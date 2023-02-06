@@ -69,7 +69,7 @@
     {
       "name": "Вопросы и обратная связь",
       "slug": "questions-and-feedback",
-      "description": "Задавай свои вопросы и оставляй отзывы здесь",
+      "description": "Задавай вопросы и оставляй отзывы",
       "id": "2",
       "categoryId": "1",
       "threadIds": ["2"],
@@ -78,7 +78,7 @@
     {
       "name": "Форум 1",
       "slug": "topic-1",
-      "description": "Описание темы 1",
+      "description": "Описание форума 1",
       "id": "3",
       "categoryId": "2",
       "threadIds": ["3", "4"],
@@ -87,7 +87,7 @@
     {
       "name": "Форум 2",
       "slug": "topic-2",
-      "description": "Описание темы 2",
+      "description": "Описание форума 2",
       "id": "4",
       "categoryId": "2",
       "threadIds": ["5", "6"],
@@ -96,28 +96,36 @@
     {
       "name": "Форум 3",
       "slug": "topic-3",
-      "description": "Описание темы 3",
+      "description": "Описание форума 3",
       "id": "5",
       "categoryId": "2",
       "threadIds": ["7"],
       "lastPostId": ""
     },
     {
-      "name": "Разное 1",
+      "name": "Форум 4",
       "slug": "mis-1",
-      "description": "Описание темы 4",
+      "description": "Описание форума 4",
       "id": "6",
       "categoryId": "3",
       "threadIds": ["8"],
       "lastPostId": ""
     },
     {
-      "name": "Разное 2",
+      "name": "Форум 5",
       "slug": "mis-2",
-      "description": "Описание темы 5",
+      "description": "Описание форума 5",
       "id": "7",
       "categoryId": "3",
       "threadIds": ["9", "10"],
+      "lastPostId": ""
+    },
+    {
+      "name": "Форум 6",
+      "slug": "mis-3",
+      "description": "Описание форума 6",
+      "id": "8",
+      "categoryId": "3",
       "lastPostId": ""
     }
   ],
@@ -451,9 +459,9 @@
       "threadsStarted": ["4"]
     },
     {
-      "avatar": "https://i.imgur.com/P0JExWH.png",
+      "avatar": "https://icons.iconarchive.com/icons/3xhumed/mega-games-pack-31/128/Dragon-Age-Origins-new-4-icon.png",
       "email": "email@mail.ru",
-      "name": "Эйприл О'нил",
+      "name": "Mr. Dragon",
       "username": "username4",
       "usernameLower": "username4",
       "id": "4",
@@ -478,9 +486,9 @@
     }
   ],
   "statistics": {
-    "forumsCount": 7,
+    "forumsCount": 8,
     "threadsCount": 10,
     "postsCount": 12,
-    "usersCount": 5
+    "usersCount": 6
   }
 }

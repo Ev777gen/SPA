@@ -1,17 +1,26 @@
 <template>
   <div class="home">
-    
+    <h1 class="title">Добро пожаловать на форум!</h1>
+    <CategoryList :categories="categories" />
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-//import HelloWorld from '@/components/HelloWorld.vue'
+import CategoryList from '@/components/CategoryList'
 
 export default {
   name: 'HomeView',
-  components: {
-    
-  }
+  components: { CategoryList },
+  computed: {
+    categories () {
+      return this.$store.state.categories;
+    }
+  },
 }
 </script>
+
+<style lang="scss" scoped>
+.title {
+  margin: 30px 0;
+}
+</style>
