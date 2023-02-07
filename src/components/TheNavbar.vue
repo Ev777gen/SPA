@@ -1,7 +1,7 @@
 <template>
   <header class="header" id="header">
     <div class="container">
-      <router-link :to="{name: 'Home'}" class="header__link"><span class="header__logo">Logo</span></router-link>
+      <router-link :to="{name: 'HomeView'}" class="header__link"><span class="header__logo">Logo</span></router-link>
     </div>
   </header>
 </template>

@@ -12,7 +12,7 @@ export default createStore({
   getters: {
     thread: (state) => {
       return (id) => {
-        const thread = findById(state.items, id)
+        const thread = findById(state.threads, id)
         if (!thread) return {}
         return {
           ...thread,

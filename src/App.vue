@@ -54,66 +54,81 @@ body {
   width: $content-width;
   border: 1px solid blue;
 }
+
+/* Заголовки */
 .title {
   font-size: 32px;
-  font-weight: 400;
-}
-.subtitle {
-  font-size: 20px;
-  font-weight: 400;
 }
 
+/* Списки */
+.list__title {
+  width: 100%;
+  padding: 10px 5px;
+  margin: 0;
+  font-size: 20px;
+  font-weight: 100;
+  color: #fefefe;
+  background-color: #23374d;
+  a:hover {
+    color: #89c6af;
+  }
+}
+.list__item {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 10px 15px 30px;
+  &:nth-child(odd) {
+    background: #eee;
+  }
+}
 
 /* кнопки */
-
 .btn, .btn-blue, .btn-red, .btn-ghost {
-    padding: 15px 30px;
-    border-radius: 5px;
-    border: none;
-    display: inline-block;
-    outline: 0;
-}
-.btn:hover, .btn-blue:hover, .btn-red:hover, .btn-ghost:hover {
+  display: inline-block;
+  padding: 15px 30px;
+  border-radius: 5px;
+  border: none;
+  outline: 0;
+  color: white;
+  &:hover {
     transition: all 0.4s ease;
-}
-.btn:disabled, .btn-blue:disabled, .btn-red:disabled, .btn-ghost:disabled, .btn-disabled {
+  }
+  &:disabled {
     cursor: default;
-}
-.btn:disabled:hover, .btn-blue:disabled:hover, .btn-red:disabled:hover, .btn-ghost:disabled:hover, .btn-disabled:hover {
-    cursor: default;
-    color: white;
+    &:hover {
+      cursor: default;
+      color: white;
+    }
+  }
 }
 .btn-blue {
-    color: white;
-    background: #263959;
-}
-.btn-blue:hover:not(:disabled):not(.btn-disabled) {
-    color: white;
+  background: #263959;
+  &:hover:not(:disabled) {
     background: #1d2b43;
+  }
 }
 .btn-red {
-    color: white;
-    background: #C82543;
-}
-.btn-red:hover:not(:disabled):not(.btn-disabled) {
-    color: white;
+  background: #C82543;
+  &:hover:not(:disabled) {
     background: #b4213c;
+  }
 }
 .btn-ghost {
-    flex-grow: 0;
-}
-.btn-ghost:hover:not(:disabled):not(.btn-disabled) {
-    color: white;
+  flex-grow: 0;
+  &:hover:not(:disabled) {
     background-color: rgba(150, 150, 150, 0.31);
+  }
 }
 
-
-/* еще стили */
+/* Ссылки */
+a,
 .link {
-    color: #1f9b80;
-    transition: all ease 0.3s;
-}
-.link:hover {
+  color: #1f9b80;
+  transition: all ease 0.3s;
+  &:hover {
     color: #5bc4ad;
+  }
 }
 </style>

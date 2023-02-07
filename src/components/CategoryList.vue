@@ -1,9 +1,10 @@
 <template>
-  <div class="category"
+  <div class="list"
     v-for="category in categories"
     :key="category.id"
   >
-    <h2 class="category__title subtitle">{{ category.name }}</h2>
+    <!--<h2 class="category__title subtitle">{{ category.name }}</h2>-->
+    <h2 class="list__title">{{ category.name }}</h2>
     <ForumList :forums="getForumsForCategory(category)" />
   </div>
 </template>
