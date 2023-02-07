@@ -12,7 +12,9 @@
               <router-link :to="{name: 'ThreadView', params: {id: thread.id}}">{{ thread.title }}</router-link>
             </p>
             <p class="thread__info">
-              Опубликовано пользователем <a href="#">{{ userById(thread.userId).name }}</a>, {{ localeDate(thread.publishedAt) }}
+              Опубликовано пользователем 
+              <a href="#">{{ userById(thread.userId).name }}</a>, 
+              {{ getTime(thread.publishedAt) }}
             </p>
           </div>
 
@@ -42,6 +44,7 @@
 
 <script>
 //import { findById } from '@/helpers'
+import { localeDate } from '@/helpers'
 export default {
   props: {
     threads: {
@@ -78,7 +81,7 @@ export default {
       }
       return 'нет ответов';
     },
-    localeDate(timestamp) {
+    /*localeDate(timestamp) {
       // Конвертируем временную метку в строку:
       // toLocaleString() - дата + время
       // toLocaleDateString() - дата 
@@ -88,6 +91,9 @@ export default {
         timestamp *= 1000;
       }
       return (new Date(timestamp)).toLocaleDateString();
+    },*/
+    getTime(timestamp) {
+      return localeDate(timestamp)
     },
   }
 }
