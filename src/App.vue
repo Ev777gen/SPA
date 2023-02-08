@@ -23,7 +23,7 @@ export default {
 <style lang="scss">
 @import '@/assets/reset.css';
 
-$max-width: 1100px;
+$container-width: 1100px;
 $content-width: 900px;
 
 html,
@@ -40,13 +40,13 @@ body {
 .container {
   display: flex;
   justify-content: space-between;
-  max-width: $max-width;
+  max-width: $container-width;
   margin: 0px auto;
   padding: 0 15px;
   border: 1px solid red;
 }
 .sidebar {
-  width: $max-width - $content-width;
+  width: $container-width - $content-width;
   margin-right: 15px;
   border: 1px solid blue;
 }
@@ -58,6 +58,17 @@ body {
 /* Заголовки */
 .title {
   font-size: 32px;
+}
+
+/* Текст */
+.gray-text {
+  color: red;
+}
+.text_gray {
+  color: #777;
+}
+.text_small {
+  font-size: 12px;
 }
 
 /* Списки */
@@ -130,5 +141,59 @@ a,
   &:hover {
     color: #5bc4ad;
   }
+}
+
+/* Аватар */
+$avatar: 50px;
+$avatar-xlarge: 200px;
+$avatar-large: 95px;
+$avatar-medium: 50px;
+$avatar-small: 35px;
+.avatar {
+  width: $avatar;
+  max-width: $avatar;
+  height: $avatar;
+  max-height: $avatar;
+  border-radius: 50%;
+}
+.avatar-xlarge {
+  width: $avatar-xlarge;
+  max-width: $avatar-xlarge;
+  height: $avatar-xlarge;
+  max-height: $avatar-xlarge;
+  border-radius: 50%;
+}
+.avatar-large {
+  width: $avatar-large;
+  max-width: $avatar-large;
+  height: $avatar-large;
+  max-height: $avatar-large;
+  border-radius: 50%;
+}
+.avatar-medium {
+  width: $avatar-medium;
+  max-width: $avatar-medium;
+  height: $avatar-medium;
+  max-height: $avatar-medium;
+  border-radius: 50%;
+}
+.avatar-small {
+  width: $avatar-small;
+  max-width: $avatar-small;
+  height: $avatar-small;
+  max-height: $avatar-small;
+  border-radius: 50%;
+}
+
+/* Формы */
+textarea {
+  resize: none;
+}
+
+/* Адаптив */
+@media (max-width: 820px) {
+    .desktop-only, .navbar-user {
+        display: none;
+    }
 }
 </style>

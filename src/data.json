@@ -263,20 +263,15 @@
   ],
   "posts": [
     {
-      "text": "Текст поста № 1",
+      "text": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa quis natus accusamus aspernatur blanditiis labore voluptates reiciendis? Deleniti repellat quo atque provident facilis voluptates, autem, eveniet, minima doloremque quibusdam repudiandae.",
       "publishedAt": 1594035908,
       "id": "1",
       "threadId": "1",
-      "userId": "1",
-      "edited": {
-        "at": 1594037546,
-        "by": "1",
-        "moderated": false
-      }
+      "userId": "1"
     },
     {
-      "text": "Текст поста № 2",
-      "publishedAt": 1594035908,
+      "text": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa quis natus accusamus aspernatur blanditiis labore voluptates reiciendis? Deleniti repellat quo atque provident facilis voluptates, autem, eveniet, minima doloremque quibusdam repudiandae.",
+      "publishedAt": 1597035908,
       "id": "2",
       "threadId": "1",
       "userId": "2",
@@ -287,31 +282,21 @@
       }
     },
     {
-      "text": "Текст поста № 3",
+      "text": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa quis natus accusamus aspernatur blanditiis labore voluptates reiciendis? Deleniti repellat quo atque provident facilis voluptates, autem, eveniet, minima doloremque quibusdam repudiandae.",
       "publishedAt": 1594035908,
       "id": "3",
       "threadId": "2",
-      "userId": "2",
-      "edited": {
-        "at": 1594037546,
-        "by": "2",
-        "moderated": false
-      }
+      "userId": "2"
     },
     {
-      "text": "Текст поста № 4",
+      "text": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa quis natus accusamus aspernatur blanditiis labore voluptates reiciendis? Deleniti repellat quo atque provident facilis voluptates, autem, eveniet, minima doloremque quibusdam repudiandae.",
       "publishedAt": 1594035908,
       "id": "4",
       "threadId": "3",
-      "userId": "2",
-      "edited": {
-        "at": 1594037546,
-        "by": "2",
-        "moderated": false
-      }
+      "userId": "2"
     },
     {
-      "text": "Текст поста № 5",
+      "text": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa quis natus accusamus aspernatur blanditiis labore voluptates reiciendis? Deleniti repellat quo atque provident facilis voluptates, autem, eveniet, minima doloremque quibusdam repudiandae.",
       "publishedAt": 1594035908,
       "id": "5",
       "threadId": "3",
@@ -323,19 +308,14 @@
       }
     },
     {
-      "text": "Текст поста № 6",
+      "text": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa quis natus accusamus aspernatur blanditiis labore voluptates reiciendis? Deleniti repellat quo atque provident facilis voluptates, autem, eveniet, minima doloremque quibusdam repudiandae.",
       "publishedAt": 1594035908,
       "id": "6",
       "threadId": "4",
-      "userId": "3",
-      "edited": {
-        "at": 1594037546,
-        "by": "3",
-        "moderated": false
-      }
+      "userId": "3"
     },
     {
-      "text": "Текст поста № 7",
+      "text": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa quis natus accusamus aspernatur blanditiis labore voluptates reiciendis? Deleniti repellat quo atque provident facilis voluptates, autem, eveniet, minima doloremque quibusdam repudiandae.",
       "publishedAt": 1594035908,
       "id": "7",
       "threadId": "5",
@@ -347,64 +327,39 @@
       }
     },
     {
-      "text": "Текст поста № 8",
+      "text": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa quis natus accusamus aspernatur blanditiis labore voluptates reiciendis? Deleniti repellat quo atque provident facilis voluptates, autem, eveniet, minima doloremque quibusdam repudiandae.",
       "publishedAt": 1594035908,
       "id": "8",
       "threadId": "6",
-      "userId": "4",
-      "edited": {
-        "at": 1594037546,
-        "by": "4",
-        "moderated": false
-      }
+      "userId": "4"
     },
     {
-      "text": "Текст поста № 9",
+      "text": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa quis natus accusamus aspernatur blanditiis labore voluptates reiciendis? Deleniti repellat quo atque provident facilis voluptates, autem, eveniet, minima doloremque quibusdam repudiandae.",
       "publishedAt": 1594035908,
       "id": "9",
       "threadId": "7",
-      "userId": "4",
-      "edited": {
-        "at": 1594037546,
-        "by": "4",
-        "moderated": false
-      }
+      "userId": "4"
     },
     {
-      "text": "Текст поста № 10",
+      "text": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa quis natus accusamus aspernatur blanditiis labore voluptates reiciendis? Deleniti repellat quo atque provident facilis voluptates, autem, eveniet, minima doloremque quibusdam repudiandae.",
       "publishedAt": 1594035908,
       "id": "10",
       "threadId": "8",
-      "userId": "5",
-      "edited": {
-        "at": 1594037546,
-        "by": "5",
-        "moderated": false
-      }
+      "userId": "5"
     },
     {
-      "text": "Текст поста № 11",
+      "text": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa quis natus accusamus aspernatur blanditiis labore voluptates reiciendis? Deleniti repellat quo atque provident facilis voluptates, autem, eveniet, minima doloremque quibusdam repudiandae.",
       "publishedAt": 1594035908,
       "id": "11",
       "threadId": "9",
-      "userId": "5",
-      "edited": {
-        "at": 1594037546,
-        "by": "5",
-        "moderated": false
-      }
+      "userId": "5"
     },
     {
-      "text": "Текст поста № 12",
+      "text": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa quis natus accusamus aspernatur blanditiis labore voluptates reiciendis? Deleniti repellat quo atque provident facilis voluptates, autem, eveniet, minima doloremque quibusdam repudiandae.",
       "publishedAt": 1594035908,
       "id": "12",
       "threadId": "10",
-      "userId": "5",
-      "edited": {
-        "at": 1594037546,
-        "by": "5",
-        "moderated": false
-      }
+      "userId": "5"
     }
   ],
   "users": [
@@ -420,9 +375,9 @@
       "isModerator": true
     },
     {
-      "avatar": "https://icons.iconarchive.com/icons/diveandgo/diving/128/turtle-icon.png",
+      "avatar": "https://icons.iconarchive.com/icons/iconka/meow/128/cat-eyes-icon.png",
       "email": "email@mail.ru",
-      "name": "Иван Иванов",
+      "name": "Мистер Кэт",
       "username": "username1",
       "usernameLower": "username1",
       "id": "1",
@@ -433,9 +388,9 @@
       "threadsStarted": ["1"]
     },
     {
-      "avatar": "https://icons.iconarchive.com/icons/iconarchive/realistic-fruits/128/Cherry-icon.png",
+      "avatar": "https://icons.iconarchive.com/icons/designbolts/rio-2-movie/128/Rio2-Luiz-2-icon.png",
       "email": "email@mail.ru",
-      "name": "Петр Петров",
+      "name": "Аркадий Перов",
       "username": "username2",
       "usernameLower": "username2",
       "id": "2",
@@ -474,7 +429,7 @@
     {
       "avatar": "https://icons.iconarchive.com/icons/pixelpirate/futurama/128/Robot-Devil-icon.png",
       "email": "email@mail.ru",
-      "name": "Пятый Пользователь",
+      "name": "Красный Чёрт",
       "username": "username5",
       "usernameLower": "username5",
       "id": "5",

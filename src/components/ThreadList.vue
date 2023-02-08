@@ -14,7 +14,7 @@
             <p class="thread__info">
               Опубликовано пользователем 
               <a href="#">{{ userById(thread.userId).name }}</a>, 
-              {{ getTime(thread.publishedAt) }}
+              {{ localeDate(thread.publishedAt) }}
             </p>
           </div>
 
@@ -44,7 +44,7 @@
 
 <script>
 //import { findById } from '@/helpers'
-import { localeDate } from '@/helpers'
+import { localeDate, repliesCountWording } from '@/helpers'
 export default {
   props: {
     threads: {
@@ -61,6 +61,8 @@ export default {
     },
   },
   methods: {
+    localeDate,
+    repliesCountWording,
     postById (postId) {
       //return findById(this.posts, postId)
       return this.posts.find(post => post.id === postId);
@@ -68,18 +70,6 @@ export default {
     userById (userId) {
       //return findById(this.users, userId) || {}
       return this.users.find(user => user.id === userId) || {};
-    },
-    repliesCountWording(repliesCount) {
-      if (repliesCount) {
-        if (repliesCount === 1) {
-          return ' ответ';
-        } else if (repliesCount > 1 && repliesCount < 5) {
-          return ' ответа';
-        } else {
-          return ' ответов';
-        }
-      }
-      return 'нет ответов';
     },
     /*localeDate(timestamp) {
       // Конвертируем временную метку в строку:
@@ -92,9 +82,6 @@ export default {
       }
       return (new Date(timestamp)).toLocaleDateString();
     },*/
-    getTime(timestamp) {
-      return localeDate(timestamp)
-    },
   }
 }
 </script>
