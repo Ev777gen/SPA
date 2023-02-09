@@ -5,7 +5,7 @@
       <!--<router-link
         v-if="thread.userId === authUser?.id"
         :to="{ name: 'ThreadEdit', id: this.id }"
-        class="btn-green btn-small"
+        class="btn_green btn_small"
         tag="button"
       >
         Редактировать тему
@@ -25,11 +25,11 @@
     <PostList :posts="threadPosts" />
 
     <PostEditor v-if="authUser" @save="addPost" />
-    <div v-else class="text-center" style="margin-bottom: 50px;">
+    <div v-else class="thread__no-auth-user">
       Чтобы написать пост, нужно 
       <router-link :to="{name: 'SignIn', query:{redirectTo: $route.path}}">Войти</router-link> 
       или 
-      <router-link :to="{name: 'Register',  query:{redirectTo: $route.path}}">Зарегистрироваться</router-link>
+      <router-link :to="{name: 'RegisterPage',  query:{redirectTo: $route.path}}">Зарегистрироваться</router-link>
     </div>
   </div>
 </template>
@@ -128,5 +128,10 @@ export default {
 }
 .thread__replies {
   float: right;
+}
+.thread__no-auth-user {
+  margin: 30px 0;
+  text-align: center;
+  font-size: 16px;
 }
 </style>

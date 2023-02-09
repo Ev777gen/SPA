@@ -12,7 +12,7 @@
               <router-link :to="{name: 'ThreadView', params: {id: thread.id}}">{{ thread.title }}</router-link>
             </p>
             <p class="thread__info">
-              Опубликовано пользователем 
+              Тема начата пользователем  
               <a href="#">{{ userById(thread.userId).name }}</a>, 
               {{ localeDate(thread.publishedAt) }}
             </p>
@@ -24,7 +24,7 @@
             {{ repliesCountWording(thread.repliesCount) }}
             </p>
 
-            <AppAvatarImg class="thread__avatar avatar_medium" :src="userById(thread.userId).avatar" />
+            <AppAvatar class="thread__avatar avatar_small" :src="userById(thread.userId).avatar" />
 
             <div>
               <p class="thread__user">
@@ -107,7 +107,7 @@ export default {
 .thread__replies-count {
   flex-basis: 35%;
 }
-.avatar_medium {
+.thread__avatar {
   margin-right: 10px;
 }
 .no-threads {

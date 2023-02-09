@@ -41,8 +41,28 @@ const routes = [
     name: 'ThreadCreate',
     component: () => import(/* webpackChunkName: "ThreadCreate" */ '@/views/ThreadCreate.vue'),
     props: true,
-    //meta: { requiresAuth: true }
+    meta: { requiresAuth: true }
   },
+  {
+    path: '/thread/:id/edit',
+    name: 'ThreadEdit',
+    component: () => import(/* webpackChunkName: "ThreadEdit" */'@/views/ThreadEdit.vue'),
+    props: true,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/signin',
+    name: 'SignIn',
+    component: () => import(/* webpackChunkName: "SignIn" */'@/views/SignIn.vue'),
+    meta: { requiresGuest: true }
+  },
+  {
+    path: '/register',
+    name: 'RegisterPage',
+    component: () => import(/* webpackChunkName: "RegisterPage" */'@/views/RegisterPage.vue'),
+    meta: { requiresGuest: true }
+  },
+
 ]
 
 const router = createRouter({

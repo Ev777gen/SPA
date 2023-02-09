@@ -3,13 +3,13 @@
     <form @submit.prevent="save">
       <textarea v-model="text" rows="10" class="form__input"></textarea>
       <div class="form__button">
-        <button class="btn btn-blue">Опубликовать</button>
+        <button class="btn_blue">Опубликовать</button>
       </div>
     </form>
     <!--<VeeForm @submit="save" :key="formKey">
       <AppFormField as="textarea" name="text" v-model="postCopy.text" rows="10" cols="30" rules="required" />
       <div class="form-actions">
-        <button class="btn-blue">{{post.id ? 'Сохранить изменения' : 'Опубликовать'}}</button>
+        <button class="btn_blue">{{post.id ? 'Сохранить изменения' : 'Опубликовать'}}</button>
       </div>
     </VeeForm>-->
   </div>
@@ -29,9 +29,9 @@ export default {
   },
   methods: {
     save () {
-      const postId = 'a' + Math.random(); // нужна система генерации postId. Пока просто строка + случайное число
+      //const postId = 'a' + Math.random(); // нужна система генерации postId. Пока просто строка + случайное число
       const post = {
-        id: postId, //теперь генерируем id в store
+        //id: postId, //теперь генерируем id в store
         text: this.text,
         publishedAt: Math.floor(Date.now() / 1000), // переводим в секунды
         userId: '1', // т.к. мы еще не создали Authentication, используем id любого пользователя
@@ -71,9 +71,5 @@ export default {
 .form__button {
   display: flex;
   justify-content: flex-end;
-  & .btn {
-    font-size: 16px;
-    letter-spacing: 1px;
-  }
 }
 </style>

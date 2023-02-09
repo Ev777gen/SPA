@@ -5,12 +5,12 @@
       <h1 class="forum__title title">{{ forum.name }}</h1>
       <p class="forum__description">{{ forum.description }}</p>
     </div>
-    <!--<router-link
+    <router-link
       :to="{name:'ThreadCreate', params: {forumId: forum.id}}"
-      class="btn btn-blue"
+      class="forum__button btn_orange btn_small"
     >
       Начать новую тему
-    </router-link>-->
+    </router-link>
   </div>
 
   <div class="forum__thread-list">
@@ -83,6 +83,7 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
+  margin-top: 30px;
 }
 .forum__details {
   flex-basis: 50%;
@@ -92,11 +93,11 @@ export default {
     }
   }
 }
-.forum__title {
-  margin-top: 20px;
-}
 .forum__description {
-  margin: 10px 0 25px 0;
+  margin: 10px 0 15px 0;
   font-size: 16px;
+}
+.forum__button {
+  align-self: flex-start;
 }
 </style>

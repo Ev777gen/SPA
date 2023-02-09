@@ -6,7 +6,7 @@
     >
       <div v-if="userById(post.userId)" class="post__user-info">
         <a href="#" class="post__user-name">{{ userById(post.userId).name }}</a>
-        <a href="#"><AppAvatar class="post__avatar avatar-large" :src="userById(post.userId).avatar" /></a>
+        <a href="#"><AppAvatar class="post__avatar avatar_large" :src="userById(post.userId).avatar" /></a>
         <p class="desktop-only text_gray">
           {{ userById(post.userId).postsCount }} 
           {{ postsCountWording(userById(post.userId).postsCount) }}
@@ -31,11 +31,10 @@
           v-if="post.userId === $store.state.authId"
           @click.prevent="toggleEditMode(post.id)"
           href="#"
-          style="margin-left: auto; padding-left:10px;"
-          class="link-unstyled"
-          title="Make a change"
+          class="post__change"
+          title="Редактировать"
         >
-          <fa icon="pencil-alt" />
+          <fa icon="pencil-alt" /><!-- Добавить иконку из font awsome -->
         </a>
       </div>
 
@@ -179,5 +178,9 @@ export default {
       margin-bottom: 0px;
     }
   }
+}
+.post__change {
+  margin-left: auto;
+  padding-left: 10px;
 }
 </style>

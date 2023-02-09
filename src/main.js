@@ -2,6 +2,19 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
+import { initializeApp } from "firebase/app"
+import firebaseConfig from "@/firebase/firebaseConfig"
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDrneVPNzmr8y5EraatCBjTIM4UIf563xs",
+  authDomain: "spa-blog-c7ad9.firebaseapp.com",
+  projectId: "spa-blog-c7ad9",
+  storageBucket: "spa-blog-c7ad9.appspot.com",
+  messagingSenderId: "965165354166",
+  appId: "1:965165354166:web:8683642d1540a64df6ea17"
+}
+
+const firebase = initializeApp(firebaseConfig);
 
 const app = createApp(App)
   .use(store)

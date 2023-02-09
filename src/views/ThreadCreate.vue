@@ -1,10 +1,10 @@
 <template>
   <div>
-    <h1>
-      Создать новую тему в <i>{{ forum.name }}</i>
+    <h1 class="title">
+      Создать новую тему в форуме <i>{{ forum.name }}</i>
     </h1>
 
-    <!--<ThreadEditor @save="save" @cancel="cancel" @dirty="formIsDirty = true" @clean="formIsDirty = false"/>-->
+    <ThreadEditor @save="save" @cancel="cancel" @dirty="formIsDirty = true" @clean="formIsDirty = false"/>
   </div>
 </template>
 <script>
@@ -44,7 +44,7 @@ export default {
   },
   async created () {
     await this.fetchForum({ id: this.forumId })
-    this.asyncDataStatus_fetched()
+    //this.asyncDataStatus_fetched()
   },
   beforeRouteLeave () {
     if (this.formIsDirty) {
@@ -54,3 +54,9 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.title {
+  margin: 35px 0;
+}
+</style>

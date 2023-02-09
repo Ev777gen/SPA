@@ -1,4 +1,5 @@
 import { createStore } from 'vuex';
+import { findItemById } from '@/helpers'
 import testData from "@/data.json";
 
 export default createStore({
@@ -13,7 +14,7 @@ export default createStore({
   getters: {
     user: (state) => {
       return (id) => {
-        const user = findById(state.users, id)
+        const user = findItemById(state.users, id)
         if (!user) return null
         return {
           ...user,
@@ -40,12 +41,12 @@ export default createStore({
     },
     thread: (state) => {
       return (id) => {
-        const thread = findById(state.threads, id)
+        const thread = findItemById(state.threads, id)
         if (!thread) return {}
         return {
           ...thread,
           get author () {
-            return findById(state.users, thread.userId)
+            return findItemById(state.users, thread.userId)
           },
           get repliesCount () {
             return thread.postIds.length - 1
@@ -113,10 +114,6 @@ export default createStore({
 })
 
 // Вспомогательные функции
-function findById(resources, id) {
-  if (!resources) return null
-  return resources.find(r => r.id === id)
-}
 function makeAppendChildToParentMutation({child, parent}) {
   return (state, { childId, parentId }) => {
     const resorce = state[parent].find(r => r.id === parentId)

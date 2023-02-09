@@ -10,6 +10,11 @@ export const localeDate = (timestamp) => {
   return (new Date(timestamp)).toLocaleDateString();
 }
 
+export const findItemById = (resources, id) => {
+  if (!resources) return null
+  return resources.find(r => r.id === id)
+}
+
 export const repliesCountWording = (repliesCount) => {
   if (repliesCount) {
     if (repliesCount === 1) {
