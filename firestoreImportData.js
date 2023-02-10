@@ -21,7 +21,7 @@
 // Импорты
 const { initializeFirebaseApp, restore } = require('firestore-export-import')
 const firebasePrivateKey = require('./firebasePrivateKey.json')
-const firebaseConfig = require('./src/config/firebaseConfig.js')
+const firebaseConfig = require('./firebaseConfig.js')
 const fs = require('fs')
 const tempFileName = `${__dirname}/data-temp.json`;
 

@@ -3,7 +3,8 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import { initializeApp } from "firebase/app"
-import firebaseConfig from "@/firebase/firebaseConfig"
+//import firebaseConfig from "../firebaseConfig"
+import { getFirestore } from 'firebase/firestore/lite'
 
 const firebaseConfig = {
   apiKey: "AIzaSyDrneVPNzmr8y5EraatCBjTIM4UIf563xs",
@@ -14,7 +15,8 @@ const firebaseConfig = {
   appId: "1:965165354166:web:8683642d1540a64df6ea17"
 }
 
-const firebase = initializeApp(firebaseConfig);
+const firebaseApp = initializeApp(firebaseConfig);
+export const db = getFirestore(firebaseApp);
 
 const app = createApp(App)
   .use(store)

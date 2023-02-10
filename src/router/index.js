@@ -8,7 +8,7 @@ const routes = [
   },
   {
     path: '/forum/:id',
-    name: 'Forum',
+    name: 'ForumView',
     component: () => import(/* webpackChunkName: "Forum" */ '@/views/ForumView.vue'),
     props: true
   },

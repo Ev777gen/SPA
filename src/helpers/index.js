@@ -15,6 +15,19 @@ export const findItemById = (resources, id) => {
   return resources.find(r => r.id === id)
 }
 
+export const forumThreadsCountWording = (threadsCount) => {
+  if (threadsCount) {
+    if (threadsCount === 1) {
+      return ' тема';
+    } else if (threadsCount > 1 && threadsCount < 5) {
+      return ' темы';
+    } else {
+      return ' тем';
+    }
+  }
+  return 'нет тем';
+}
+
 export const repliesCountWording = (repliesCount) => {
   if (repliesCount) {
     if (repliesCount === 1) {
@@ -28,7 +41,7 @@ export const repliesCountWording = (repliesCount) => {
   return 'нет ответов';
 }
 
-export const postsCountWording = (postsCount) => {
+export const userPostsCountWording = (postsCount) => {
   if (postsCount) {
     if (postsCount === 1) {
       return ' пост';
@@ -41,7 +54,7 @@ export const postsCountWording = (postsCount) => {
   return 'нет постов';
 }
 
-export const threadsCountWording = (threadsCount) => {
+export const userThreadsCountWording = (threadsCount) => {
   if (threadsCount) {
     if (threadsCount === 1) {
       return ' начатая тема';

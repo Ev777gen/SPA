@@ -1,49 +1,46 @@
 <template>
-<div v-if="forum" class="forum">
-  <div class="forum__header">
-    <div class="forum__details">
-      <h1 class="forum__title title">{{ forum.name }}</h1>
-      <p class="forum__description">{{ forum.description }}</p>
+  <div v-if="isAsyncDataLoaded" class="forum">
+    <div v-if="forum" class="forum__header">
+      <div class="forum__details">
+        <h1 class="forum__title title">{{ forum.name }}</h1>
+        <p class="forum__description">{{ forum.description }}</p>
+      </div>
+      <router-link
+        :to="{name:'ThreadCreate', params: {forumId: forum.id}}"
+        class="forum__button btn_orange btn_small"
+      >
+        Начать новую тему
+      </router-link>
     </div>
-    <router-link
-      :to="{name:'ThreadCreate', params: {forumId: forum.id}}"
-      class="forum__button btn_orange btn_small"
-    >
-      Начать новую тему
-    </router-link>
-  </div>
 
-  <div class="forum__thread-list">
-    <ThreadList :threads="threads"/>
+    <div class="forum__thread-list">
+      <ThreadList :threads="threads"/>
+    </div>
   </div>
-</div>
 </template>
 
 <script>
-import ThreadList from '@/components/ThreadList'
-//import { findById } from '@/helpers'
-//import { mapActions } from 'vuex'
-//import asyncDataStatus from '@/mixins/asyncDataStatus'
+import ThreadList from '@/components/ThreadList';
+import { findItemById } from '@/helpers';
+import { mapActions } from 'vuex';
 export default {
   components: { ThreadList },
-  //mixins: [asyncDataStatus],
   props: {
     id: {
-      required: true,
       type: String,
+      required: true
     }
   },
-  /*data () {
+  data () {
     return {
-      page: parseInt(this.$route.query.page) || 1,
-      perPage: 10
+      isAsyncDataLoaded: false,
+      //page: parseInt(this.$route.query.page) || 1,
+      //perPage: 10
     }
-  },*/
+  },
   computed: {
     forum () {
-      //return findById(this.$store.state.forums.items, this.id)
-      //console.log('this.id', this.id)
-      return this.$store.state.forums.find(forum => forum.id === this.id)
+      return findItemById(this.$store.state.forums, this.id)
     },
     threads () {
       if (!this.forum) return []
@@ -51,24 +48,30 @@ export default {
         .filter(thread => thread.forumId === this.forum.id)
         .map(thread => this.$store.getters.thread(thread.id))
     },
-    /*threadCount () {
+    threadCount () {
       return this.forum.threads?.length || 0
     },
-    totalPages () {
+    /*totalPages () {
       if (!this.threadCount) return 0
       return Math.ceil(this.threadCount / this.perPage)
     }*/
   },
-  /*methods: {
-    ...mapActions('forums', ['fetchForum']),
-    ...mapActions('threads', ['fetchThreadsByPage']),
-    ...mapActions('users', ['fetchUsers'])
+  methods: {
+    ...mapActions(['fetchForum', 'fetchThreads', 'fetchUsers']),
+    //...mapActions('threads', ['fetchThreadsByPage']),
   },
   async created () {
-    const forum = await this.fetchForum({ id: this.id })
-    const threads = await this.fetchThreadsByPage({ ids: forum.threads, page: this.page, perPage: this.perPage })
-    await this.fetchUsers({ ids: threads.map(thread => thread.userId) })
-    this.asyncDataStatus_fetched()
+    const forum = await this.fetchForum({ id: this.id });
+    const threads = await this.fetchThreads({ ids: forum.threadIds || [] });
+    await this.fetchUsers({ ids: threads.map(thread => thread.userId) });
+    this.isAsyncDataLoaded = true;
+  },
+  // With pagination:
+  /*async created () {
+    const forum = await this.fetchForum({ id: this.id });
+    const threads = await this.fetchThreadsByPage({ ids: forum.threads, page: this.page, perPage: this.perPage });
+    await this.fetchUsers({ ids: threads.map(thread => thread.userId) });
+    this.isAsyncDataLoaded = true;;
   },
   watch: {
     async page (page) {

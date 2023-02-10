@@ -4,16 +4,16 @@
          v-for="post in posts"
          :key="post.id"
     >
-      <div v-if="userById(post.userId)" class="post__user-info">
-        <a href="#" class="post__user-name">{{ userById(post.userId).name }}</a>
-        <a href="#"><AppAvatar class="post__avatar avatar_large" :src="userById(post.userId).avatar" /></a>
+      <div v-if="getUserById(post.userId)" class="post__user-info">
+        <a href="#" class="post__user-name">{{ getUserById(post.userId).name }}</a>
+        <a href="#"><AppAvatar class="post__avatar avatar_large" :src="getUserById(post.userId).avatar" /></a>
         <p class="desktop-only text_gray">
-          {{ userById(post.userId).postsCount }} 
-          {{ postsCountWording(userById(post.userId).postsCount) }}
+          {{ getUserById(post.userId).postsCount }} 
+          {{ userPostsCountWording(getUserById(post.userId).postsCount) }}
         </p>
         <p class="desktop-only text_gray">
-          {{ userById(post.userId).threadsCount }} 
-          {{ threadsCountWording(userById(post.userId).threadsCount) }}
+          {{ getUserById(post.userId).threadsCount }} 
+          {{ userThreadsCountWording(getUserById(post.userId).threadsCount) }}
         </p>
       </div>
 
@@ -49,13 +49,13 @@
 <script>
 import PostEditor from '@/components/PostEditor'
 import { mapActions } from 'vuex'
-import { localeDate, postsCountWording, threadsCountWording } from '@/helpers'
+import { localeDate, userPostsCountWording, userThreadsCountWording } from '@/helpers'
 export default {
   components: { PostEditor },
   props: {
     posts: {
-      required: true,
-      type: Array
+      type: Array,
+      required: true
     }
   },
   data () {
@@ -71,9 +71,9 @@ export default {
   methods: {
     ...mapActions(['updatePost']),
     localeDate,
-    postsCountWording,
-    threadsCountWording,
-    userById (userId) {
+    userPostsCountWording,
+    userThreadsCountWording,
+    getUserById (userId) {
       return this.$store.getters.user(userId)
     },
     toggleEditMode (id) {

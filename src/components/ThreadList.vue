@@ -1,50 +1,38 @@
 <template>
-  <div>
-    <div class="list">
-
-      <!--<h2 class="threads__title subtitle">Список тем</h2>-->
-      <h2 class="list__title">Список тем</h2>
-
-      <div v-if="threads.length">
-        <div v-for="thread in threads" :key="thread.id" class="list__item thread">
-          <div>
-            <p class="thread__title">
-              <router-link :to="{name: 'ThreadView', params: {id: thread.id}}">{{ thread.title }}</router-link>
-            </p>
-            <p class="thread__info">
-              Тема начата пользователем  
-              <a href="#">{{ userById(thread.userId).name }}</a>, 
-              {{ localeDate(thread.publishedAt) }}
-            </p>
-          </div>
-
-          <div class="thread__activity">
-            <p class="thread__replies-count">
-            {{ thread.repliesCount > 0 ? thread.repliesCount : '' }}
-            {{ repliesCountWording(thread.repliesCount) }}
-            </p>
-
-            <AppAvatar class="thread__avatar avatar_small" :src="userById(thread.userId).avatar" />
-
-            <div>
-              <p class="thread__user">
-                <a href="#">{{ userById(thread.userId).name }}</a>
-              </p>
-            </div>
-          </div>
+  <h2 class="list__title">Список тем</h2>
+  <div v-if="threads.length" class="list">
+    <div v-for="thread in threads" :key="thread.id" class="list__item thread">
+      <div>
+        <p class="thread__title">
+          <router-link :to="{name: 'ThreadView', params: {id: thread.id}}">{{ thread.title }}</router-link>
+        </p>
+        <p class="thread__info">
+          Тема начата пользователем  
+          <a href="#">{{ userById(thread.userId).name }}</a>, 
+          {{ localeDate(thread.publishedAt) }}
+        </p>
+      </div>
+      <div class="thread__activity">
+        <p class="thread__replies-count">
+        {{ thread.repliesCount > 0 ? thread.repliesCount : '' }}
+        {{ repliesCountWording(thread.repliesCount) }}
+        </p>
+        <AppAvatar class="thread__avatar avatar_small" :src="userById(thread.userId).avatar" />
+        <div>
+          <p class="thread__user">
+            <a href="#">{{ userById(thread.userId).name }}</a>
+          </p>
         </div>
       </div>
     </div>
-
-    <div v-if="!threads.length" class="no-threads">
-      <em>Здесь пока нет тем. Создайте первую!</em>
-    </div>
+  </div>
+  <div v-else class="no-threads">
+    <em>Здесь пока нет тем. Создайте первую!</em>
   </div>
 </template>
 
 <script>
-//import { findById } from '@/helpers'
-import { localeDate, repliesCountWording } from '@/helpers'
+import { localeDate, findItemById, repliesCountWording } from '@/helpers'
 export default {
   props: {
     threads: {
@@ -64,24 +52,11 @@ export default {
     localeDate,
     repliesCountWording,
     postById (postId) {
-      //return findById(this.posts, postId)
-      return this.posts.find(post => post.id === postId);
+      return findItemById(this.posts, postId)
     },
     userById (userId) {
-      //return findById(this.users, userId) || {}
-      return this.users.find(user => user.id === userId) || {};
-    },
-    /*localeDate(timestamp) {
-      // Конвертируем временную метку в строку:
-      // toLocaleString() - дата + время
-      // toLocaleDateString() - дата 
-      // toLocaleTimeString() - время
-      const isTimestampInSeconds = timestamp < 10000000000;
-      if (isTimestampInSeconds) {
-        timestamp *= 1000;
-      }
-      return (new Date(timestamp)).toLocaleDateString();
-    },*/
+      return findItemById(this.users, userId) || {}
+    }
   }
 }
 </script>

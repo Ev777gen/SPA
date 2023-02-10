@@ -117,7 +117,8 @@ a,
 }
 .btn_orange {
   /*background: #ffaf6e;*/
-  background: #ffc494;
+  /*background: #ffc494;*/
+  background: #ffb579;
   &:hover:not(:disabled) {
     background: #ff9d4e;
   }
@@ -185,3 +186,35 @@ textarea {
     display: none;
   }
 }
+
+/*
+@media (max-width: 820px) {
+    .desktop-only, .forum-list .forum-listing .threads-count, .forum-list .forum-listing .last-thread, .forum-stats, .thread-list .thread .activity, .navbar-user {
+        display: none;
+    }
+}
+
+@media (min-width: 820px) {
+    .mobile-only, .navbar-mobile-item {
+        display: none;
+    }
+}
+
+@media (max-width: 720px) {
+    .hide-mobile {
+        display: none;
+    }
+}
+
+@media (min-width: 720px) and (max-width: 820px) {
+    .hide-tablet {
+        display: none;
+    }
+}
+
+@media (max-width: 720px) {
+    .hide-desktop {
+        display: none;
+    }
+}
+*/

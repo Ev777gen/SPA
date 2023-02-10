@@ -1,14 +1,24 @@
 import { createStore } from 'vuex';
-import { findItemById } from '@/helpers'
-import testData from "@/data.json";
+import { findItemById } from '@/helpers';
+//import testData from "@/data.json";
+import { db } from "@/main.js";
+import { collection, getDocs } from "firebase/firestore/lite";
+//import { addDoc, doc, updateDoc } from "firebase/firestore/lite";
 
 export default createStore({
   state: {
-    categories: testData.categories,
+    // На тестовых данных:
+    /*categories: testData.categories,
     forums: testData.forums,
     threads: testData.threads,
     posts: testData.posts,
-    users: testData.users,
+    users: testData.users,*/
+    // На Firebase:
+    categories: [],
+    forums: [],
+    threads: [],
+    posts: [],
+    users: [],
     authId: '1',
   },
   getters: {
@@ -78,6 +88,7 @@ export default createStore({
     appendContributorToThread: makeAppendChildToParentMutation({child: 'contributors', parent: 'threads'}),
   },
   actions: {
+    // На тестовых данных:
     async createPost({state, commit}, post) {
       post.id = 'a' + Math.random();  // Здесь должна быть функция генерации id
       post.userId = state.authId;
@@ -87,6 +98,7 @@ export default createStore({
       commit('appendPostToThread', {childId: post.id, parentId: post.threadId});
       commit('appendContributorToThread', {childId: post.userId, parentId: post.threadId});
     },
+    // На Firebase:
     /*async createPost({state, commit}, post) {
       //post.id = 'qqqq' + Math.random();  // Здесь должна быть функция генерации id
       post.userId = state.authId;
@@ -108,6 +120,101 @@ export default createStore({
       commit('appendContributorToThread', {childId: post.userId, parentId: post.threadId});
       // Hello! This is the first post to be loaded to the Cloud Firestore database!
     },*/
+    async createThread({commit, state, dispatch}, {title, text, forumId}) {
+      const id = 'qqqq' + Math.random();  // Здесь должна быть функция генерации id
+      const userId = state.authId;
+      const publishedAt = Math.floor(Date.now() / 1000);
+      const thread = { forumId, title, publishedAt, userId, id, };
+      commit('setThread', {thread});
+      commit('appendThreadToForum', {forumId, threadId: id});
+      commit('appendThreadToUser', {userId, threadId: id});
+      dispatch('createPost', {text, threadId: id});
+      return state.threads.find(thread => thread.id === id)
+    },
+    async updateThread({commit, state}, {title, text, id}) {
+      const thread = state.threads.find(thread => thread.id === id);
+      const post = state.posts.find(post => post.id === thread.posts[0]);
+      const newThread = { ...thread, title };
+      const newPost = { ...post, text };
+      commit('setThread', { thread: newThread });
+      commit('setPost', { post: newPost });
+      return newThread;
+    },
+    updateUser({commit}, user) {
+      commit('setUser', {user, userId: user.id});
+    },
+    //------------------------------------------------------------
+    // Firebase
+    //------------------------------------------------------------
+    // Создаем два универсальных метода для чтения из базы данных: 
+    //------------------------------------------------------------
+    // Первый – для получения одного документа
+    async fetchItem({ commit }, {id, resource}) {
+      let item = {};
+      // Запрашиваем коллекцию
+      const querySnapshot = await getDocs(collection(db, resource));
+      // Выбираем из нее нужный документ по какому-то условию
+      querySnapshot.forEach((doc) => {
+        if (doc.id === id) {
+          // Восстанавливаем полный документ = данные + id
+          item = { ...doc.data(), id: doc.id };
+          // Добавляем документ в state с помощью мутации
+          commit('setItem', { resource, item });
+        }
+      });
+      // Дополнительно возвращаем промис, чтобы результат вызова этой функции не был  
+      // равен undefined и его можно было бы использовать в Компонентах.vue
+      return Promise.resolve(item);
+    },
+    // Второй – для получения нескольких документов из коллекции
+    fetchItems({dispatch}, { ids, resource }) {
+      return Promise.all(ids.map(id => dispatch('fetchItem', { id, resource })));
+    },
+    //-------------------------------------------------------------
+    // Создаем на их основе методы чтения из базы данных
+    //-------------------------------------------------------------
+    // Для одного item
+    fetchCategory({ dispatch }, {id}) {
+      return dispatch('fetchItem', { resource: 'categories', id });
+    },
+    fetchForum({ dispatch }, {id}) {
+      return dispatch('fetchItem', { resource: 'forums', id });
+    },
+    fetchThread({ dispatch }, {id}) {
+      return dispatch('fetchItem', { resource: 'threads', id });
+    },
+    fetchPost({ dispatch }, {id}) {
+      return dispatch('fetchItem', { resource: 'posts', id });
+    },
+    fetchUser({ dispatch }, {id}) {
+      return dispatch('fetchItem', { resource: 'users', id });
+    },
+    fetchAuthUser({ state, dispatch }) {
+      return dispatch('fetchItem', { resource: 'users', id: state.authId });
+    },
+    // Для нескольких items
+    async fetchAllCategories({ commit }) {
+      let categories = [];
+      const querySnapshot = await getDocs(collection(db, 'categories'));
+      querySnapshot.forEach((doc) => {
+        const item = { ...doc.data(), id: doc.id };
+        categories.push(item);
+        commit('setItem', { resource: 'categories', item });
+      });
+      return Promise.resolve(categories);
+    },
+    fetchForums({ dispatch }, {ids}) {
+      return dispatch('fetchItems', { resource: 'forums', ids });
+    },
+    fetchThreads({ dispatch }, {ids}) {
+      return dispatch('fetchItems', { resource: 'threads', ids });
+    },
+    fetchPosts({ dispatch }, {ids}) {
+      return dispatch('fetchItems', { resource: 'posts', ids });
+    },
+    fetchUsers({ dispatch }, {ids}) {
+      return dispatch('fetchItems', { resource: 'users', ids });
+    },
   },
   modules: {
   }

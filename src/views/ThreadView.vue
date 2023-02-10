@@ -1,15 +1,13 @@
 <template>
-  <div class="thread">
+  <div v-if="isAsyncDataLoaded" class="thread">
     <h1 class="thread__title title">
       {{ thread.title }}
-      <!--<router-link
+      <router-link
         v-if="thread.userId === authUser?.id"
         :to="{ name: 'ThreadEdit', id: this.id }"
-        class="btn_green btn_small"
-        tag="button"
       >
-        Редактировать тему
-      </router-link>-->
+        <button class="thread__button btn_small btn_green">Редактировать тему</button>
+      </router-link>
     </h1>
     <p class="thread__info text_gray">
       Тема начата пользователем <a href="#">{{thread.author?.name}}</a>, {{ localeDate(thread.publishedAt) }}
@@ -35,64 +33,63 @@
 </template>
 
 <script>
-import PostList from '@/components/PostList'
-import PostEditor from '@/components/PostEditor'
-import { mapActions, mapGetters } from 'vuex'
-//import asyncDataStatus from '@/mixins/asyncDataStatus'
-//import useNotifications from '@/composables/useNotifications'
-//import difference from 'lodash/difference'
-import { localeDate, repliesCountWording } from '@/helpers'
+import PostList from '@/components/PostList';
+import PostEditor from '@/components/PostEditor';
+import { mapActions, mapGetters } from 'vuex';
+//import useNotifications from '@/composables/useNotifications';
+//import difference from 'lodash/difference';
+import { localeDate, repliesCountWording } from '@/helpers';
 export default {
   name: 'ThreadView',
   components: {
     PostList,
     PostEditor
   },
-  /*mixins: [asyncDataStatus],*/
   props: {
     id: {
-      required: true,
-      type: String
+      type: String,
+      required: true
     }
   },
   /*setup () {
     const { addNotification } = useNotifications()
     return { addNotification }
   },*/
+  data() {
+    return { isAsyncDataLoaded: false };
+  },
   computed: {
     ...mapGetters(['authUser']),
-    threads () {
+    threads() {
       return this.$store.state.threads
     },
-    posts () {
+    posts() {
       return this.$store.state.posts
     },
-    thread () {
+    thread() {
       return this.$store.getters.thread(this.id)
     },
-    threadPosts () {
+    threadPosts() {
       return this.posts.filter(post => post.threadId === this.id)
     }
   },
   methods: {
     ...mapActions(['fetchThread', 'fetchUsers', 'fetchPosts', 'createPost']),
-    /*...mapActions('users', ['fetchUsers']),
-    ...mapActions('posts', ['fetchPosts', 'createPost']),*/
     localeDate,
     repliesCountWording,
-    /*async fetchPostsWithUsers (ids) {
-      // fetch the posts
+    async fetchPostsWithUsers (ids) {
+      // Загружаем из базы данных посты
       const posts = await this.fetchPosts({
         ids,
-        onSnapshot: ({ isLocal, previousItem }) => {
+        /*onSnapshot: ({ isLocal, previousItem }) => {
           if (!this.asyncDataStatus_ready || isLocal || (previousItem?.edited && !previousItem?.edited?.at)) return
           this.addNotification({ message: 'Thread recently updated', timeout: 5000 })
-        }
+        }*/
       })
-      // fetch the users associated with the posts
+      // Загружаем пользователей, написавших эти посты
       const users = posts.map(post => post.userId).concat(this.thread.userId)
       await this.fetchUsers({ ids: users })
-    },*/
+    },
     addPost (eventData) {
       const post = {
         ...eventData.post,
@@ -100,31 +97,34 @@ export default {
       }
       this.createPost(post)
     }
-  },/*
+  },
   async created () {
     // fetch the thread
     const thread = await this.fetchThread({
       id: this.id,
-      onSnapshot: async ({ isLocal, item, previousItem }) => {
-        if (!this.asyncDataStatus_ready || isLocal) return
-        const newPosts = difference(item.posts, previousItem.posts)
-        const hasNewPosts = newPosts.length > 0
+      /*onSnapshot: async ({ isLocal, item, previousItem }) => {
+        if (!this.asyncDataStatus_ready || isLocal) return;
+        const newPosts = difference(item.posts, previousItem.posts);
+        const hasNewPosts = newPosts.length > 0;
         if (hasNewPosts) {
-          await this.fetchPostsWithUsers(newPosts)
+          await this.fetchPostsWithUsers(newPosts);
         } else {
-          this.addNotification({ message: 'Thread recently updated', timeout: 5000 })
+          this.addNotification({ message: 'Thread recently updated', timeout: 5000 });
         }
-      }
+      }*/
     })
-    await this.fetchPostsWithUsers(thread.posts)
-    this.asyncDataStatus_fetched()
-  }*/
+    await this.fetchPostsWithUsers(thread.postIds);
+    this.isAsyncDataLoaded = true;
+  }
 }
 </script>
 
 <style lang="scss" scoped>
 .thread__title {
   margin: 20px 0;
+}
+.thread__button {
+  float: right;
 }
 .thread__replies {
   float: right;
