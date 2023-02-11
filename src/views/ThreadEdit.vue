@@ -9,7 +9,8 @@
       :text="text"
       @save="save"
       @cancel="cancel"
-      @dirty="formIsDirty = true" @clean="formIsDirty = false"
+      @dirty="formIsDirty = true"
+      @clean="formIsDirty = false"
     />
   </div>
 </template>
@@ -35,7 +36,7 @@ export default {
       return findItemById(this.$store.state.threads, this.id)
     },
     text () {
-      const post = findItemById(this.$store.state.posts, this.thread.posts[0])
+      const post = findItemById(this.$store.state.posts, this.thread.postIds[0])
       return post ? post.text : ''
     }
   },
@@ -47,20 +48,22 @@ export default {
         title,
         text
       })
+      console.log('thread', thread)
       this.$router.push({ name: 'ThreadView', params: { id: thread.id } })
     },
     cancel () {
+      console.log(this.id)
       this.$router.push({ name: 'ThreadView', params: { id: this.id } })
     }
   },
   async created () {
     const thread = await this.fetchThread({ id: this.id })
-    await this.fetchPost({ id: thread.posts[0] })
-    this.asyncDataStatus_fetched()
+    await this.fetchPost({ id: thread.postIds[0] })
+    //this.asyncDataStatus_fetched()
   },
   beforeRouteLeave () {
     if (this.formIsDirty) {
-      const confirmed = window.confirm('Are you sure you want to leave? Unsaved changes will be lost!')
+      const confirmed = window.confirm('Вы уверены, что хотите покинуть страницу? Все несохраненные изменения будут потеряны.')
       if (!confirmed) return false
     }
   }

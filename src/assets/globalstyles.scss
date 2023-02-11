@@ -176,8 +176,98 @@ $avatar-small: 35px;
 }
 
 /* Формы */
+.form__input-group {
+  margin-bottom: 10px;
+  width: 100%;
+  display: inline-block;
+}
+.form__label {
+  margin-bottom: 5px;
+  display: inline-block;
+  color: #767676;
+}
+.form__input {
+  width: 100%;
+  min-height: 43px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  padding: 5px 10px;
+  font-size: 16px;
+  color: #505050;
+  background-color: #fdfdfd;
+  transition: all 0.3s ease;
+  &:disabled {
+    cursor: no-drop;
+    background: #F5F8FE;
+    color: #bbbbbb;
+    &::placeholder {
+      color: #bbbbbb;
+    }
+  }
+  &::placeholder {
+    font-size: inherit;
+    color: #878787;
+  }
+  &:focus {
+    outline: none;
+    border: 1px solid #c7c7c7;
+    color: #434343;
+    background-color: white;
+  }
+  &:invalid {
+    border-color: #C82543;
+    & ~ .form_error {
+      display: block;
+    }
+  }
+  @media (min-width: 240px) and (max-width: 400px) {
+    & {
+      padding-left: 10px;
+      height: 50px;
+    }
+  }
+}
 textarea {
   resize: none;
+}
+textarea.form__input {
+  padding-top: 7px;
+  padding-right: 2px;
+  padding-bottom: 0px;
+  min-height: 110px;
+}
+.form__input_error {
+  border-color: #C82543;
+  & ~ .form-error {
+    display: block;
+  }
+}
+.form_error {
+  background: #f4d3d9;
+  color: #C82543;
+  font-size: 0.8em;
+  float: left;
+  border-radius: 100px;
+  padding: 6px 20px;
+  margin-top: 10px;
+  @media (min-width: 240px) and (max-width: 400px) {
+    & {
+      width: 100%;
+    }
+  }
+}
+@media (min-width: 240px) and (max-width: 720px) {
+  .form_button {
+      width: 100%;
+  }
+}
+.form__btn-group {
+  display: flex;
+  justify-content: flex-end;
+  & button {
+    margin-left: 15px;
+  }
 }
 
 /* Адаптив */

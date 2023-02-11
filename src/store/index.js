@@ -70,11 +70,11 @@ export default createStore({
     },
   },
   mutations: {
-    setPost(state, {post}) {
-      pushItemToStore(state.posts, post)
-    },
     setThread(state, {thread}) {
       pushItemToStore(state.threads, thread)
+    },
+    setPost(state, {post}) {
+      pushItemToStore(state.posts, post)
     },
     setUser(state, {user}) {
       pushItemToStore(state.users, user)
@@ -83,14 +83,14 @@ export default createStore({
       pushItemToStore(state[resource], item);
     },
     appendPostToThread: makeAppendChildToParentMutation({child: 'posts', parent: 'threads'}),
+    appendContributorToThread: makeAppendChildToParentMutation({child: 'contributors', parent: 'threads'}),
     appendThreadToForum: makeAppendChildToParentMutation({child: 'threads', parent: 'forums'}),
     appendThreadToUser: makeAppendChildToParentMutation({child: 'threads', parent: 'users'}),
-    appendContributorToThread: makeAppendChildToParentMutation({child: 'contributors', parent: 'threads'}),
   },
   actions: {
     // На тестовых данных:
     async createPost({state, commit}, post) {
-      post.id = 'a' + Math.random();  // Здесь должна быть функция генерации id
+      post.id = 'p' + Math.random();  // Здесь должна быть функция генерации id
       post.userId = state.authId;
       post.publishedAt = Math.floor(Date.now() / 1000);
       // Добавляем пост в store, чтобы он сразу отобразился на странице
@@ -121,10 +121,10 @@ export default createStore({
       // Hello! This is the first post to be loaded to the Cloud Firestore database!
     },*/
     async createThread({commit, state, dispatch}, {title, text, forumId}) {
-      const id = 'qqqq' + Math.random();  // Здесь должна быть функция генерации id
+      const id = 't' + Math.random();  // Здесь должна быть функция генерации id
       const userId = state.authId;
       const publishedAt = Math.floor(Date.now() / 1000);
-      const thread = { forumId, title, publishedAt, userId, id, };
+      const thread = { forumId, title, publishedAt, userId, id };
       commit('setThread', {thread});
       commit('appendThreadToForum', {forumId, threadId: id});
       commit('appendThreadToUser', {userId, threadId: id});
@@ -133,7 +133,7 @@ export default createStore({
     },
     async updateThread({commit, state}, {title, text, id}) {
       const thread = state.threads.find(thread => thread.id === id);
-      const post = state.posts.find(post => post.id === thread.posts[0]);
+      const post = state.posts.find(post => post.id === thread.postIds[0]);
       const newThread = { ...thread, title };
       const newPost = { ...post, text };
       commit('setThread', { thread: newThread });
@@ -223,14 +223,15 @@ export default createStore({
 // Вспомогательные функции
 function makeAppendChildToParentMutation({child, parent}) {
   return (state, { childId, parentId }) => {
-    const resorce = state[parent].find(r => r.id === parentId)
-    if (!resorce) {
-      console.warn(`Appending ${child} ${childId} to ${parent} ${parentId} failed because parent did't exist`);
+    const resource = state[parent].find(r => r.id === parentId)
+    if (!resource) {
+      console.warn(`Не удалось добавить ${child} ${childId} к ${parent} ${parentId} т.к. родитель не существует.`);
       return;
     }
-    resorce[child] = resorce[child] || []
-    if (!resorce[child].includes(childId)) { // Чтобы добавить пользователя в список только один раз (т.к. они могут по много раз отвечать на одной ветке / форуме и т.д.)
-      resorce[child].push(childId)
+    const propertyName = child.slice(0, -1) + 'Ids'
+    resource[propertyName] = resource[propertyName] || []
+    if (!resource[propertyName].includes(childId)) { // Чтобы добавить пользователя в список только один раз (т.к. они могут по много раз отвечать на одной ветке / форуме и т.д.)
+      resource[propertyName].push(childId)
     }
   }
 }

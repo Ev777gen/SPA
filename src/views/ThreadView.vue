@@ -74,35 +74,62 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['fetchThread', 'fetchUsers', 'fetchPosts', 'createPost']),
+    ...mapActions(['fetchThread', 'fetchUser', 'fetchUsers', 'fetchPosts', 'createPost']),
     localeDate,
     repliesCountWording,
-    async fetchPostsWithUsers (ids) {
-      // Загружаем из базы данных посты
-      const posts = await this.fetchPosts({
-        ids,
-        /*onSnapshot: ({ isLocal, previousItem }) => {
-          if (!this.asyncDataStatus_ready || isLocal || (previousItem?.edited && !previousItem?.edited?.at)) return
-          this.addNotification({ message: 'Thread recently updated', timeout: 5000 })
-        }*/
-      })
-      // Загружаем пользователей, написавших эти посты
-      const users = posts.map(post => post.userId).concat(this.thread.userId)
-      await this.fetchUsers({ ids: users })
-    },
     addPost (eventData) {
       const post = {
         ...eventData.post,
         threadId: this.id
       }
       this.createPost(post)
-    }
+    },
+    /*async fetchPostsWithUsers (ids) {
+      // Загружаем из базы данных посты
+      const posts = await this.fetchPosts({
+        ids,
+        onSnapshot: ({ isLocal, previousItem }) => {
+          if (!this.asyncDataStatus_ready || isLocal || (previousItem?.edited && !previousItem?.edited?.at)) return
+          this.addNotification({ message: 'Thread recently updated', timeout: 5000 })
+        }
+      })
+      // Загружаем пользователей, написавших эти посты
+      const users = posts.map(post => post.userId).concat(this.thread.userId)
+      await this.fetchUsers({ ids: users })
+    }*/
   },
-  async created () {
+  async created() {
+    // fetch the thread
+    console.log('1. fetching the thread inside created hook', this.id);
+    // Из store (временно!!!) !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    const thread = this.$store.state.threads.find(t => t.id == this.id);
+    // Из Firebase
+    //const thread = await this.fetchThread({ id: this.id });
+    console.log('7. thread inside created hook', thread);
+    // fetch the user
+    this.fetchUser({ id: thread.userId });
+    // fetch the posts
+    // Из store (временно!!!)
+    //const posts = this.$store.state.posts.filter(p => p.id == thread.postIds);
+    // Из Firebase
+    const posts = await this.fetchPosts({ ids: thread.postIds });
+    console.log('posts', posts)
+    // fetch the users associated with the posts
+    const users = posts.map(post => post.userId);
+    console.log('users', users)
+    this.fetchUsers({ ids: users });
+    /*thread.posts.forEach( async (postId) => {
+      const post = await this.$store.dispatch('fetchPost', {id: postId});
+      //console.log('post inside created hook ', post);
+      this.$store.dispatch('fetchUser', {id: post.userId});
+    });*/
+    this.isAsyncDataLoaded = true;
+  },
+  /*async created () {
     // fetch the thread
     const thread = await this.fetchThread({
       id: this.id,
-      /*onSnapshot: async ({ isLocal, item, previousItem }) => {
+      onSnapshot: async ({ isLocal, item, previousItem }) => {
         if (!this.asyncDataStatus_ready || isLocal) return;
         const newPosts = difference(item.posts, previousItem.posts);
         const hasNewPosts = newPosts.length > 0;
@@ -111,11 +138,11 @@ export default {
         } else {
           this.addNotification({ message: 'Thread recently updated', timeout: 5000 });
         }
-      }*/
+      }
     })
-    await this.fetchPostsWithUsers(thread.postIds);
+    //await this.fetchPostsWithUsers(thread.postIds);
     this.isAsyncDataLoaded = true;
-  }
+  }*/
 }
 </script>
 

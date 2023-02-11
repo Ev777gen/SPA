@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="forum">
     <h1 class="title">
       Создать новую тему в форуме <i>{{ forum.name }}</i>
     </h1>
@@ -8,15 +8,18 @@
   </div>
 </template>
 <script>
-//import ThreadEditor from '@/components/ThreadEditor'
-//import { findById } from '@/helpers'
+import ThreadEditor from '@/components/ThreadEditor'
+import { findItemById } from '@/helpers'
 import { mapActions } from 'vuex'
 //import asyncDataStatus from '@/mixins/asyncDataStatus'
 export default {
-  //components: { ThreadEditor },
+  components: { ThreadEditor },
   //mixins: [asyncDataStatus],
   props: {
-    forumId: { type: String, required: true }
+    forumId: { 
+      type: String, 
+      required: true 
+    }
   },
   data () {
     return {
@@ -25,17 +28,20 @@ export default {
   },
   computed: {
     forum () {
-      return this.$store.state.forums.find(forum => forum.id === this.forumId)
+      //return this.$store.state.forums.find(forum => forum.id === this.forumId)
+      return findItemById(this.$store.state.forums, this.forumId)
     }
   },
   methods: {
     ...mapActions(['fetchForum', 'createThread']),
     async save ({ title, text }) {
       const thread = await this.createThread({
-        forumId: this.forum.id,
         title,
-        text
+        text,
+        forumId: this.forum.id
+        //forumId
       })
+      console.log('thread', thread, 'thread.id', thread.id)
       this.$router.push({ name: 'ThreadView', params: { id: thread.id } })
     },
     cancel () {

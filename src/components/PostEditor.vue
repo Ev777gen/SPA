@@ -18,7 +18,9 @@
 <script>
 export default {
   props: {
-    post: { type: Object, default: () => ({ text: null }) }
+    post: { 
+      type: Object,
+      default: () => ({ text: null }) }
   },
   data () {
     return {
@@ -28,6 +30,7 @@ export default {
     }
   },
   methods: {
+    // На тестовых данных:
     save () {
       //const postId = 'a' + Math.random(); // нужна система генерации postId. Пока просто строка + случайное число
       const post = {
@@ -48,6 +51,7 @@ export default {
 
       this.text = '';
     },
+    // На Firebase:
     /*save () {
       this.$emit('save', { post: this.postCopy })
       this.postCopy.text = ''
