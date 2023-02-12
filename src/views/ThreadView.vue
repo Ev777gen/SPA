@@ -1,7 +1,7 @@
 <template>
   <div v-if="isAsyncDataLoaded" class="thread">
     <h1 class="thread__title title">
-      {{ thread.title }}
+      <p>{{ thread.title }}</p>
       <router-link
         v-if="thread.userId === authUser?.id"
         :to="{ name: 'ThreadEdit', id: this.id }"
@@ -100,12 +100,12 @@ export default {
   },
   async created() {
     // fetch the thread
-    console.log('1. fetching the thread inside created hook', this.id);
+    //console.log('1. fetching the thread inside created hook', this.id);
     // Из store (временно!!!) !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    const thread = this.$store.state.threads.find(t => t.id == this.id);
+    //const thread = this.$store.state.threads.find(t => t.id == this.id);
     // Из Firebase
-    //const thread = await this.fetchThread({ id: this.id });
-    console.log('7. thread inside created hook', thread);
+    const thread = await this.fetchThread({ id: this.id });
+    //console.log('7. thread inside created hook', thread);
     // fetch the user
     this.fetchUser({ id: thread.userId });
     // fetch the posts
@@ -113,10 +113,10 @@ export default {
     //const posts = this.$store.state.posts.filter(p => p.id == thread.postIds);
     // Из Firebase
     const posts = await this.fetchPosts({ ids: thread.postIds });
-    console.log('posts', posts)
+    //console.log('posts', posts)
     // fetch the users associated with the posts
     const users = posts.map(post => post.userId);
-    console.log('users', users)
+    //console.log('users', users)
     this.fetchUsers({ ids: users });
     /*thread.posts.forEach( async (postId) => {
       const post = await this.$store.dispatch('fetchPost', {id: postId});
@@ -148,10 +148,9 @@ export default {
 
 <style lang="scss" scoped>
 .thread__title {
+  display: flex;
+  justify-content: space-between;
   margin: 20px 0;
-}
-.thread__button {
-  float: right;
 }
 .thread__replies {
   float: right;

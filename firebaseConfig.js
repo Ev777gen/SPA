@@ -1,4 +1,4 @@
-export default {
+module.exports = {
   apiKey: "AIzaSyDrneVPNzmr8y5EraatCBjTIM4UIf563xs",
   authDomain: "spa-blog-c7ad9.firebaseapp.com",
   projectId: "spa-blog-c7ad9",

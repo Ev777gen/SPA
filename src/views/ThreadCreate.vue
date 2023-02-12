@@ -41,7 +41,7 @@ export default {
         forumId: this.forum.id
         //forumId
       })
-      console.log('thread', thread, 'thread.id', thread.id)
+      //console.log('thread', thread, 'thread.id', thread.id)
       this.$router.push({ name: 'ThreadView', params: { id: thread.id } })
     },
     cancel () {
