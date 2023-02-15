@@ -3,6 +3,11 @@ export const localeDate = (timestamp) => {
   // toLocaleString() - дата + время
   // toLocaleDateString() - дата 
   // toLocaleTimeString() - время
+  // Обрабатываем формат timestamp из Firebase
+  if (timestamp.seconds) {
+    timestamp = timestamp.seconds;
+  }
+  // Обрабатываем наш формат даты
   const isTimestampInSeconds = timestamp < 10000000000;
   if (isTimestampInSeconds) {
     timestamp *= 1000;
