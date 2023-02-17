@@ -1,5 +1,5 @@
 <template>
-  <div v-if="isAsyncDataLoaded" class="forum">
+  <div v-if="asyncDataStatus_isReady" class="forum">
     <div v-if="forum" class="forum__header">
       <div class="forum__details">
         <h1 class="forum__title title">{{ forum.name }}</h1>
@@ -23,8 +23,10 @@
 import ThreadList from '@/components/ThreadList';
 import { findItemById } from '@/helpers';
 import { mapActions } from 'vuex';
+import asyncDataStatus from '@/mixins/asyncDataStatus';
 export default {
   components: { ThreadList },
+  mixins: [asyncDataStatus],
   props: {
     id: {
       type: String,
@@ -33,7 +35,6 @@ export default {
   },
   data () {
     return {
-      isAsyncDataLoaded: false,
       //page: parseInt(this.$route.query.page) || 1,
       //perPage: 10
     }
@@ -64,14 +65,14 @@ export default {
     const forum = await this.fetchForum({ id: this.id });
     const threads = await this.fetchThreads({ ids: forum.threadIds || [] });
     await this.fetchUsers({ ids: threads.map(thread => thread.userId) });
-    this.isAsyncDataLoaded = true;
+    this.asyncDataStatus_loaded();
   },
   // With pagination:
   /*async created () {
     const forum = await this.fetchForum({ id: this.id });
     const threads = await this.fetchThreadsByPage({ ids: forum.threads, page: this.page, perPage: this.perPage });
     await this.fetchUsers({ ids: threads.map(thread => thread.userId) });
-    this.isAsyncDataLoaded = true;;
+    this.asyncDataStatus_loaded();
   },
   watch: {
     async page (page) {

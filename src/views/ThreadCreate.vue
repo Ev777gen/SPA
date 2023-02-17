@@ -1,5 +1,5 @@
 <template>
-  <div v-if="forum">
+  <div v-if="asyncDataStatus_isReady">
     <h1 class="title">
       Создать новую тему в форуме <i>{{ forum.name }}</i>
     </h1>
@@ -11,10 +11,10 @@
 import ThreadEditor from '@/components/ThreadEditor'
 import { findItemById } from '@/helpers'
 import { mapActions } from 'vuex'
-//import asyncDataStatus from '@/mixins/asyncDataStatus'
+import asyncDataStatus from '@/mixins/asyncDataStatus'
 export default {
   components: { ThreadEditor },
-  //mixins: [asyncDataStatus],
+  mixins: [asyncDataStatus],
   props: {
     forumId: { 
       type: String, 
@@ -28,7 +28,6 @@ export default {
   },
   computed: {
     forum () {
-      //return this.$store.state.forums.find(forum => forum.id === this.forumId)
       return findItemById(this.$store.state.forums, this.forumId)
     }
   },
@@ -40,22 +39,22 @@ export default {
         text,
         forumId: this.forum.id
         //forumId
-      })
+      });
       //console.log('thread', thread, 'thread.id', thread.id)
-      this.$router.push({ name: 'ThreadView', params: { id: thread.id } })
+      this.$router.push({ name: 'ThreadView', params: { id: thread.id } });
     },
     cancel () {
-      this.$router.push({ name: 'ForumView', params: { id: this.forum.id } })
+      this.$router.push({ name: 'ForumView', params: { id: this.forum.id } });
     }
   },
   async created () {
-    await this.fetchForum({ id: this.forumId })
-    //this.asyncDataStatus_fetched()
+    await this.fetchForum({ id: this.forumId });
+    this.asyncDataStatus_loaded();
   },
   beforeRouteLeave () {
     if (this.formIsDirty) {
-      const confirmed = window.confirm('Are you sure you want to leave? Unsaved changes will be lost!')
-      if (!confirmed) return false
+      const confirmed = window.confirm('Are you sure you want to leave? Unsaved changes will be lost!');
+      if (!confirmed) return false;
     }
   }
 }

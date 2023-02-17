@@ -69,7 +69,7 @@
     {
       "name": "Вопросы и обратная связь",
       "slug": "questions-and-feedback",
-      "description": "Задавай вопросы и оставляй отзывы",
+      "description": "Задавай вопросы и оставляй отзывы здесь",
       "id": "2",
       "categoryId": "1",
       "threadIds": ["2"],

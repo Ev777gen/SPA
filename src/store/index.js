@@ -225,8 +225,6 @@ export default createStore({
       return newThread;
       */
     },
-    // На тестовых данных:
-
     // На Firebase:
     async createPost({state, commit, dispatch}, post) {
       //post.id = 'qqqq' + Math.random();  // Здесь должна быть функция генерации id

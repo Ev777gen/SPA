@@ -1,5 +1,5 @@
 <template>
-  <div v-if="isAsyncDataLoaded" class="thread">
+  <div v-if="asyncDataStatus_isReady" class="thread">
     <h1 class="thread__title title">
       <p>{{ thread.title }}</p>
       <router-link
@@ -36,6 +36,7 @@
 import PostList from '@/components/PostList';
 import PostEditor from '@/components/PostEditor';
 import { mapActions, mapGetters } from 'vuex';
+import asyncDataStatus from '@/mixins/asyncDataStatus';
 //import useNotifications from '@/composables/useNotifications';
 //import difference from 'lodash/difference';
 import { localeDate, repliesCountWording } from '@/helpers';
@@ -45,6 +46,7 @@ export default {
     PostList,
     PostEditor
   },
+  mixins: [asyncDataStatus],
   props: {
     id: {
       type: String,
@@ -55,9 +57,6 @@ export default {
     const { addNotification } = useNotifications()
     return { addNotification }
   },*/
-  data() {
-    return { isAsyncDataLoaded: false };
-  },
   computed: {
     ...mapGetters(['authUser']),
     threads() {
@@ -141,7 +140,7 @@ export default {
       }*/
     })
     await this.fetchPostsWithUsers(thread.postIds);
-    this.isAsyncDataLoaded = true;
+    this.asyncDataStatus_loaded();
   }
 }
 </script>
