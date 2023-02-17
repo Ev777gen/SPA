@@ -3,7 +3,7 @@ import { findItemById } from '@/helpers';
 //import testData from "@/data.json";
 import { db } from "@/main.js";
 //import { collection, getDocs, addDoc, doc, updateDoc, arrayUnion, writeBatch, serverTimestamp } from "firebase/firestore/lite";
-import { collection, getDocs, getDoc, doc, arrayUnion, writeBatch, serverTimestamp, increment } from "firebase/firestore/lite";
+import { collection, getDocs, getDoc, onSnapshot, doc, arrayUnion, writeBatch, serverTimestamp, increment } from "firebase/firestore";
 
 export default createStore({
   state: {
@@ -19,6 +19,7 @@ export default createStore({
     threads: [],
     posts: [],
     users: [],
+    unsubscribes: [],
     authId: '1',
   },
   getters: {
@@ -71,7 +72,7 @@ export default createStore({
     },
   },
   mutations: {
-    setThread(state, {thread}) {
+    /*setThread(state, {thread}) {
       pushItemToStore(state.threads, thread)
     },
     setPost(state, {post}) {
@@ -79,7 +80,7 @@ export default createStore({
     },
     setUser(state, {user}) {
       pushItemToStore(state.users, user)
-    },
+    },*/
     setItem(state, { resource, item }) {
       pushItemToStore(state[resource], item);
     },
@@ -87,10 +88,20 @@ export default createStore({
     appendContributorToThread: makeAppendChildToParentMutation({child: 'contributorIds', parent: 'threads'}),
     appendThreadToForum: makeAppendChildToParentMutation({child: 'threadIds', parent: 'forums'}),
     appendThreadToUser: makeAppendChildToParentMutation({child: 'threadsStarted', parent: 'users'}),
+    // Мутации для работы с обновлением в реальном времени из БД
+    appendUnsubscribe (state, { unsubscribe }) {
+      state.unsubscribes.push(unsubscribe)
+    },
+    clearAllUnsubscribes (state) {
+      state.unsubscribes = []
+    },
   },
   actions: {
+    /*
+    //------------------------------------------------------------
     // На тестовых данных:
-    /*async createThread({commit, state, dispatch}, {title, text, forumId}) {
+    //------------------------------------------------------------
+    async createThread({commit, state, dispatch}, {title, text, forumId}) {
       const id = 't' + Math.random();  // Здесь должна быть функция генерации id
       const userId = state.authId;
       const publishedAt = Math.floor(Date.now() / 1000);
@@ -109,8 +120,22 @@ export default createStore({
       commit('setThread', { thread: newThread });
       commit('setPost', { post: newPost });
       return newThread;
-    },*/
+    },
+    async createPost({state, commit}, post) {
+      post.id = 'p' + Math.random();  // Здесь должна быть функция генерации id
+      post.userId = state.authId;
+      post.publishedAt = Math.floor(Date.now() / 1000);
+      // Добавляем пост в store, чтобы он сразу отобразился на странице
+      commit('setItem', { resource: 'posts', item: { ...post, id: post.id } });
+      commit('appendPostToThread', {childId: post.id, parentId: post.threadId});
+      commit('appendContributorToThread', {childId: post.userId, parentId: post.threadId});
+    },
+    */
+    //------------------------------------------------------------
     // На Firebase:
+    //------------------------------------------------------------
+    // Запись в Cloud Firestore
+    //------------------------------------------------------------
     async createThread({commit, state, dispatch}, {title, text, forumId}) {
       //const id = 't' + Math.random();  // Здесь должна быть функция генерации id
       const userId = state.authId;
@@ -201,15 +226,7 @@ export default createStore({
       */
     },
     // На тестовых данных:
-    /*async createPost({state, commit}, post) {
-      post.id = 'p' + Math.random();  // Здесь должна быть функция генерации id
-      post.userId = state.authId;
-      post.publishedAt = Math.floor(Date.now() / 1000);
-      // Добавляем пост в store, чтобы он сразу отобразился на странице
-      commit('setItem', { resource: 'posts', item: { ...post, id: post.id } });
-      commit('appendPostToThread', {childId: post.id, parentId: post.threadId});
-      commit('appendContributorToThread', {childId: post.userId, parentId: post.threadId});
-    },*/
+
     // На Firebase:
     async createPost({state, commit, dispatch}, post) {
       //post.id = 'qqqq' + Math.random();  // Здесь должна быть функция генерации id
@@ -276,13 +293,28 @@ export default createStore({
       commit('setUser', {user, userId: user.id});
     },
     //------------------------------------------------------------
-    // Firebase
+    // Чтение из Cloud Firestore
     //------------------------------------------------------------
     // Создаем два универсальных метода для чтения из базы данных: 
     //------------------------------------------------------------
     // Первый – для получения одного документа
     async fetchItem({ commit }, { resource, id }) {
-      // Улучшаем этот метод
+      
+      // Первый вариант - обновление данных в реальном времени
+      return new Promise((resolve) => {
+        const unsubscribe = onSnapshot(doc(db, resource, id), (doc) => {
+          //console.log('snapshot', id);
+          // Восстанавливаем полный документ = данные + id
+          const item = { ...doc.data(), id: doc.id };
+          // Добавляем документ в state
+          commit('setItem', { resource, item });
+          resolve(item);
+        });
+        commit('appendUnsubscribe', { unsubscribe });
+      });
+      
+      /*
+      // Второй вариант - одиночный запрос
       const docRef = doc(db, resource, id);
       const docSnap = await getDoc(docRef);
       console.log('snapshot', id)
@@ -293,32 +325,20 @@ export default createStore({
       // Дополнительно возвращаем промис, чтобы результат вызова этой функции не был  
       // равен undefined и его можно было бы использовать в Компонентах.vue
       return Promise.resolve(item);
-      
-      /*
-      // Первый вариант этого метода - НЕПРАВИЛЬНЫЙ
-      console.log('snapshot', id)
-      let item = {};
-      // Запрашиваем коллекцию
-      const querySnapshot = await getDocs(collection(db, resource));
-      // Выбираем из нее нужный документ по какому-то условию
-      querySnapshot.forEach((doc) => {
-        if (doc.id === id) {
-          // Восстанавливаем полный документ = данные + id
-          item = { ...doc.data(), id: doc.id };
-          // Добавляем документ в state с помощью мутации
-          commit('setItem', { resource, item });
-        }
-      });
-      // Дополнительно возвращаем промис, чтобы результат вызова этой функции не был  
-      // равен undefined и его можно было бы использовать в Компонентах.vue
-      //console.log('fetchItem', id, resource)
-      return Promise.resolve(item);
       */
     },
     // Второй – для получения нескольких документов из коллекции
     fetchItems({dispatch}, { resource, ids }) {
       //console.log('fetchItems', ids, resource)
       return Promise.all(ids.map(id => dispatch('fetchItem', { resource, id })));
+    },
+    // Вспомогательный метод для работы с обновлением в реальном времени
+    // Удаляем все onSnapshot listeners
+    // Вызываем эту функцию в глобальном Navigation Guard (src/router/index.js)
+    async unsubscribeAllSnapshots ({ state, commit }) {
+      //console.log('state.unsubscribes', state.unsubscribes)
+      state.unsubscribes.forEach(unsubscribe => unsubscribe());
+      commit('clearAllUnsubscribes');
     },
     //-------------------------------------------------------------
     // Создаем на их основе методы чтения из базы данных

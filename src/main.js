@@ -4,7 +4,8 @@ import router from './router';
 import store from './store';
 // Importing Firebase
 import { initializeApp } from "firebase/app";
-import { getFirestore } from 'firebase/firestore/lite';
+import { getFirestore } from 'firebase/firestore';
+//import { getFirestore } from 'firebase/firestore/lite';
 // Importing FontAwesome plugin
 import FontAwesome from "@/plugins/FontAwesome";
 

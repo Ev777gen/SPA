@@ -1,4 +1,5 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router';
+import store from '@/store';
 
 const routes = [
   {
@@ -68,6 +69,17 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
-})
+});
 
-export default router
+router.beforeEach(async (to, from) => {
+  //await store.dispatch('auth/initAuthentication');
+  store.dispatch('unsubscribeAllSnapshots');
+  /*if (to.meta.requiresAuth && !store.state.auth.authId) {
+    return { name: 'SignIn', query: { redirectTo: to.path } };
+  }
+  if (to.meta.requiresGuest && store.state.auth.authId) {
+    return { name: 'Home' };
+  }*/
+});
+
+export default router;
