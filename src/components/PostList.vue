@@ -18,9 +18,10 @@
       </div>
 
       <div class="post__content">
-        <div class="col-full">
+        <div class="post__body">
           <PostEditor
-            v-if="editing === post.id" :post="post"
+            v-if="editing === post.id"
+            :post="post"
             @save="handleUpdate"
           />
           <p v-else>
@@ -31,10 +32,10 @@
           v-if="post.userId === $store.state.authId"
           @click.prevent="toggleEditMode(post.id)"
           href="#"
-          class="post__change"
-          title="Редактировать"
+          class="post__edit-icon"
+          title="Редактировать пост"
         >
-          <fa icon="pencil-alt" /><!-- Добавить иконку из font awsome -->
+          <font-awesome-icon icon="fa-solid fa-pencil" />
         </a>
       </div>
 
@@ -162,6 +163,9 @@ export default {
     margin-bottom: 20px;
   } 
 }
+.post__body {
+  width: 100%;
+}
 .post__date {
   flex-basis: 100%;
   font-size: 14px;
@@ -179,8 +183,9 @@ export default {
     }
   }
 }
-.post__change {
+.post__edit-icon {
   margin-left: auto;
   padding-left: 10px;
+  color: #777;
 }
 </style>

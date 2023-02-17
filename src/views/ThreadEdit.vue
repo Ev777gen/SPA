@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>
+    <h1 class="title">
       Редактирование темы <i>{{ thread.title }}</i>
     </h1>
 
@@ -69,3 +69,9 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.title {
+  margin: 35px 0;
+}
+</style>

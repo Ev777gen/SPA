@@ -14,8 +14,8 @@
       <span v-if="thread.repliesCount" class="thread__replies">
         {{ thread.repliesCount }}
         {{ repliesCountWording(thread.repliesCount) }}
-        от {{thread.contributorsCount - 1}}
-        {{thread.contributorsCount - 1 === 1 ? 'пользователя' : 'пользователей'}}
+        от {{ thread.contributorsCount - 1 || 1 }}
+        {{ thread.contributorsCount - 1 <= 1 ? 'пользователя' : 'пользователей' }}
       </span>
       <span v-else class="thread__replies">Нет ответов</span>
     </p>
@@ -84,21 +84,21 @@ export default {
       }
       this.createPost(post)
     },
-    /*async fetchPostsWithUsers (ids) {
+    async fetchPostsWithUsers (ids) {
       // Загружаем из базы данных посты
       const posts = await this.fetchPosts({
         ids,
-        onSnapshot: ({ isLocal, previousItem }) => {
+        /*onSnapshot: ({ isLocal, previousItem }) => {
           if (!this.asyncDataStatus_ready || isLocal || (previousItem?.edited && !previousItem?.edited?.at)) return
           this.addNotification({ message: 'Thread recently updated', timeout: 5000 })
-        }
+        }*/
       })
       // Загружаем пользователей, написавших эти посты
       const users = posts.map(post => post.userId).concat(this.thread.userId)
       await this.fetchUsers({ ids: users })
-    }*/
+    }
   },
-  async created() {
+  /*async created() {
     // fetch the thread
     //console.log('1. fetching the thread inside created hook', this.id);
     // Из store (временно!!!) !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -118,18 +118,18 @@ export default {
     const users = posts.map(post => post.userId);
     //console.log('users', users)
     this.fetchUsers({ ids: users });
-    /*thread.posts.forEach( async (postId) => {
-      const post = await this.$store.dispatch('fetchPost', {id: postId});
-      //console.log('post inside created hook ', post);
-      this.$store.dispatch('fetchUser', {id: post.userId});
-    });*/
+    //thread.posts.forEach( async (postId) => {
+    //  const post = await this.$store.dispatch('fetchPost', {id: postId});
+    //  //console.log('post inside created hook ', post);
+    //  this.$store.dispatch('fetchUser', {id: post.userId});
+    //});
     this.isAsyncDataLoaded = true;
-  },
-  /*async created () {
+  },*/
+  async created () {
     // fetch the thread
     const thread = await this.fetchThread({
       id: this.id,
-      onSnapshot: async ({ isLocal, item, previousItem }) => {
+      /*onSnapshot: async ({ isLocal, item, previousItem }) => {
         if (!this.asyncDataStatus_ready || isLocal) return;
         const newPosts = difference(item.posts, previousItem.posts);
         const hasNewPosts = newPosts.length > 0;
@@ -138,11 +138,11 @@ export default {
         } else {
           this.addNotification({ message: 'Thread recently updated', timeout: 5000 });
         }
-      }
+      }*/
     })
-    //await this.fetchPostsWithUsers(thread.postIds);
+    await this.fetchPostsWithUsers(thread.postIds);
     this.isAsyncDataLoaded = true;
-  }*/
+  }
 }
 </script>
 

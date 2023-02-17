@@ -1,9 +1,10 @@
 <template>
   <div class="form">
     <form @submit.prevent="save">
-      <textarea v-model="text" rows="10" class="form__input"></textarea>
+      <!--<textarea v-model="text" rows="10" class="form__input"></textarea>-->
+      <textarea v-model="postCopy.text" rows="10" class="form__input"></textarea>
       <div class="form__button">
-        <button class="btn_blue">Опубликовать</button>
+        <button class="btn_blue">{{post.id ? 'Сохранить изменения' : 'Опубликовать'}}</button>
       </div>
     </form>
     <!--<VeeForm @submit="save" :key="formKey">
@@ -20,16 +21,18 @@ export default {
   props: {
     post: { 
       type: Object,
-      default: () => ({ text: null }) }
+      default: () => ({ text: null })
+    }
   },
   data () {
     return {
-      text: '',
-      //postCopy: { ...this.post },
+      //text: '',
+      postCopy: { ...this.post },
       //formKey: Math.random()
     }
   },
   methods: {
+    /*
     // На тестовых данных:
     save () {
       //const postId = 'a' + Math.random(); // нужна система генерации postId. Пока просто строка + случайное число
@@ -51,12 +54,13 @@ export default {
 
       this.text = '';
     },
+    */
     // На Firebase:
-    /*save () {
+    save () {
       this.$emit('save', { post: this.postCopy })
       this.postCopy.text = ''
-      this.formKey = Math.random()
-    }*/
+      //this.formKey = Math.random()
+    }
   }
 }
 </script>

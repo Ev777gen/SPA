@@ -439,11 +439,5 @@
       "postsCount": 3,
       "threadsStarted": ["10", "11", "12"]
     }
-  ],
-  "statistics": [{
-    "forumsCount": 8,
-    "threadsCount": 10,
-    "postsCount": 12,
-    "usersCount": 6
-  }]
+  ]
 }

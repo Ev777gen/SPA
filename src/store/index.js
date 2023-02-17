@@ -3,7 +3,7 @@ import { findItemById } from '@/helpers';
 //import testData from "@/data.json";
 import { db } from "@/main.js";
 //import { collection, getDocs, addDoc, doc, updateDoc, arrayUnion, writeBatch, serverTimestamp } from "firebase/firestore/lite";
-import { collection, getDocs, doc, arrayUnion, writeBatch, serverTimestamp } from "firebase/firestore/lite";
+import { collection, getDocs, getDoc, doc, arrayUnion, writeBatch, serverTimestamp, increment } from "firebase/firestore/lite";
 
 export default createStore({
   state: {
@@ -37,7 +37,7 @@ export default createStore({
           get threads () {
             return state.threads.filter(post => post.userId === user.id)
           },
-          get threadIds () { // Может быть переименовать в threadsStarted ???????????????????????
+          get threadsStarted () {
             return user.threadsStarted
           },
           get threadsCount () {
@@ -144,7 +144,7 @@ export default createStore({
       commit('setItem', { resource: 'threads', item: { ...newThread, id: newThread.id } });
       commit('appendThreadToForum', {forumId, threadId: newThread.id});
       commit('appendThreadToUser', {userId, threadId: newThread.id});
-      dispatch('createPost', {text, threadId: newThread.id});
+      await dispatch('createPost', {text, threadId: newThread.id});
       return findItemById(state.threads, newThread.id);
       /*
       // Это первая версия, без batch:
@@ -163,20 +163,28 @@ export default createStore({
       return state.threads.find(thread => thread.id === newThread.id);
       */
     },
-    async updateThread({commit, state}, {title, text, id}) {
+    async updateThread({commit, state, dispatch}, {title, text, id}) {
       const thread = findItemById(state.threads, id);
       const post = findItemById(state.posts, thread.postIds[0]);
-      const newThread = { ...thread, title };
-      const newPost = { ...post, text };
+      let newThread = { ...thread, title };
+      let newPost = { ...post, text };
       // Изменяем thread в базе данных Cloud Firestore:
       // Это последняя версия, с batch:
       const batch = writeBatch(db);
-      batch.update(doc(db, "threads", id), { title });
-      batch.update(doc(db, "posts", thread.postIds[0]), { text });
+      const threadRef = doc(db, "threads", id);
+      const postRef = doc(db, "posts", thread.postIds[0]);
+      batch.update(threadRef, { title });
+      batch.update(postRef, { text });
       await batch.commit();
       // Делаем то же самое в store, чтобы измененная тема сразу отобразилась на странице
-      commit('setItem', { resource: 'threads', item: { thread: newThread } });
-      commit('setItem', { resource: 'posts', item: { post: newPost } });
+      // Сначала загружаем посты из БД, чтобы точно работать со свежими данными
+      newThread = await dispatch("fetchThread", { id: threadRef.id });
+      newPost = await dispatch("fetchPost", { id: postRef.id });
+      // И выполняем мутации
+      commit('setItem', { resource: 'threads', item: { ...newThread, id: newThread.id } });
+      commit('setItem', { resource: 'posts', item: { ...newPost, id: newPost.id } });
+      //commit('setItem', { resource: 'threads', item: { thread: newThread } });
+      //commit('setItem', { resource: 'posts', item: { post: newPost } });
       return newThread;
       /*
       // Это первая версия, без batch:
@@ -215,6 +223,8 @@ export default createStore({
       const batch = writeBatch(db);
       const postRef = doc(collection(db, "posts"));
       const threadRef = doc(db, "threads", post.threadId);
+      const userRef = doc(db, "users", post.userId);
+
       batch.set(postRef, post);
       batch.update(postRef, {
         publishedAt: serverTimestamp()
@@ -222,6 +232,9 @@ export default createStore({
       batch.update(threadRef, {
         postIds: arrayUnion(postRef.id),
         contributorIds: arrayUnion(state.authId)
+      });
+      batch.update(userRef, {
+        postsCount: increment(1)
       });
       await batch.commit();
       // Делаем то же самое в store, чтобы пост сразу отобразился на странице
@@ -244,6 +257,21 @@ export default createStore({
       commit('appendContributorToThread', {childId: post.userId, parentId: post.threadId});
       */
     },
+    async updatePost ({ commit, state, dispatch }, { text, id }) {
+      const batch = writeBatch(db);
+      const postRef = doc(db, "posts", id);
+      batch.update(postRef, {
+        text,
+        edited: {
+          at: serverTimestamp(),
+          by: state.authId,
+          moderated: false
+        }
+      });
+      await batch.commit();
+      const updatedPost = await dispatch("fetchPost", { id });
+      commit('setItem', { resource: 'posts', item: updatedPost });
+    },
     updateUser({commit}, user) {
       commit('setUser', {user, userId: user.id});
     },
@@ -254,6 +282,21 @@ export default createStore({
     //------------------------------------------------------------
     // Первый – для получения одного документа
     async fetchItem({ commit }, { resource, id }) {
+      // Улучшаем этот метод
+      const docRef = doc(db, resource, id);
+      const docSnap = await getDoc(docRef);
+      console.log('snapshot', id)
+      // Восстанавливаем полный документ = данные + id
+      const item = { ...docSnap.data(), id: docSnap.id };
+      // Добавляем документ в state
+      commit('setItem', { resource, item });
+      // Дополнительно возвращаем промис, чтобы результат вызова этой функции не был  
+      // равен undefined и его можно было бы использовать в Компонентах.vue
+      return Promise.resolve(item);
+      
+      /*
+      // Первый вариант этого метода - НЕПРАВИЛЬНЫЙ
+      console.log('snapshot', id)
       let item = {};
       // Запрашиваем коллекцию
       const querySnapshot = await getDocs(collection(db, resource));
@@ -270,6 +313,7 @@ export default createStore({
       // равен undefined и его можно было бы использовать в Компонентах.vue
       //console.log('fetchItem', id, resource)
       return Promise.resolve(item);
+      */
     },
     // Второй – для получения нескольких документов из коллекции
     fetchItems({dispatch}, { resource, ids }) {
