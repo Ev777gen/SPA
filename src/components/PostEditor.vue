@@ -3,7 +3,8 @@
     <form @submit.prevent="save">
       <!--<textarea v-model="text" rows="10" class="form__input"></textarea>-->
       <textarea v-model="postCopy.text" rows="10" class="form__input"></textarea>
-      <div class="form__button">
+      <div class="form__btn-group">
+        <button v-if="postCopy.text" @click.prevent="cancel" class="btn btn_ghost">Отмена</button>
         <button class="btn_blue">{{post.id ? 'Сохранить изменения' : 'Опубликовать'}}</button>
       </div>
     </form>
@@ -56,10 +57,13 @@ export default {
     },
     */
     // На Firebase:
-    save () {
+    save() {
       this.$emit('save', { post: this.postCopy })
       this.postCopy.text = ''
       //this.formKey = Math.random()
+    },
+    cancel() {
+      this.$emit('cancel')
     }
   }
 }
@@ -76,8 +80,8 @@ export default {
   color: #505050;
   background-color: #fdfdfd;
 }
-.form__button {
+/*.form__button {
   display: flex;
   justify-content: flex-end;
-}
+}*/
 </style>

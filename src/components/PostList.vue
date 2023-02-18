@@ -23,6 +23,7 @@
             v-if="editing === post.id"
             :post="post"
             @save="handleUpdate"
+            @cancel="hidePostEditor"
           />
           <p v-else>
             {{post.text}}
@@ -74,15 +75,18 @@ export default {
     localeDate,
     userPostsCountWording,
     userThreadsCountWording,
-    getUserById (userId) {
-      return this.$store.getters.user(userId)
+    getUserById(userId) {
+      return this.$store.getters.user(userId);
     },
-    toggleEditMode (id) {
-      this.editing = id === this.editing ? null : id
+    toggleEditMode(id) {
+      this.editing = id === this.editing ? null : id;
     },
-    handleUpdate (event) {
-      this.updatePost(event.post)
-      this.editing = null
+    handleUpdate(event) {
+      this.updatePost(event.post);
+      this.editing = null;
+    },
+    hidePostEditor() {
+      this.editing = null;
     }
   }
 }
