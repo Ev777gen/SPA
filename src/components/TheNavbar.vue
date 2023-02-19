@@ -20,7 +20,7 @@
       </div>
 
       <div class="dropdown" :class="{'dropdown_open': isDropdownOpen}">
-        <a href="" class="dropdown__link">Мой профиль</a>
+        <router-link :to="{name: 'ProfileView'}" class="dropdown__link">Мой профиль</router-link>
         <a href="" class="dropdown__link">Настройки</a>
         <a href="" class="dropdown__link">Выйти <font-awesome-icon icon="fa-solid fa-right-from-bracket" /></a>
       </div>
@@ -34,13 +34,17 @@ import { mapGetters } from 'vuex';
 export default {
   data () {
     return {
-      isDropdownOpen: false,
-      //mobileNavMenu: false
+      isDropdownOpen: false
     }
   },
   computed: {
     ...mapGetters(['authUser'])
   },
+  created () {
+    this.$router.beforeEach((to, from) => {
+      this.isDropdownOpen = false;
+    })
+  }
 }
 </script>
 

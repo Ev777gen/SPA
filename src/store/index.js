@@ -34,6 +34,7 @@ export default createStore({
       }
     ],
     unsubscribes: [],
+    isLoaded: true,
     authId: '1',
   },
   getters: {
@@ -104,11 +105,14 @@ export default createStore({
     appendThreadToUser: makeAppendChildToParentMutation({child: 'threadsStarted', parent: 'users'}),
     // Мутации для работы с обновлением в реальном времени из БД
     appendUnsubscribe (state, { unsubscribe }) {
-      state.unsubscribes.push(unsubscribe)
+      state.unsubscribes.push(unsubscribe);
     },
     clearAllUnsubscribes (state) {
-      state.unsubscribes = []
+      state.unsubscribes = [];
     },
+    setIsLoadedStatus(state, status) {
+      state.isLoaded = status;
+    }
   },
   actions: {
     /*
@@ -396,6 +400,13 @@ export default createStore({
     },
     fetchUsers({ dispatch }, {ids}) {
       return dispatch('fetchItems', { resource: 'users', ids });
+    },
+    // Установка и сброс переменной для индикатора загрузки
+    startLoadingIndicator({commit}) {
+      commit('setIsLoadedStatus', false);
+    },
+    stopLoadingIndicator({commit}) {
+      commit('setIsLoadedStatus', true);
     },
   },
   modules: {

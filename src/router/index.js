@@ -8,6 +8,24 @@ const routes = [
     component: () => import(/* webpackChunkName: "HomeView" */ '@/views/HomeView.vue')
   },
   {
+    path: '/profile',
+    name: 'ProfileView',
+    component: () => import(/* webpackChunkName: "ProfileView" */'@/views/ProfileView.vue'),
+    meta: { toTop: true, smoothScroll: true, requiresAuth: true }
+  },
+  {
+    path: '/signin',
+    name: 'SignIn',
+    component: () => import(/* webpackChunkName: "SignIn" */'@/views/SignIn.vue'),
+    meta: { requiresGuest: true }
+  },
+  {
+    path: '/register',
+    name: 'RegisterPage',
+    component: () => import(/* webpackChunkName: "RegisterPage" */'@/views/RegisterPage.vue'),
+    meta: { requiresGuest: true }
+  },
+  {
     path: '/forum/:id',
     name: 'ForumView',
     component: () => import(/* webpackChunkName: "Forum" */ '@/views/ForumView.vue'),
@@ -51,18 +69,7 @@ const routes = [
     props: true,
     meta: { requiresAuth: true }
   },
-  {
-    path: '/signin',
-    name: 'SignIn',
-    component: () => import(/* webpackChunkName: "SignIn" */'@/views/SignIn.vue'),
-    meta: { requiresGuest: true }
-  },
-  {
-    path: '/register',
-    name: 'RegisterPage',
-    component: () => import(/* webpackChunkName: "RegisterPage" */'@/views/RegisterPage.vue'),
-    meta: { requiresGuest: true }
-  },
+
 
 ]
 

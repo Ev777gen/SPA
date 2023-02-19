@@ -1,5 +1,5 @@
 <template>
-  <div v-if="asyncDataStatus_isReady" class="home">
+  <div v-if="isAsyncDataLoaded" class="home">
     <h1 class="title">Добро пожаловать на форум!</h1>
     <CategoryList :categories="categories" />
   </div>
@@ -8,24 +8,26 @@
 <script>
 import CategoryList from '@/components/CategoryList';
 import { mapActions } from 'vuex';
-import asyncDataStatus from '@/mixins/asyncDataStatus';
 export default {
   name: 'HomeView',
   components: { CategoryList },
-  mixins: [asyncDataStatus],
   computed: {
-    categories () {
+    categories() {
       return this.$store.state.categories;
-    }
+    },
+    isAsyncDataLoaded() {
+      return this.$store.state.isLoaded;
+    },
   },
   methods: {
-    ...mapActions(['fetchAllCategories', 'fetchForums'])
+    ...mapActions(['fetchAllCategories', 'fetchForums', 'startLoadingIndicator', 'stopLoadingIndicator'])
   },
   async created () {
+    this.startLoadingIndicator();
     const categories = await this.fetchAllCategories();
     const forumIds = categories.map(category => category.forumIds).flat();
     await this.fetchForums({ ids: forumIds });
-    this.asyncDataStatus_loaded();
+    this.stopLoadingIndicator();
   }
 }
 </script>

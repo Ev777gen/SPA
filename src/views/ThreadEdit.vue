@@ -1,5 +1,5 @@
 <template>
-  <div v-if="asyncDataStatus_isReady" >
+  <div v-if="isAsyncDataLoaded" >
     <h1 class="title">
       Редактирование темы <i>{{ thread.title }}</i>
     </h1>
@@ -16,13 +16,11 @@
 </template>
 
 <script>
-import ThreadEditor from '@/components/ThreadEditor'
-import { findItemById } from '@/helpers'
-import { mapActions } from 'vuex'
-import asyncDataStatus from '@/mixins/asyncDataStatus'
+import ThreadEditor from '@/components/ThreadEditor';
+import { findItemById } from '@/helpers';
+import { mapActions } from 'vuex';
 export default {
   components: { ThreadEditor },
-  mixins: [asyncDataStatus],
   props: {
     id: { type: String, required: true }
   },
@@ -38,10 +36,13 @@ export default {
     text () {
       const post = findItemById(this.$store.state.posts, this.thread.postIds[0]);
       return post ? post.text : '';
-    }
+    },
+    isAsyncDataLoaded() {
+      return this.$store.state.isLoaded;
+    },
   },
   methods: {
-    ...mapActions(['fetchThread', 'updateThread', 'fetchPost']),
+    ...mapActions(['fetchThread', 'updateThread', 'fetchPost', 'startLoadingIndicator', 'stopLoadingIndicator']),
     async save ({ title, text }) {
       const thread = await this.updateThread({
         id: this.id,
@@ -57,9 +58,10 @@ export default {
     }
   },
   async created () {
+    this.startLoadingIndicator();
     const thread = await this.fetchThread({ id: this.id });
     await this.fetchPost({ id: thread.postIds[0] });
-    this.asyncDataStatus_loaded();
+    this.stopLoadingIndicator();
   },
   beforeRouteLeave () {
     if (this.formIsDirty) {

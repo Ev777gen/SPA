@@ -1,5 +1,5 @@
 <template>
-  <div v-if="asyncDataStatus_isReady">
+  <div v-if="isAsyncDataLoaded">
     <h1 class="title">
       Создать новую тему в форуме <i>{{ forum.name }}</i>
     </h1>
@@ -8,13 +8,11 @@
   </div>
 </template>
 <script>
-import ThreadEditor from '@/components/ThreadEditor'
-import { findItemById } from '@/helpers'
-import { mapActions } from 'vuex'
-import asyncDataStatus from '@/mixins/asyncDataStatus'
+import ThreadEditor from '@/components/ThreadEditor';
+import { findItemById } from '@/helpers';
+import { mapActions } from 'vuex';
 export default {
   components: { ThreadEditor },
-  mixins: [asyncDataStatus],
   props: {
     forumId: { 
       type: String, 
@@ -28,11 +26,14 @@ export default {
   },
   computed: {
     forum () {
-      return findItemById(this.$store.state.forums, this.forumId)
-    }
+      return findItemById(this.$store.state.forums, this.forumId);
+    },
+    isAsyncDataLoaded() {
+      return this.$store.state.isLoaded;
+    },
   },
   methods: {
-    ...mapActions(['fetchForum', 'createThread']),
+    ...mapActions(['fetchForum', 'createThread', 'startLoadingIndicator', 'stopLoadingIndicator']),
     async save ({ title, text }) {
       const thread = await this.createThread({
         title,
@@ -48,8 +49,9 @@ export default {
     }
   },
   async created () {
+    this.startLoadingIndicator();
     await this.fetchForum({ id: this.forumId });
-    this.asyncDataStatus_loaded();
+    this.stopLoadingIndicator();
   },
   beforeRouteLeave () {
     if (this.formIsDirty) {

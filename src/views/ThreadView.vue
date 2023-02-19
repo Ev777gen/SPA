@@ -1,5 +1,5 @@
 <template>
-  <div v-if="asyncDataStatus_isReady" class="thread">
+  <div v-if="isAsyncDataLoaded" class="thread">
     <h1 class="thread__title title">
       <p>{{ thread.title }}</p>
       <router-link
@@ -36,7 +36,6 @@
 import PostList from '@/components/PostList';
 import PostEditor from '@/components/PostEditor';
 import { mapActions, mapGetters } from 'vuex';
-import asyncDataStatus from '@/mixins/asyncDataStatus';
 //import useNotifications from '@/composables/useNotifications';
 //import difference from 'lodash/difference';
 import { localeDate, repliesCountWording } from '@/helpers';
@@ -46,7 +45,6 @@ export default {
     PostList,
     PostEditor
   },
-  mixins: [asyncDataStatus],
   props: {
     id: {
       type: String,
@@ -70,10 +68,13 @@ export default {
     },
     threadPosts() {
       return this.posts.filter(post => post.threadId === this.id)
-    }
+    },
+    isAsyncDataLoaded() {
+      return this.$store.state.isLoaded;
+    },
   },
   methods: {
-    ...mapActions(['fetchThread', 'fetchUser', 'fetchUsers', 'fetchPosts', 'createPost']),
+    ...mapActions(['fetchThread', 'fetchUser', 'fetchUsers', 'fetchPosts', 'createPost', 'startLoadingIndicator', 'stopLoadingIndicator']),
     localeDate,
     repliesCountWording,
     addPost (eventData) {
@@ -126,6 +127,7 @@ export default {
   },*/
   async created () {
     // fetch the thread
+    this.startLoadingIndicator();
     const thread = await this.fetchThread({
       id: this.id,
       /*onSnapshot: async ({ isLocal, item, previousItem }) => {
@@ -140,7 +142,7 @@ export default {
       }*/
     })
     await this.fetchPostsWithUsers(thread.postIds);
-    this.asyncDataStatus_loaded();
+    this.stopLoadingIndicator();
   }
 }
 </script>

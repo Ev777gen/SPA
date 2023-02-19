@@ -3,8 +3,9 @@
   <div class="container">
     <div class="sidebar">Sidebar</div>
     <div class="content">
-      <router-view v-show="isReady" @ready="onPageReady"/>
-      <AppSpinner v-show="!isReady" />
+      <router-view v-show="isLoaded" />
+      <!--<router-view v-show="isReady" @ready="onPageReady"/>-->
+      <AppSpinner v-show="!isLoaded" />
     </div>
   </div>
 </template>
@@ -18,14 +19,26 @@ export default {
   components: { TheNavbar },
   data () {
     return {
-      isReady: false
+      //isLoaded: false
+    }
+  },
+  computed: {
+    isLoaded() {
+      return this.$store.state.isLoaded;
     }
   },
   methods: {
     ...mapActions(['fetchAuthUser']),
-    onPageReady() {
-      this.isReady = true;
+    /*onPageReady() {
+      //this.isLoaded = true;
       NProgress.done();
+    }*/
+  },
+  watch: {
+    isLoaded(newValue) {
+      if (newValue === true) {
+        NProgress.done();
+      }
     }
   },
   created () {
@@ -35,7 +48,7 @@ export default {
       showSpinner: false
     })
     this.$router.beforeEach(() => {
-      this.isReady = false;
+      //this.isLoaded = false;
       NProgress.start();
     });
   }
@@ -44,6 +57,9 @@ export default {
 
 <style lang="scss">
 @import '@/assets/reset.css';
-@import '@/assets/globalstyles.scss';
+@import '@/assets/global.scss';
 @import "~nprogress/nprogress.css";
+#nprogress .bar{
+  background: #5ce0b0 !important;
+}
 </style>
