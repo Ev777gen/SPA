@@ -33,7 +33,7 @@ export default {
 -->
 <style scoped>
 .spinner {
-  margin-top: 45vh;
+  margin-top: 40vh;
   text-align: center;
 }
 
