@@ -4,7 +4,6 @@
     <div class="sidebar">Sidebar</div>
     <div class="content">
       <router-view v-show="isLoaded" />
-      <!--<router-view v-show="isReady" @ready="onPageReady"/>-->
       <AppSpinner v-show="!isLoaded" />
     </div>
   </div>
@@ -17,11 +16,6 @@ import NProgress from 'nprogress';
 export default {
   name: 'App',
   components: { TheNavbar },
-  data () {
-    return {
-      //isLoaded: false
-    }
-  },
   computed: {
     isLoaded() {
       return this.$store.state.isLoaded;
@@ -29,10 +23,6 @@ export default {
   },
   methods: {
     ...mapActions(['fetchAuthUser']),
-    /*onPageReady() {
-      //this.isLoaded = true;
-      NProgress.done();
-    }*/
   },
   watch: {
     isLoaded(newValue) {
@@ -46,12 +36,15 @@ export default {
     NProgress.configure({
       speed: 200,
       showSpinner: false
-    })
+    });
     this.$router.beforeEach(() => {
-      //this.isLoaded = false;
+      this.isLoaded = false;
       NProgress.start();
     });
-  }
+    /*this.$router.afterEach(() => {
+      setTimeout(() => NProgress.done(), 500);
+    });*/
+  },
 }
 </script>
 
