@@ -3,7 +3,7 @@ import { findItemById } from '@/helpers';
 //import testData from "@/data.json";
 import { db } from "@/main.js";
 //import { collection, getDocs, addDoc, doc, updateDoc, arrayUnion, writeBatch, serverTimestamp } from "firebase/firestore/lite";
-import { collection, getDocs, getDoc, onSnapshot, doc, arrayUnion, writeBatch, serverTimestamp, increment } from "firebase/firestore";
+import { collection, getDocs, onSnapshot, doc, arrayUnion, writeBatch, serverTimestamp, increment } from "firebase/firestore";
 
 export default createStore({
   state: {
@@ -18,7 +18,21 @@ export default createStore({
     forums: [],
     threads: [],
     posts: [],
-    users: [],
+    users: [
+      {
+        "avatar": "https://icons.iconarchive.com/icons/iconka/meow/128/cat-eyes-icon.png",
+        "email": "email@mail.ru",
+        "name": "Мистер Кэт",
+        "username": "username1",
+        "usernameLower": "username1",
+        "id": "1",
+        "bio": "Обожаю программировать",
+        "registeredAt": 1594632260,
+        "lastVisitAt": 1594772078,
+        "postsCount": 1,
+        "threadsStarted": ["1"]
+      }
+    ],
     unsubscribes: [],
     authId: '1',
   },
