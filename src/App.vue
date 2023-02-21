@@ -24,13 +24,13 @@ export default {
   methods: {
     ...mapActions(['fetchAuthUser']),
   },
-  watch: {
+  /*watch: {
     isLoaded(newValue) {
       if (newValue === true) {
         NProgress.done();
       }
     }
-  },
+  },*/
   created () {
     this.fetchAuthUser();
     NProgress.configure({
@@ -38,12 +38,12 @@ export default {
       showSpinner: false
     });
     this.$router.beforeEach(() => {
-      this.isLoaded = false;
+      //this.isLoaded = false;
       NProgress.start();
     });
-    /*this.$router.afterEach(() => {
+    this.$router.afterEach(() => {
       setTimeout(() => NProgress.done(), 500);
-    });*/
+    });
   },
 }
 </script>

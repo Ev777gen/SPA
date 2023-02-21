@@ -130,9 +130,10 @@ a,
   }
 }
 .btn_ghost {
-  flex-grow: 0;
+  /*flex-grow: 0;*/
+  background-color: rgba(150, 150, 150, 0.45);
   &:hover:not(:disabled) {
-    background-color: rgba(150, 150, 150, 0.31);
+    background-color: rgba(150, 150, 150, 0.7);
   }
 }
 .btn_small {
@@ -143,7 +144,7 @@ a,
 
 /* Аватар */
 $avatar: 50px;
-$avatar-xlarge: 200px;
+$avatar-xlarge: 160px;
 $avatar-large: 95px;
 $avatar-small: 35px;
 .avatar {

@@ -49,8 +49,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$dropdown-color: #f6f6f6;
-$triangle-size: 10px;
+
+$dropdown-color: #fff;
+$dropdown-link-color: #444;
+$triangle-size: 8px;
 
 .header {
   padding: 20px 0;
@@ -93,24 +95,25 @@ $triangle-size: 10px;
 .dropdown {
   position: absolute;
   display: block;
-  opacity: 1;
-  visibility: visible;
-  display: none;
   top: 100%;
   right: 15px;
-  display: block;
-  margin-top: 20px;
+  margin-top: 10px;
   padding: 20px 40px;
   background-color: $dropdown-color;
+  box-shadow: 1px 15px 15px rgba(1, 1, 1, 0.1);
+  opacity: 1;
+  visibility: visible;
+  z-index: 1000;
   & .dropdown__link {
     display: block;
     font-size: 18px;
     line-height: 2;
+    color: $dropdown-link-color;
   }
   &::after {
     content: ''; 
     position: absolute;
-    right: 23px; 
+    right: 25px; 
     top: -2 * $triangle-size;
     border: $triangle-size solid transparent;
     border-bottom: $triangle-size solid $dropdown-color;

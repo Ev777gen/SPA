@@ -14,6 +14,20 @@ const routes = [
     meta: { toTop: true, smoothScroll: true, requiresAuth: true }
   },
   {
+    path: '/profile',
+    name: 'ProfileAnyUser',
+    component: () => import(/* webpackChunkName: "ProfileView" */'@/views/ProfileView.vue'),
+    props: true,
+    meta: { toTop: true, smoothScroll: true }
+  },
+  {
+    path: '/profile/edit',
+    name: 'ProfileEdit',
+    component: () => import(/* webpackChunkName: "Profile" */'@/views/ProfileView.vue'),
+    props: { edit: true },
+    meta: { requiresAuth: true }
+  },
+  {
     path: '/signin',
     name: 'SignIn',
     component: () => import(/* webpackChunkName: "SignIn" */'@/views/SignIn.vue'),

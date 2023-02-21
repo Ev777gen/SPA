@@ -306,7 +306,7 @@ export default createStore({
       commit('setItem', { resource: 'posts', item: updatedPost });
     },
     updateUser({commit}, user) {
-      commit('setUser', {user, userId: user.id});
+      commit('setItem', { resource: 'users', item: user });
     },
     //------------------------------------------------------------
     // Чтение из Cloud Firestore
