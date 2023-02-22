@@ -27,7 +27,7 @@
       Чтобы написать пост, нужно 
       <router-link :to="{name: 'SignIn', query:{redirectTo: $route.path}}">Войти</router-link> 
       или 
-      <router-link :to="{name: 'RegisterPage',  query:{redirectTo: $route.path}}">Зарегистрироваться</router-link>
+      <router-link :to="{name: 'RegisterForm',  query:{redirectTo: $route.path}}">Зарегистрироваться</router-link>
     </div>
   </div>
 </template>

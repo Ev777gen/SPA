@@ -13,7 +13,7 @@
       </a>
 
       <div v-else class="header__not-auth-user">
-        <router-link :to="{name: 'RegisterPage'}" class="header__link">Зарегистрироваться</router-link>
+        <router-link :to="{name: 'RegisterForm'}" class="header__link">Зарегистрироваться</router-link>
         <router-link :to="{name: 'SignIn'}" class="header__link">
           <font-awesome-icon icon="fa-solid fa-right-to-bracket" /> Войти
         </router-link>
@@ -41,7 +41,7 @@ export default {
     ...mapGetters(['authUser'])
   },
   created () {
-    this.$router.beforeEach((to, from) => {
+    this.$router.beforeEach(() => {
       this.isDropdownOpen = false;
     })
   }

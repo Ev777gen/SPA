@@ -35,7 +35,7 @@ export default createStore({
     ],
     unsubscribes: [],
     isLoaded: true,
-    authId: '1',
+    authId: '',
   },
   getters: {
     user: (state) => {

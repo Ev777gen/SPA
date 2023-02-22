@@ -35,8 +35,8 @@ const routes = [
   },
   {
     path: '/register',
-    name: 'RegisterPage',
-    component: () => import(/* webpackChunkName: "RegisterPage" */'@/views/RegisterPage.vue'),
+    name: 'RegisterForm',
+    component: () => import(/* webpackChunkName: "RegisterForm" */'@/views/RegisterForm.vue'),
     meta: { requiresGuest: true }
   },
   {
@@ -92,8 +92,8 @@ const router = createRouter({
   routes
 });
 
-router.beforeEach(async (to, from) => {
-  //await store.dispatch('auth/initAuthentication');
+router.beforeEach(async (/*to, from*/) => {
+  //await store.dispatch('initAuthentication');
   store.dispatch('unsubscribeAllSnapshots');
   /*if (to.meta.requiresAuth && !store.state.auth.authId) {
     return { name: 'SignIn', query: { redirectTo: to.path } };
