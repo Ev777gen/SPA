@@ -1,8 +1,8 @@
 <template>
-  <div class="registration-form">
+  <div class="form_narrow">
 
     <form @submit.prevent="register">
-      <h1 class="registration-form__title title">Форма регистрации</h1>
+      <h1 class="form__title title">Форма регистрации</h1>
 
       <div class="form__input-group">
         <label for="name" class="form__label">Полное имя</label>
@@ -53,17 +53,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-.registration-form {
-  max-width: 500px;
-  margin: 0 auto;
-}
-.registration-form__title {
-  margin: 50px 0;
-  text-align: center;
-}
-.form__btn-group {
-  margin-top: 25px;
-}
-</style>

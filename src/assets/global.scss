@@ -177,6 +177,14 @@ $avatar-small: 35px;
 }
 
 /* Формы */
+.form_narrow {
+  max-width: 500px;
+  margin: 0 auto;
+}
+.form__title {
+  margin: 50px 0;
+  text-align: center;
+}
 .form__input-group {
   margin-bottom: 10px;
   width: 100%;
@@ -266,6 +274,7 @@ textarea.form__input {
 .form__btn-group {
   display: flex;
   justify-content: flex-end;
+  margin-top: 25px;
   & button {
     margin-left: 15px;
   }
