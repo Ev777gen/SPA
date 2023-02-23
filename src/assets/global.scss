@@ -97,6 +97,7 @@ a,
   }
   &:disabled {
     cursor: default;
+    background: #999;
     &:hover {
       cursor: default;
       color: white;
