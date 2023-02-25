@@ -44,12 +44,13 @@ export default {
     }
   },
   methods: {
-    register () {
-      console.log('Отправка формы', this.form)
+    async register () {
+      await this.$store.dispatch('registerUserWithEmailAndPassword', this.form);
+      this.$router.push('/');
     }
   },
   created () {
-    this.$emit('ready')
+    this.$emit('ready');
   }
 }
 </script>

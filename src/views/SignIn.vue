@@ -32,20 +32,29 @@ export default {
   methods: {
     async signIn () {
       try {
-        await this.$store.dispatch('signInWithEmailAndPassword', { ...this.form })
-        this.successRedirect()
+        await this.$store.dispatch('signInWithEmailAndPassword', { ...this.form });
+        await this.$store.dispatch('fetchAuthUser'); // Убрать эту строчку !!!!!!!!!!!!!!!!!!!!!!!!! Но без нне пока не работает
+
+        //console.log('SignIn - 1 - before any action')
+        //const user = await this.$store.dispatch('signInWithEmailAndPassword', { ...this.form });
+        //console.log('SignIn - 2 - after signInWithEmailAndPassword', user)
+        //const authUser = await this.$store.dispatch('fetchAuthUser');
+        ///console.log('SignIn - 3 - after fetchAuthUser', authUser)
+        //this.$router.push('/');
+        //console.log('SignIn - 4 - after this.$router.push')
+        this.successRedirect();
       } catch (error) {
-        alert(error.message)
+        alert(error.message);
       }
     },
     successRedirect () {
-      const redirectTo = this.$route.query.redirectTo || { name: 'Home' }
-      this.$router.push(redirectTo)
+      const redirectTo = this.$route.query.redirectTo || { name: 'HomeView' };
+      this.$router.push(redirectTo);
     }
   },
-  created () {
+  /*created () {
     this.$emit('ready')
-  }
+  }*/
 }
 </script>
 <style lang="scss" scoped>

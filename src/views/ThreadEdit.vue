@@ -34,7 +34,7 @@ export default {
       return findItemById(this.$store.state.threads, this.id);
     },
     text () {
-      const post = findItemById(this.$store.state.posts, this.thread.postIds[0]);
+      const post = findItemById(this.$store.state.posts, this.thread?.postIds[0]);
       return post ? post.text : '';
     },
     isAsyncDataLoaded() {

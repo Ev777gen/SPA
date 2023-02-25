@@ -19,51 +19,51 @@
 */
 
 // Импорты
-const { initializeFirebaseApp, restore } = require('firestore-export-import')
-const firebasePrivateKey = require('./firebasePrivateKey.json')
-const firebaseConfig = require('./firebaseConfig.js')
-const fs = require('fs')
+const { initializeFirebaseApp, restore } = require('firestore-export-import');
+const firebasePrivateKey = require('./firebasePrivateKey.json');
+const firebaseConfig = require('./firebaseConfig');
+const fs = require('fs');
 const tempFileName = `${__dirname}/data-temp.json`;
 
 // Загрузка данных в Cloud Firestore
 (async () => {
-  const fileContents = fs.readFileSync(`${__dirname}/src/data.json`, 'utf8')
-  const data = JSON.parse(fileContents)
-  const transformed = transformDataForFirestore(data)
-  fs.writeFileSync(tempFileName, JSON.stringify(transformed))
-  await jsonToFirestore()
-  fs.unlinkSync(tempFileName)
-})()
+  const fileContents = fs.readFileSync(`${__dirname}/src/data.json`, 'utf8');
+  const data = JSON.parse(fileContents);
+  const transformed = transformDataForFirestore(data);
+  fs.writeFileSync(tempFileName, JSON.stringify(transformed));
+  await jsonToFirestore();
+  fs.unlinkSync(tempFileName);
+})();
 
 // -------------------------------------
 // Вспомогательные функции
 // Формируем JSON для Firestore
 async function jsonToFirestore () {
   try {
-    console.log('Initialzing Firebase')
-    await initializeFirebaseApp(firebasePrivateKey, firebaseConfig.databaseURL)
-    console.log('Firebase Initialized')
+    console.log('Initialzing Firebase');
+    await initializeFirebaseApp(firebasePrivateKey, firebaseConfig.databaseURL);
+    console.log('Firebase Initialized');
 
-    await restore(tempFileName)
-    console.log('Upload Success')
+    await restore(tempFileName);
+    console.log('Upload Success');
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
 }
 
 // Сохраняем id, заданные нами в файле data.json,
 // чтобы записать в базу даннные под этими ключами (нашими id)
 function transformDataForFirestore (data) {
-  const collections = data
-  delete collections.stats
-  const collectionsById = {}
+  const collections = data;
+  delete collections.stats;
+  const collectionsById = {};
   Object.keys(collections).forEach((collectionKey) => {
-    collectionsById[collectionKey] = {}
-    const collection = collections[collectionKey]
+    collectionsById[collectionKey] = {};
+    const collection = collections[collectionKey];
     collection.forEach((record) => {
-      collectionsById[collectionKey][record.id] = record
-      delete collectionsById[collectionKey][record.id].id
+      collectionsById[collectionKey][record.id] = record;
+      delete collectionsById[collectionKey][record.id].id;
     })
   })
-  return collectionsById
+  return collectionsById;
 }
