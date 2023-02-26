@@ -35,7 +35,7 @@ export default createStore({
       }*/
     ],
     unsubscribes: [],
-    isLoaded: false,
+    isLoaded: true,
     //authId: null,
   },
   getters: {

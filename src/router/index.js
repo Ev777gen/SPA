@@ -83,8 +83,11 @@ const routes = [
     props: true,
     meta: { requiresAuth: true }
   },
-
-
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'NotFound',
+    component: () => import(/* webpackChunkName: "NotFound" */'@/views/NotFound.vue'),
+  },
 ]
 
 const router = createRouter({
@@ -92,15 +95,15 @@ const router = createRouter({
   routes
 });
 
-router.beforeEach(async (/*to, from*/) => {
+router.beforeEach(async (to) => {
   //await store.dispatch('initAuthentication');
   store.dispatch('unsubscribeAllSnapshots');
-  /*if (to.meta.requiresAuth && !store.state.auth.authId) {
+  if (to.meta.requiresAuth && !store.state.auth.authId) {
     return { name: 'SignIn', query: { redirectTo: to.path } };
   }
   if (to.meta.requiresGuest && store.state.auth.authId) {
     return { name: 'Home' };
-  }*/
+  }
 });
 
 export default router;

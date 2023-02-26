@@ -1,0 +1,16 @@
+<template>
+  <div class="not-found">
+    <h1 class="not-found__title title">Страница не найдена</h1>
+    <span>Вернуться на </span>
+    <router-link to="/">домашнюю страницу</router-link>.
+  </div>
+</template>
+
+<style scoped>
+.not-found {
+  font-size: 16px;
+}
+.not-found__title {
+  margin: 35px 0;
+}
+</style>
