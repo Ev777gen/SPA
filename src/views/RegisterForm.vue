@@ -45,12 +45,13 @@ export default {
   },
   methods: {
     async register () {
-      await this.$store.dispatch('registerUserWithEmailAndPassword', this.form);
-      this.$router.push('/');
+      try {
+        await this.$store.dispatch('registerUserWithEmailAndPassword', this.form);
+        this.$router.push('/');
+      } catch (error) {
+        alert(error.message);
+      }
     }
   },
-  created () {
-    this.$emit('ready');
-  }
 }
 </script>
