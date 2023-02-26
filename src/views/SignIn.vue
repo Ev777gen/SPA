@@ -33,7 +33,7 @@ export default {
     async signIn () {
       try {
         await this.$store.dispatch('signInWithEmailAndPassword', { ...this.form });
-        await this.$store.dispatch('fetchAuthUser'); // Убрать эту строчку !!!!!!!!!!!!!!!!!!!!!!!!! Но без нне пока не работает
+        //await this.$store.dispatch('fetchAuthUser'); // Убрать эту строчку !!!!!!!!!!!!!!!!!!!!!!!!! Но без нне пока не работает
 
         //console.log('SignIn - 1 - before any action')
         //const user = await this.$store.dispatch('signInWithEmailAndPassword', { ...this.form });

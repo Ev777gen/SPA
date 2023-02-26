@@ -14,7 +14,7 @@ export default {
   },
   getters: {
     authUser: (state, getters, rootState, rootGetters) => {
-      console.log('auth.js -> authUser ', rootGetters.user(state.authId))
+      //console.log('auth.js -> authUser ', rootGetters.user(state.authId))
       return rootGetters.user(state.authId);
     }
     /*authUser: (state, getters) => {
@@ -22,6 +22,40 @@ export default {
     }*/
   },
   actions: {
+    async registerUserWithEmailAndPassword({ dispatch }, { name, username, email, password }) {
+      const result = await createUserWithEmailAndPassword(auth, email, password);
+      await dispatch('createUser', { id: result.user.uid, name, username, email }, { root: true });
+      await dispatch('fetchAuthUser');
+    },
+    async signInWithEmailAndPassword({dispatch}, { email, password }) {
+      const result = await signInWithEmailAndPassword(auth, email, password);
+      await dispatch('fetchAuthUser');
+      return result;
+    },
+    async signOut({ commit }) {
+      await auth.signOut();
+      commit('setAuthId', null);
+    },
+    // Пробую поменять
+    async fetchAuthUser({ dispatch, commit }) {
+      const userId = auth.currentUser?.uid;
+      //console.log('auth.js -> fetchAuthUser ', 'auth', auth, 'userId', userId)
+      if (!userId) return;
+      await dispatch(
+        'fetchItem',
+        {
+          resource: 'users',
+          id: userId,
+          /*handleUnsubscribe: unsubscribe => {
+            commit('setAuthUserUnsubscribe', unsubscribe)
+          }*/
+        },
+        { root: true }
+      )
+      
+      //localStorage.setItem("uid", userId);
+      commit('setAuthId', userId)
+    },
     /*async updateEmail({ state }, { email }) {
       return updateEmail(auth.currentUser, email)
     },*/
@@ -49,10 +83,7 @@ export default {
         commit('setAuthObserverUnsubscribe', unsubscribe)
       })
     },*/
-    async registerUserWithEmailAndPassword({ dispatch }, { name, username, email, password }) {
-      const result = await createUserWithEmailAndPassword(auth, email, password);
-      await dispatch('createUser', { id: result.user.uid, name, username, email }, { root: true });
-    },
+
     /*async uploadAvatar({ state }, { authId, file, filename }) {
       if (!file) return null
       authId = authId || state.authId
@@ -73,34 +104,7 @@ export default {
         })
       }
     },*/
-    async signInWithEmailAndPassword(context, { email, password }) {
-      const result = await signInWithEmailAndPassword(auth, email, password);
-      return result;
-    },
-    async signOut({ commit }) {
-      await auth.signOut();
-      commit('setAuthId', null);
-    },
-    // Пробую поменять
-    async fetchAuthUser({ dispatch, commit }) {
-      const userId = auth.currentUser?.uid;
-      console.log('auth.js -> fetchAuthUser ', 'auth', auth, 'userId', userId)
-      if (!userId) return;
-      await dispatch(
-        'fetchItem',
-        {
-          resource: 'users',
-          id: userId,
-          /*handleUnsubscribe: unsubscribe => {
-            commit('setAuthUserUnsubscribe', unsubscribe)
-          }*/
-        },
-        { root: true }
-      )
-      
-      //localStorage.setItem("uid", userId);
-      commit('setAuthId', userId)
-    },
+    // Дублируется:
     /*fetchAuthUser: async ({ dispatch, state, commit }) => {
       const userId = auth.currentUser?.uid;
       console.log('auth.js -> fetchAuthUser ', 'auth', auth, 'userId', userId)

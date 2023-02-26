@@ -22,7 +22,7 @@
       <div class="dropdown" :class="{'dropdown_open': isDropdownOpen}">
         <router-link :to="{name: 'ProfileView'}" class="dropdown__link">Мой профиль</router-link>
         <a href="" class="dropdown__link">Настройки</a>
-        <a href="" class="dropdown__link">Выйти <font-awesome-icon icon="fa-solid fa-right-from-bracket" /></a>
+        <a href="" class="dropdown__link" @click.prevent="signOut">Выйти <font-awesome-icon icon="fa-solid fa-right-from-bracket" /></a>
       </div>
       
     </div>
@@ -39,6 +39,12 @@ export default {
   },
   computed: {
     ...mapGetters(['authUser'])
+  },
+  methods: {
+    signOut() {
+      this.$store.dispatch('signOut');
+      this.isDropdownOpen = false;
+    }
   },
   created () {
     this.$router.beforeEach(() => {
@@ -62,6 +68,8 @@ $triangle-size: 8px;
   position: relative;
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  min-height: 35px;
 }
 .header__logo {
   font-size: 32px;

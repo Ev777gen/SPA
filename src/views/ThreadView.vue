@@ -14,7 +14,7 @@
       <span v-if="thread.repliesCount" class="thread__replies">
         {{ thread.repliesCount }}
         {{ repliesCountWording(thread.repliesCount) }}
-        от {{ thread.contributorsCount - 1 || 1 }}
+        от {{ thread.contributorsCount - 1 <= 1 ? 1 : thread.contributorsCount - 1 }}
         {{ thread.contributorsCount - 1 <= 1 ? 'пользователя' : 'пользователей' }}
       </span>
       <span v-else class="thread__replies">Нет ответов</span>
