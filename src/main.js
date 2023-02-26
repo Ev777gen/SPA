@@ -5,7 +5,7 @@ import store from './store';
 // Importing Firebase
 import { initializeApp } from "firebase/app";
 import { getFirestore } from 'firebase/firestore';
-import { getAuth } from "firebase/auth";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 // Importing FontAwesome plugin
 import FontAwesome from "@/plugins/FontAwesome";
@@ -22,9 +22,16 @@ const firebaseConfig = {
 const firebaseApp = initializeApp(firebaseConfig);
 export const db = getFirestore(firebaseApp);
 export const auth = getAuth(firebaseApp);
+//console.log('main.js -> auth ', auth)
 
-console.log('main.js -> auth ', auth)
-
+onAuthStateChanged(auth, (user) => {
+  store.dispatch('unsubscribeAuthUserSnapshot');
+  if (user) {
+    store.dispatch('fetchAuthUser');
+  } else {
+    // User is signed out
+  }
+});
 
 // Creating Vue app
 const app = createApp(App)

@@ -9,7 +9,7 @@ import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'fire
 export default {
   state: {
     authId: null,
-    //authUserUnsubscribe: null,
+    authUserUnsubscribe: null,
     //authObserverUnsubscribe: null
   },
   getters: {
@@ -25,12 +25,9 @@ export default {
     async registerUserWithEmailAndPassword({ dispatch }, { name, username, email, password }) {
       const result = await createUserWithEmailAndPassword(auth, email, password);
       await dispatch('createUser', { id: result.user.uid, name, username, email }, { root: true });
-      await dispatch('fetchAuthUser');
     },
-    async signInWithEmailAndPassword({dispatch}, { email, password }) {
-      const result = await signInWithEmailAndPassword(auth, email, password);
-      await dispatch('fetchAuthUser');
-      return result;
+    signInWithEmailAndPassword(context, { email, password }) {
+      return signInWithEmailAndPassword(auth, email, password);
     },
     async signOut({ commit }) {
       await auth.signOut();
@@ -46,9 +43,9 @@ export default {
         {
           resource: 'users',
           id: userId,
-          /*handleUnsubscribe: unsubscribe => {
+          handleUnsubscribe: unsubscribe => {
             commit('setAuthUserUnsubscribe', unsubscribe)
-          }*/
+          }
         },
         { root: true }
       )
@@ -142,21 +139,21 @@ export default {
         commit('setItem', { resource: 'posts', item }, { root: true })
       })
     },*/
-    /*async unsubscribeAuthUserSnapshot({ state, commit }) {
+    async unsubscribeAuthUserSnapshot({ state, commit }) {
       if (state.authUserUnsubscribe) {
-        state.authUserUnsubscribe()
-        commit('setAuthUserUnsubscribe', null)
+        state.authUserUnsubscribe();
+        commit('setAuthUserUnsubscribe', null);
       }
-    }*/
+    }
   },
   mutations: {
     setAuthId(state, id) {
       //localStorage.getItem("uid");
       state.authId = id;
     },
-    /*setAuthUserUnsubscribe(state, unsubscribe) {
-      state.authUserUnsubscribe = unsubscribe
-    },*/
+    setAuthUserUnsubscribe(state, unsubscribe) {
+      state.authUserUnsubscribe = unsubscribe;
+    },
     /*setAuthObserverUnsubscribe(state, unsubscribe) {
       state.authObserverUnsubscribe = unsubscribe
     }*/

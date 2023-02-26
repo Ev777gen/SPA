@@ -439,7 +439,7 @@ export default createStore({
     // Создаем два универсальных метода для чтения из базы данных: 
     //------------------------------------------------------------
     // Первый – для получения одного документа
-    async fetchItem({ commit }, { resource, id }) {
+    async fetchItem({ commit }, { resource, id, handleUnsubscribe = null }) {
       
       // Первый вариант - обновление данных в реальном времени
       return new Promise((resolve) => {
@@ -451,7 +451,11 @@ export default createStore({
           commit('setItem', { resource, item });
           resolve(item);
         });
-        commit('appendUnsubscribe', { unsubscribe });
+        if (handleUnsubscribe) {
+          handleUnsubscribe(unsubscribe);
+        } else {
+          commit('appendUnsubscribe', { unsubscribe });
+        }
       });
       
       /*
