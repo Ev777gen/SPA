@@ -3,7 +3,7 @@ import { findItemById } from '@/helpers';
 //import testData from "@/data.json";
 import { db } from "@/main.js";
 //import { collection, getDocs, setDoc, addDoc, doc, updateDoc, arrayUnion, writeBatch, serverTimestamp } from "firebase/firestore/lite";
-import { collection, getDocs, onSnapshot, updateDoc, getDoc, doc, arrayUnion, writeBatch, serverTimestamp, increment } from "firebase/firestore";
+import { collection,doc, getDoc, getDocs, setDoc, updateDoc, arrayUnion, writeBatch, serverTimestamp, increment, onSnapshot } from "firebase/firestore";
 import auth from './modules/auth';
 
 export default createStore({
@@ -411,7 +411,7 @@ export default createStore({
       await batch.commit();
       const updatedPost = await dispatch("fetchPost", { id });
       commit('setItem', { resource: 'posts', item: updatedPost });
-    },
+    },*/
     async createUser({ commit }, { id, email, name, username }) {
       const registeredAt = serverTimestamp();
       const usernameLower = username.toLowerCase();
@@ -429,9 +429,20 @@ export default createStore({
       commit('setItem', { resource: 'users', item: newUser });
       console.log('store - index.js -> createUser ', newUser)
       return makeResourceFromDoc(newUser);
-    },*/
-    updateUser({commit}, user) {
-      commit('setItem', { resource: 'users', item: user });
+    },
+    async updateUser({ commit }, user) {
+      const userUpdates = {
+        avatar: user.avatar || null,
+        username: user.username || null,
+        name: user.name || null,
+        bio: user.bio || null,
+        website: user.website || null,
+        email: user.email || null,
+        location: user.location || null
+      }
+      const userRef = doc(db, 'users', user.id)
+      await updateDoc(userRef, userUpdates)
+      commit('setItem', { resource: 'users', item: user }, { root: true })
     },
     //------------------------------------------------------------
     // Чтение из Cloud Firestore
