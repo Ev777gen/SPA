@@ -10,7 +10,7 @@ export default {
   state: {
     authId: null,
     authUserUnsubscribe: null,
-    //authObserverUnsubscribe: null
+    authObserverUnsubscribe: null
   },
   getters: {
     authUser: (state, getters, rootState, rootGetters) => {
@@ -43,7 +43,7 @@ export default {
         {
           resource: 'users',
           id: userId,
-          handleUnsubscribe: unsubscribe => {
+          handleUnsubscribe: (unsubscribe) => {
             commit('setAuthUserUnsubscribe', unsubscribe)
           }
         },
@@ -53,6 +53,23 @@ export default {
       //localStorage.setItem("uid", userId);
       commit('setAuthId', userId)
     },
+    initAuthentication({ dispatch, commit, state }) {
+      if (state.authObserverUnsubscribe) state.authObserverUnsubscribe();
+      return new Promise(resolve => {
+        const unsubscribe = auth.onAuthStateChanged(async user => {
+          dispatch('unsubscribeAuthUserSnapshot');
+          if (user) {
+            await dispatch('fetchAuthUser');
+            resolve(user);
+          } else {
+            resolve(null);
+          }
+        })
+        commit('setAuthObserverUnsubscribe', unsubscribe);
+      })
+    },
+
+
     /*async updateEmail({ state }, { email }) {
       return updateEmail(auth.currentUser, email)
     },*/
@@ -65,21 +82,7 @@ export default {
         console.log({ error })
       }
     },*/
-    /*initAuthentication({ dispatch, commit, state }) {
-      if (state.authObserverUnsubscribe) state.authObserverUnsubscribe()
-      return new Promise(resolve => {
-        const unsubscribe = auth.onAuthStateChanged(async user => {
-          this.dispatch('unsubscribeAuthUserSnapshot')
-          if (user) {
-            await this.dispatch('fetchAuthUser')
-            resolve(user)
-          } else {
-            resolve(null)
-          }
-        })
-        commit('setAuthObserverUnsubscribe', unsubscribe)
-      })
-    },*/
+
 
     /*async uploadAvatar({ state }, { authId, file, filename }) {
       if (!file) return null
@@ -154,9 +157,9 @@ export default {
     setAuthUserUnsubscribe(state, unsubscribe) {
       state.authUserUnsubscribe = unsubscribe;
     },
-    /*setAuthObserverUnsubscribe(state, unsubscribe) {
+    setAuthObserverUnsubscribe(state, unsubscribe) {
       state.authObserverUnsubscribe = unsubscribe
-    }*/
+    }
   }
 }
 

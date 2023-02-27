@@ -30,7 +30,7 @@
           </p>
         </div>
         <a
-          v-if="post.userId === $store.getters.authUser?.id"
+          v-if="post.userId === $store.state.auth.authId"
           @click.prevent="toggleEditMode(post.id)"
           href="#"
           class="post__edit-icon"

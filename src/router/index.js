@@ -11,32 +11,32 @@ const routes = [
     path: '/profile',
     name: 'ProfileView',
     component: () => import(/* webpackChunkName: "ProfileView" */'@/views/ProfileView.vue'),
-    meta: { toTop: true, smoothScroll: true, requiresAuth: true }
+    meta: { isAuthRequired: true, toTop: true, smoothScroll: true },
   },
-  {
-    path: '/profile',
-    name: 'ProfileAnyUser',
-    component: () => import(/* webpackChunkName: "ProfileView" */'@/views/ProfileView.vue'),
-    props: true,
-    meta: { toTop: true, smoothScroll: true }
-  },
+  // {
+  //   path: '/profile',
+  //   name: 'ProfileAnyUser',
+  //   component: () => import(/* webpackChunkName: "ProfileView" */'@/views/ProfileView.vue'),
+  //   props: true,
+  //   meta: { toTop: true, smoothScroll: true }
+  // },
   {
     path: '/profile/edit',
     name: 'ProfileEdit',
     component: () => import(/* webpackChunkName: "Profile" */'@/views/ProfileView.vue'),
     props: { edit: true },
-    meta: { requiresAuth: true }
-  },
-  {
-    path: '/signin',
-    name: 'SignIn',
-    component: () => import(/* webpackChunkName: "SignIn" */'@/views/SignIn.vue'),
-    meta: { requiresGuest: true }
+    meta: { isAuthRequired: true }
   },
   {
     path: '/register',
     name: 'RegisterForm',
     component: () => import(/* webpackChunkName: "RegisterForm" */'@/views/RegisterForm.vue'),
+    meta: { requiresGuest: true }
+  },
+  {
+    path: '/signin',
+    name: 'SignIn',
+    component: () => import(/* webpackChunkName: "SignIn" */'@/views/SignIn.vue'),
     meta: { requiresGuest: true }
   },
   {
@@ -74,14 +74,14 @@ const routes = [
     name: 'ThreadCreate',
     component: () => import(/* webpackChunkName: "ThreadCreate" */ '@/views/ThreadCreate.vue'),
     props: true,
-    meta: { requiresAuth: true }
+    meta: { isAuthRequired: true }
   },
   {
     path: '/thread/:id/edit',
     name: 'ThreadEdit',
     component: () => import(/* webpackChunkName: "ThreadEdit" */'@/views/ThreadEdit.vue'),
     props: true,
-    meta: { requiresAuth: true }
+    meta: { isAuthRequired: true }
   },
   {
     path: '/:pathMatch(.*)*',
@@ -96,14 +96,17 @@ const router = createRouter({
 });
 
 router.beforeEach(async (to) => {
-  //await store.dispatch('initAuthentication');
+  await store.dispatch('initAuthentication');
   store.dispatch('unsubscribeAllSnapshots');
-  if (to.meta.requiresAuth && !store.state.auth.authId) {
-    return { name: 'SignIn', query: { redirectTo: to.path } };
+  if (to.meta.isAuthRequired && !store.state.auth.authId) {
+    return {name: 'HomeView'};
   }
-  if (to.meta.requiresGuest && store.state.auth.authId) {
-    return { name: 'Home' };
-  }
+  // if (to.meta.isAuthRequired && !store.state.auth.authId) {
+  //   return { name: 'SignIn', query: { redirectTo: to.path } };
+  // }
+  // if (to.meta.requiresGuest && store.state.auth.authId) {
+  //   return { name: 'HomeView' };
+  // }
 });
 
 export default router;
