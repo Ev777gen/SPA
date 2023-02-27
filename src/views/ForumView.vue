@@ -6,6 +6,7 @@
         <p class="forum__description">{{ forum.description }}</p>
       </div>
       <router-link
+        v-if="authUser"
         :to="{name:'ThreadCreate', params: {forumId: forum.id}}"
         class="forum__button btn_orange btn_small"
       >
@@ -22,7 +23,7 @@
 <script>
 import ThreadList from '@/components/ThreadList';
 import { findItemById } from '@/helpers';
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 export default {
   components: { ThreadList },
   props: {
@@ -38,6 +39,7 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['authUser']),
     forum () {
       return findItemById(this.$store.state.forums, this.id)
     },

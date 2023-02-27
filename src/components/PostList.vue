@@ -42,7 +42,7 @@
 
       <div class="post__date text_gray text_small">
         <div v-if="post.edited?.at" class="edition-info"><i>изменено</i></div>
-        {{ localeDate(post.publishedAt) }}
+        {{ localeDate(post.edited?.at || post.publishedAt) }}
       </div>
     </div>
   </div>

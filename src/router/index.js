@@ -31,13 +31,13 @@ const routes = [
     path: '/register',
     name: 'RegisterForm',
     component: () => import(/* webpackChunkName: "RegisterForm" */'@/views/RegisterForm.vue'),
-    meta: { requiresGuest: true }
+    meta: { isForGuests: true }
   },
   {
     path: '/signin',
     name: 'SignIn',
     component: () => import(/* webpackChunkName: "SignIn" */'@/views/SignIn.vue'),
-    meta: { requiresGuest: true }
+    meta: { isForGuests: true }
   },
   {
     path: '/forum/:id',
@@ -99,14 +99,11 @@ router.beforeEach(async (to) => {
   await store.dispatch('initAuthentication');
   store.dispatch('unsubscribeAllSnapshots');
   if (to.meta.isAuthRequired && !store.state.auth.authId) {
-    return {name: 'HomeView'};
+    return { name: 'SignIn', query: { redirectTo: to.path } };
   }
-  // if (to.meta.isAuthRequired && !store.state.auth.authId) {
-  //   return { name: 'SignIn', query: { redirectTo: to.path } };
-  // }
-  // if (to.meta.requiresGuest && store.state.auth.authId) {
-  //   return { name: 'HomeView' };
-  // }
+  if (to.meta.isForGuests && store.state.auth.authId) {
+    return { name: 'HomeView' };
+  }
 });
 
 export default router;
