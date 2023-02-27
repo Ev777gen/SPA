@@ -3,7 +3,7 @@
   <div class="container">
     <div class="sidebar">Sidebar</div>
     <div class="content">
-      <router-view v-show="isLoaded" />
+      <router-view v-show="isLoaded" :key="`${$route.path}${JSON.stringify($route.query)}`" />
       <AppSpinner v-show="!isLoaded" />
     </div>
   </div>
