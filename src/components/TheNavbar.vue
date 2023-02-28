@@ -5,7 +5,7 @@
       <a
         v-if="authUser"
         @click.prevent="isDropdownOpen = !isDropdownOpen"
-        v-click-outside="()=> isDropdownOpen = false"
+        v-click-outside="onClickOutside"
         class="header__user-avatar"
       >
         <AppAvatar class="header__avatar avatar_small" :src="authUser?.avatar" :alt="`${authUser.name} profile image`"/>
@@ -31,18 +31,25 @@
 
 <script>
 import { mapGetters } from 'vuex';
+import vClickOutside from 'click-outside-vue3';
 export default {
   data () {
     return {
       isDropdownOpen: false
     }
   },
+  directives: {
+    clickOutside: vClickOutside.directive
+  },
   computed: {
     ...mapGetters(['authUser'])
   },
   methods: {
-    signOut() {
+    signOut () {
       this.$store.dispatch('signOut');
+      this.isDropdownOpen = false;
+    },
+    onClickOutside () {
       this.isDropdownOpen = false;
     }
   },
