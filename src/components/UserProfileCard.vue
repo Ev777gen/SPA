@@ -4,7 +4,7 @@
       <div class="card__background_cover"></div>
       <div class="card__background_footer">
         <p class="card__name">{{ user.name }}</p>
-        <p class="card__date text_gray">Зарегистрирован {{ localeDate(user.registeredAt) }}</p>
+        <p class="card__date text_gray desktop-only">Зарегистрирован {{ localeDate(user.registeredAt) }}</p>
       </div>
       <div class="card__avatar">
         <AppAvatar :src="user.avatar" class="avatar_xlarge" />
@@ -64,7 +64,7 @@ export default {
 /* 
   Общую часть стилей компонентов 
   UserProfileCard.vue и UserProfileCardEditor.vue 
-  я поместил в файл global.scss 
+  я поместил в файл ProfileView.vue. 
 */
 .card__info {
   margin: 15px 0;
@@ -74,14 +74,36 @@ export default {
   font-size: 18px;
   & div {
     padding: 10px;
+    display: flex;
+    flex-wrap: nowrap;
     & > span:first-child {
-      display: inline-block;
       width: 250px;
+      @media (max-width: 720px) {
+        & {
+          width: 150px;
+        }
+      }
+    }
+  }
+  @media (max-width: 720px) {
+    & {
+      padding: 10px;
     }
   }
 }
 .card__button {
   margin-bottom: 30px;
   text-align: right;
+  @media (max-width: 720px) {
+    & {
+      text-align: center;
+    }
+  }
+  @media (max-width: 550px) {
+    & .btn {
+      width: 100%;
+      text-align: center;
+    }
+  }
 }
 </style>

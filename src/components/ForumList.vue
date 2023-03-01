@@ -11,7 +11,7 @@
         <p>{{ forum.description }}</p>
       </div>
 
-      <div class="forum__threads-count">
+      <div class="forum__threads-count desktop-only">
         {{ forum.threadIds?.length }}
         {{ forumThreadsCountWording(forum.threadIds?.length) }}
       </div>

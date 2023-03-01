@@ -97,7 +97,7 @@ export default {
   flex-basis: 50%;
   @media (max-width: 720px) {
     & {
-        flex-basis: 100%;
+      flex-basis: 100%;
     }
   }
 }
@@ -107,5 +107,12 @@ export default {
 }
 .forum__button {
   align-self: flex-start;
+  margin-left: 15px;
+  text-align: center;
+  @media (max-width: 720px) {
+    & {
+      padding: 5px;
+    }
+  }
 }
 </style>

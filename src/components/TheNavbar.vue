@@ -1,9 +1,9 @@
 <template>
   <header class="header">
     <div class="header__body container">
-      <router-link :to="{name: 'HomeView'}" class="header__logo">Logo</router-link>
+      <router-link :to="{name: 'HomeView'}" v-if="authUser" class="header__logo">Logo</router-link>
       <a
-        v-if="authUser"
+        v-if="authUser && !isMobile"
         @click.prevent="isDropdownOpen = !isDropdownOpen"
         v-click-outside="onClickOutside"
         class="header__user-avatar"
@@ -11,6 +11,18 @@
         <AppAvatar class="header__avatar avatar_small" :src="authUser?.avatar" :alt="`${authUser.name} profile image`"/>
         <font-awesome-icon icon="fa-solid fa-angle-down" class="header__arrow" :class="{'header__arrow_up': isDropdownOpen}" />
       </a>
+
+      
+      <div 
+        v-else-if="authUser && isMobile" 
+        @click="isDropdownOpen = !isDropdownOpen"
+        v-click-outside="onClickOutside"
+        class="burger"
+      >
+        <div class="burger__top-bar"></div>
+        <div class="burger__middle-bar"></div>
+        <div class="burger__bottom-bar"></div>
+      </div>
 
       <div v-else class="header__not-auth-user">
         <router-link :to="{name: 'RegisterForm'}" class="header__link">Зарегистрироваться</router-link>
@@ -35,7 +47,8 @@ import vClickOutside from 'click-outside-vue3';
 export default {
   data () {
     return {
-      isDropdownOpen: false
+      isDropdownOpen: false,
+      isMobile: false
     }
   },
   directives: {
@@ -56,13 +69,18 @@ export default {
   created () {
     this.$router.beforeEach(() => {
       this.isDropdownOpen = false;
-    })
+    });
+    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+      this.isMobile = true;
+    } else {
+      this.isMobile = false;
+    }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-
+$burger-size: 35px;
 $dropdown-color: #fff;
 $dropdown-link-color: #444;
 $triangle-size: 8px;
@@ -107,6 +125,33 @@ $triangle-size: 8px;
   }
 }
 
+.burger {
+  display: block;
+  width: $burger-size;
+  height: $burger-size;
+  margin: 0 20px;
+  cursor: pointer;
+}
+.burger__top-bar,
+.burger__middle-bar,
+.burger__bottom-bar {
+  width: $burger-size;
+  height: 3px;
+  background: white;
+  position: absolute;
+  border-radius: 10px;
+  transition: all 0.5s;
+}
+.burger__top-bar {
+  top: 15%;
+}
+.burger__middle-bar {
+  top: 50%;
+}
+.burger__bottom-bar {
+  top: 85%;
+}
+
 .dropdown {
   position: absolute;
   display: block;
@@ -124,6 +169,11 @@ $triangle-size: 8px;
     font-size: 18px;
     line-height: 2;
     color: $dropdown-link-color;
+    @media (max-width: 720px) {
+      & {
+        font-size: 24px;
+      }
+    }
   }
   &::after {
     content: ''; 

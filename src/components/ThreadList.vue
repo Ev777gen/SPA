@@ -6,7 +6,7 @@
         <p class="thread__title">
           <router-link :to="{name: 'ThreadView', params: {id: thread.id}}">{{ thread.title }}</router-link>
         </p>
-        <p class="thread__info">
+        <p class="thread__info desktop-only">
           Тема начата пользователем  
           <a href="#">{{ userById(thread.userId).name }}</a>, 
           {{ localeDate(thread.publishedAt) }}
@@ -81,9 +81,13 @@ export default {
 }
 .thread__replies-count {
   flex-basis: 35%;
+  text-align: center;
 }
 .thread__avatar {
-  margin-right: 10px;
+  margin: 0 10px;
+}
+.thread__user {
+  white-space: nowrap;
 }
 .no-threads {
   padding: 10px;

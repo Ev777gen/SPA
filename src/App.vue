@@ -1,7 +1,10 @@
 <template>
-  <TheNavbar/>
+  <div class="navbar">
+    <TheNavbar/>
+  </div>
+  <hr>
   <div class="container">
-    <div class="sidebar">Sidebar</div>
+    <div class="sidebar desktop-only">Sidebar</div>
     <div class="content">
       <router-view v-show="isLoaded" :key="`${$route.path}${JSON.stringify($route.query)}`" />
       <AppSpinner v-show="!isLoaded" />
@@ -54,5 +57,19 @@ export default {
 @import "~nprogress/nprogress.css";
 #nprogress .bar{
   background: #5ce0b0 !important;
+}
+</style>
+
+<style scoped>
+.navbar {
+  position: fixed;
+  width: 100%;
+  z-index: 999;
+}
+hr {
+  height: 1px;
+}
+.container {
+  margin-top: 75px;
 }
 </style>

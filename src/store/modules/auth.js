@@ -44,7 +44,7 @@ export default {
           resource: 'users',
           id: userId,
           handleUnsubscribe: (unsubscribe) => {
-            commit('setAuthUserUnsubscribe', unsubscribe)
+            commit('setAuthUserUnsubscribe', unsubscribe);
           }
         },
         { root: true }
@@ -158,7 +158,7 @@ export default {
       state.authUserUnsubscribe = unsubscribe;
     },
     setAuthObserverUnsubscribe(state, unsubscribe) {
-      state.authObserverUnsubscribe = unsubscribe
+      state.authObserverUnsubscribe = unsubscribe;
     }
   }
 }

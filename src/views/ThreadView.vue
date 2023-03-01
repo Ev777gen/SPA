@@ -10,7 +10,11 @@
       </router-link>
     </h1>
     <p class="thread__info text_gray">
-      Тема начата пользователем <a href="#">{{thread.author?.name}}</a>, {{ localeDate(thread.publishedAt) }}
+      <span class="thread__info_user desktop-only">
+        Тема начата пользователем 
+        <a href="#">{{thread.author?.name}}</a>, 
+        {{ localeDate(thread.publishedAt) }}
+      </span>
       <span v-if="thread.repliesCount" class="thread__replies">
         {{ thread.repliesCount }}
         {{ repliesCountWording(thread.repliesCount) }}
@@ -153,8 +157,13 @@ export default {
   justify-content: space-between;
   margin: 20px 0;
 }
+.thread__info {
+  display: flex;
+  justify-content: space-between;
+}
 .thread__replies {
-  float: right;
+  justify-self: flex-end;
+  text-align: right;
 }
 .thread__no-auth-user {
   margin: 30px 0;

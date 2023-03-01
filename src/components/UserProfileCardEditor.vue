@@ -33,7 +33,7 @@
           <input v-model="activeUser.website" type="text" placeholder="Добавьте ссылку на Ваш вебсайт" class="form__input">
         </div>
       </div>
-      <div class="card__button form__btn-group">
+      <div class="card__buttons form__btn-group">
         <button @click="cancel" class="btn btn_ghost">Отмена</button>
         <button type="submit" class="btn btn_blue">Сохранить</button>
       </div>
@@ -74,7 +74,7 @@ export default {
 /* 
   Общую часть стилей компонентов 
   UserProfileCard.vue и UserProfileCardEditor.vue 
-  я поместил в файл global.scss 
+  я поместил в файл ProfileView.vue. 
 */
 .card__avatar-cover {
   position: absolute;
@@ -122,13 +122,27 @@ export default {
       vertical-align: top;
     }
   }
+  @media (max-width: 720px) {
+    & {
+      padding: 10px;
+    }
+  }
 }
 .form__input {
   max-width: 535px;
   margin: 0;
 }
-.card__button {
+.card__buttons {
+  display: flex;
   margin-bottom: 30px;
   text-align: right;
+  @media (max-width: 720px) {
+    & {
+      justify-content: space-between;
+    }
+    & .btn {
+      margin: 0;
+    }
+  }
 }
 </style>
