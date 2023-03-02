@@ -13,10 +13,10 @@
         </p>
       </div>
       <div class="thread__activity">
-        <p class="thread__replies-count">
-        {{ thread.repliesCount > 0 ? thread.repliesCount : '' }}
-        {{ repliesCountWording(thread.repliesCount) }}
-        </p>
+        <div class="thread__replies-count">
+          {{ thread.repliesCount > 0 ? thread.repliesCount : '' }}
+          {{ repliesCountWording(thread.repliesCount) }}
+        </div>
         <AppAvatar class="thread__avatar avatar_small" :src="userById(thread.userId).avatar" />
         <div>
           <p class="thread__user">
@@ -64,7 +64,7 @@ export default {
 <style lang="scss" scoped>
 .thread {
   flex-wrap: wrap;
-  padding: 5px 0 5px 20px;
+  padding: 5px 10px 5px 20px;
   min-height: 45px;
 }
 .thread__title {
@@ -78,16 +78,36 @@ export default {
   display: flex;
   justify-content: flex-start;
   align-items: center;
-}
-.thread__replies-count {
-  flex-basis: 35%;
-  text-align: center;
-}
-.thread__avatar {
-  margin: 0 10px;
-}
-.thread__user {
-  white-space: nowrap;
+  & .thread__replies-count {
+    flex-basis: 35%;
+    text-align: center;
+  }
+  & .thread__avatar {
+    margin: 0 10px;
+  }
+  & .thread__user {
+    white-space: nowrap;
+  }
+  @media (max-width: 720px) {
+    & {
+      flex-basis: 100%;
+      margin-top: 5px;
+    }
+    & .thread__replies-count {
+      order: 2;
+      line-height: 1;
+      margin-left: auto;
+      text-align: right;
+    }
+    & .thread__avatar {
+      order: -1;
+      margin-left: 0;
+      margin-right: 5px;
+    }
+    & .thread__user {
+      order: 1;
+    }
+  }
 }
 .no-threads {
   padding: 10px;

@@ -13,7 +13,10 @@
       </div>
 
       <div class="form__btn-group">
-        <p>Еще не зарегистрированы? &nbsp;<router-link :to="{name: 'RegisterForm'}">Создайте аккаунт</router-link></p>
+        <div>
+          <span>Еще не зарегистрированы? </span>
+          <router-link :to="{name: 'RegisterForm'}">Создайте аккаунт</router-link>
+        </div>
         <button type="submit" class="btn btn_blue" :disabled="!(form.email && form.password)">Войти</button>
       </div>
     </form>
@@ -48,6 +51,6 @@ export default {
 <style lang="scss" scoped>
 .form__btn-group {
   justify-content: space-between;
-  align-items: first baseline;
+  align-items: center;
 }
 </style>

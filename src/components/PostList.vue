@@ -36,13 +36,13 @@
           class="post__edit-icon"
           title="Редактировать пост"
         >
-          <font-awesome-icon icon="fa-solid fa-pencil" />
+          <font-awesome-icon icon="fa-solid fa-pencil" v-if="!editing" />
         </a>
       </div>
 
       <div class="post__date text_gray text_small">
         <div v-if="post.edited?.at" class="edition-info"><i>изменено</i></div>
-        {{ localeDate(post.edited?.at || post.publishedAt) }}
+        <div>{{ localeDate(post.edited?.at || post.publishedAt) }}</div>
       </div>
     </div>
   </div>
@@ -109,7 +109,7 @@ export default {
   &:nth-child(odd) {
     background: #eee;
   }
-  @media (max-width: 820px) {
+  @media (max-width: 720px) {
     & {
       padding: 0;
     }
@@ -136,8 +136,7 @@ export default {
       justify-content: flex-start;
       background: rgba(73, 89, 96, 0.06);
       margin-right: 0;
-      padding: 5px;
-      padding-left: 10px;
+      padding: 10px;
       .post__avatar {
         height: 35px;
         width: 35px;
@@ -178,12 +177,17 @@ export default {
   padding-right: 7px;
   @media (max-width: 820px) {
     & {
+      box-sizing: content-box;
       order: -1;
-      flex-basis: 40%;
-      background: rgba(73, 89, 96, 0.06);
+      flex-basis: 30%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-end;
       padding-right: 10px;
-      padding-top: 16px;
       margin-bottom: 0px;
+      height: 55px;
+      background: rgba(73, 89, 96, 0.06);
     }
   }
 }

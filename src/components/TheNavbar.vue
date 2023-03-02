@@ -1,7 +1,7 @@
 <template>
   <header class="header">
     <div class="header__body container">
-      <router-link :to="{name: 'HomeView'}" v-if="authUser" class="header__logo">Logo</router-link>
+      <router-link :to="{name: 'HomeView'}" v-if="!isMobile || (authUser && isMobile)" class="header__logo">Logo</router-link>
       <a
         v-if="authUser && !isMobile"
         @click.prevent="isDropdownOpen = !isDropdownOpen"
@@ -11,7 +11,6 @@
         <AppAvatar class="header__avatar avatar_small" :src="authUser?.avatar" :alt="`${authUser.name} profile image`"/>
         <font-awesome-icon icon="fa-solid fa-angle-down" class="header__arrow" :class="{'header__arrow_up': isDropdownOpen}" />
       </a>
-
       
       <div 
         v-else-if="authUser && isMobile" 
@@ -33,7 +32,7 @@
 
       <div class="dropdown" :class="{'dropdown_open': isDropdownOpen}">
         <router-link :to="{name: 'ProfileView'}" class="dropdown__link">Мой профиль</router-link>
-        <a href="" class="dropdown__link">Настройки</a>
+        <!--<p class="dropdown__link">Настройки</p>-->
         <a href="" class="dropdown__link" @click.prevent="signOut">Выйти <font-awesome-icon icon="fa-solid fa-right-from-bracket" /></a>
       </div>
       
@@ -101,6 +100,10 @@ $triangle-size: 8px;
   font-weight: bold;
   color: #fff;
 }
+.header__not-auth-user {
+  margin-left: auto;
+}
+
 .header__user-avatar {
   cursor: pointer;
 }
@@ -126,10 +129,9 @@ $triangle-size: 8px;
 }
 
 .burger {
-  display: block;
   width: $burger-size;
   height: $burger-size;
-  margin: 0 20px;
+  margin: 0 10px;
   cursor: pointer;
 }
 .burger__top-bar,
@@ -182,6 +184,11 @@ $triangle-size: 8px;
     top: -2 * $triangle-size;
     border: $triangle-size solid transparent;
     border-bottom: $triangle-size solid $dropdown-color;
+    @media (max-width: 720px) {
+      & {
+        right: 20px;
+      }
+    }
   }
   opacity: 0;
   visibility: hidden;
