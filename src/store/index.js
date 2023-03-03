@@ -5,6 +5,7 @@ import { db } from "@/main.js";
 //import { collection, getDocs, setDoc, addDoc, doc, updateDoc, arrayUnion, writeBatch, serverTimestamp } from "firebase/firestore/lite";
 import { collection,doc, getDoc, getDocs, setDoc, updateDoc, arrayUnion, writeBatch, serverTimestamp, increment, onSnapshot } from "firebase/firestore";
 import auth from './modules/auth';
+import chunk from 'lodash/chunk';
 
 export default createStore({
   state: {
@@ -113,6 +114,9 @@ export default createStore({
     },
     setIsLoadedStatus(state, status) {
       state.isLoaded = status;
+    },
+    clearThreadsForPagination(state) {
+      state.threads = [];
     }
   },
   actions: {
@@ -534,6 +538,12 @@ export default createStore({
     },
     fetchThreads({ dispatch }, {ids}) {
       return dispatch('fetchItems', { resource: 'threads', ids });
+    },
+    fetchThreadsByPage: ({ dispatch, commit }, { ids, currentPage, threadsPerPage = 10 }) => {
+      commit('clearThreadsForPagination');
+      const chunks = chunk(ids, threadsPerPage);
+      const limitedIds = chunks[currentPage - 1];
+      return dispatch('fetchThreads', { ids: limitedIds });
     },
     fetchPosts({ dispatch }, {ids}) {
       return dispatch('fetchItems', { resource: 'posts', ids });

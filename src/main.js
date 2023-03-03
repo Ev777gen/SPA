@@ -1,3 +1,4 @@
+// Importing Vue + its ecosystem
 import { createApp } from 'vue';
 import App from './App.vue';
 import router from './router';
@@ -6,9 +7,10 @@ import store from './store';
 import { initializeApp } from "firebase/app";
 import { getFirestore } from 'firebase/firestore';
 import { getAuth } from "firebase/auth";
-
 // Importing FontAwesome plugin
 import FontAwesome from "@/plugins/FontAwesome";
+// Importing pagination
+import VPagination from '@/plugins/VPagination';
 
 // Initializing Firebase
 const firebaseConfig = {
@@ -28,6 +30,7 @@ const app = createApp(App)
   .use(store)
   .use(router)
   .use(FontAwesome)
+  .use(VPagination)
 
 // Базовые компоненты: делаем глобальными компоненты, начинающиеся на App...
 const requireComponent = require.context("@/components", true, /App[A-Z]\w+\.(vue|js)$/)

@@ -17,6 +17,13 @@
     <div class="forum__thread-list">
       <ThreadList :threads="threads"/>
     </div>
+    <div v-if="totalPagesCount > 1" class="pagination">
+      <v-pagination
+        v-model="currentPage"
+        :pages="totalPagesCount"
+        active-color="#DCEDFF"
+      />
+    </div>
   </div>
 </template>
 
@@ -34,8 +41,8 @@ export default {
   },
   data () {
     return {
-      //page: parseInt(this.$route.query.page) || 1,
-      //perPage: 10
+      currentPage: parseInt(this.$route.query.currentPage) || 1,
+      threadsPerPage: 10
     }
   },
   computed: {
@@ -49,40 +56,42 @@ export default {
         .filter(thread => thread.forumId === this.forum.id)
         .map(thread => this.$store.getters.thread(thread.id))
     },
-    threadCount () {
-      return this.forum.threads?.length || 0
+    threadsCount () {
+      return this.forum.threadIds?.length || 0
     },
     isAsyncDataLoaded() {
       return this.$store.state.isLoaded;
     },
-    /*totalPages () {
-      if (!this.threadCount) return 0
-      return Math.ceil(this.threadCount / this.perPage)
-    }*/
+    totalPagesCount () {
+      if (!this.threadsCount) return 0;
+      return Math.ceil(this.threadsCount / this.threadsPerPage);
+    }
   },
   methods: {
-    ...mapActions(['fetchForum', 'fetchThreads', 'fetchUsers', 'startLoadingIndicator', 'stopLoadingIndicator']),
-    //...mapActions('threads', ['fetchThreadsByPage']),
+    ...mapActions(['fetchForum', 'fetchThreads', 'fetchThreadsByPage', 'fetchUsers', 'startLoadingIndicator', 'stopLoadingIndicator']),
   },
-  async created () {
+  /*async created () {
     this.startLoadingIndicator();
     const forum = await this.fetchForum({ id: this.id });
     const threads = await this.fetchThreads({ ids: forum.threadIds || [] });
     await this.fetchUsers({ ids: threads.map(thread => thread.userId) });
     this.stopLoadingIndicator();
-  },
+  },*/
   // With pagination:
-  /*async created () {
+  async created () {
+    this.startLoadingIndicator();
     const forum = await this.fetchForum({ id: this.id });
-    const threads = await this.fetchThreadsByPage({ ids: forum.threads, page: this.page, perPage: this.perPage });
+    //console.log(forum)
+    const threads = await this.fetchThreadsByPage({ ids: forum.threadIds, currentPage: this.currentPage, threadsPerPage: this.threadsPerPage });
+    //console.log(threads)
     await this.fetchUsers({ ids: threads.map(thread => thread.userId) });
-    this.asyncDataStatus_loaded();
+    this.stopLoadingIndicator();
   },
   watch: {
-    async page (page) {
-      this.$router.push({ query: { page: this.page } })
+    async currentPage (currentPage) {
+      this.$router.push({ query: { currentPage } });
     }
-  }*/
+  }
 }
 </script>
 
@@ -114,5 +123,10 @@ export default {
       padding: 5px;
     }
   }
+}
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
 }
 </style>
