@@ -1,24 +1,27 @@
 <template>
-  <div class="navbar">
+  <header class="header">
     <TheNavbar/>
-  </div>
+  </header>
   <hr>
   <div class="container">
-    <div class="sidebar desktop-only">Sidebar</div>
-    <div class="content">
+    <aside class="sidebar desktop-only">
+      <TheSidebar />
+    </aside>
+    <main class="content">
       <router-view v-show="isLoaded" :key="`${$route.path}${JSON.stringify($route.query)}`" />
       <AppSpinner v-show="!isLoaded" />
-    </div>
+    </main>
   </div>
 </template>
 
 <script>
 import TheNavbar from '@/components/TheNavbar';
+import TheSidebar from '@/components/TheSidebar';
 import { mapActions } from 'vuex';
 import NProgress from 'nprogress';
 export default {
   name: 'App',
-  components: { TheNavbar },
+  components: { TheNavbar, TheSidebar },
   computed: {
     isLoaded() {
       return this.$store.state.isLoaded;
@@ -60,8 +63,8 @@ export default {
 }
 </style>
 
-<style scoped>
-.navbar {
+<style lang="scss" scoped>
+.header {
   position: fixed;
   width: 100%;
   z-index: 999;

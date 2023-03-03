@@ -19,7 +19,7 @@
     </div>
     <div v-if="totalPagesCount > 1" class="pagination">
       <v-pagination
-        v-model="currentPage"
+        v-model="page"
         :pages="totalPagesCount"
         active-color="#DCEDFF"
       />
@@ -41,7 +41,7 @@ export default {
   },
   data () {
     return {
-      currentPage: parseInt(this.$route.query.currentPage) || 1,
+      page: parseInt(this.$route.query.page) || 1,
       threadsPerPage: 10
     }
   },
@@ -82,14 +82,14 @@ export default {
     this.startLoadingIndicator();
     const forum = await this.fetchForum({ id: this.id });
     //console.log(forum)
-    const threads = await this.fetchThreadsByPage({ ids: forum.threadIds, currentPage: this.currentPage, threadsPerPage: this.threadsPerPage });
+    const threads = await this.fetchThreadsByPage({ ids: forum.threadIds, page: this.page, threadsPerPage: this.threadsPerPage });
     //console.log(threads)
     await this.fetchUsers({ ids: threads.map(thread => thread.userId) });
     this.stopLoadingIndicator();
   },
   watch: {
-    async currentPage (currentPage) {
-      this.$router.push({ query: { currentPage } });
+    async page (page) {
+      this.$router.push({ query: { page } });
     }
   }
 }
