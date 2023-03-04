@@ -69,6 +69,7 @@ $card-header-height: 300px;
   & input.card__name {
     height: 40px;
     margin: auto 0;
+    margin-right: 35px;
   }
   @media (max-width: 720px) {
     & {

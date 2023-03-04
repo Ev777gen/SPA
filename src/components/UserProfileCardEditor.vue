@@ -7,10 +7,13 @@
           <input v-model="activeUser.name" type="text" placeholder="Имя" class="card__name form__input">
         </div>
         <div class="card__avatar">
-          <AppAvatar :src="user.avatar" class="avatar_xlarge" />
+          <div v-if="avatarPreview">
+            <img :src="avatarPreview" class="avatar_xlarge">
+          </div>
+          <AppAvatar v-else :src="activeUser.avatar" class="avatar_xlarge" />
           <div class="card__avatar-cover">
-            <a href="#"><font-awesome-icon icon="fa-solid fa-camera" /></a>
-            <input type="file" title="Изменить аватар">
+            <font-awesome-icon icon="fa-solid fa-camera" class="card__camera-icon" />
+            <input type="file" title="Изменить аватар" accept="image/*" @change="onAvatarChange">
           </div>
         </div>
       </div>
@@ -34,7 +37,7 @@
         </div>
       </div>
       <div class="card__buttons form__btn-group">
-        <button @click="cancel" class="btn btn_ghost">Отмена</button>
+        <button @click.prevent="cancel" class="btn btn_ghost">Отмена</button>
         <button type="submit" class="btn btn_blue">Сохранить</button>
       </div>
     </form>
@@ -42,11 +45,13 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
 export default {
   data() {
     return {
       activeUser: { ...this.user },
-      changeName: false
+      avatar: null,
+      avatarPreview: null
     }
   },
   props: {
@@ -56,7 +61,23 @@ export default {
     }
   },
   methods: {
-    save() {
+    ...mapActions(['uploadAvatar']),
+    onAvatarChange (e) {
+      this.avatar = e.target.files[0];
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        this.avatarPreview = event.target.result;
+      }
+      reader.readAsDataURL(this.avatar);
+      
+      /*const file = e.target.files[0];
+      const uploadedImage = await this.uploadAvatar({ file });
+      this.activeUser.avatar = uploadedImage || this.activeUser.avatar;*/
+    },
+    async save() {
+      // Загружаем аватар в Firebase Storage и получаем его URL
+      const uploadedImageURL = await this.uploadAvatar({ file: this.avatar });
+      this.activeUser.avatar = uploadedImageURL || this.activeUser.avatar;
       // Надо клонировать объект, прежде чем посылать его в store
       // Если этого не сделать, получается мы создаем реактивную привязку данных
       this.$store.dispatch('updateUser', {...this.activeUser});
@@ -84,7 +105,9 @@ export default {
   height: 100%;
   border-radius: 50%;
   background-color: rgba(0, 0, 0, 0.25);
-  & a {
+  opacity: 0;
+  transition: all 0.3s;
+  & .card__camera-icon {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -105,6 +128,9 @@ export default {
     transform: translate(-50%, -50%);
     opacity: 0;
     cursor: pointer;
+  }
+  &:hover {
+    opacity: 1;
   }
 }
 .card__info {
@@ -129,7 +155,7 @@ export default {
   }
 }
 .form__input {
-  max-width: 535px;
+  width: 100%;
   margin: 0;
 }
 .card__buttons {

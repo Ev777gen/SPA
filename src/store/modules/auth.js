@@ -1,7 +1,8 @@
-import { auth } from "@/main.js";
+import { auth, storage } from "@/main.js";
 //import { doc, collection, getDocs, getDoc, query, where, orderBy, limit, startAfter} from 'firebase/firestore';
 //import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateEmail, reauthenticateWithCredential, EmailAuthProvider} from 'firebase/auth';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 
 // Последняя версия
@@ -33,7 +34,6 @@ export default {
       await auth.signOut();
       commit('setAuthId', null);
     },
-    // Пробую поменять
     async fetchAuthUser({ dispatch, commit }) {
       const userId = auth.currentUser?.uid;
       //console.log('auth.js -> fetchAuthUser ', 'auth', auth, 'userId', userId)
@@ -49,8 +49,6 @@ export default {
         },
         { root: true }
       )
-      
-      //localStorage.setItem("uid", userId);
       commit('setAuthId', userId)
     },
     initAuthentication({ dispatch, commit, state }) {
@@ -68,8 +66,24 @@ export default {
         commit('setAuthObserverUnsubscribe', unsubscribe);
       })
     },
+    async uploadAvatar({ state }, { file, filename }) {
+      if (!file) return null;
+      const authId = state.authId;
+      filename = filename || file.name;
+      try {
+        const storageRef = ref(
+          storage,
+          `uploads/${authId}/images/${Date.now()}-${filename}`
+        )
+        return uploadBytes(storageRef, file).then(() => {
+          return getDownloadURL(storageRef);
+        })
+      } catch (error) {
+        alert(error.message);
+      }
+    },
 
-
+    // Заготовки на будущее
     /*async updateEmail({ state }, { email }) {
       return updateEmail(auth.currentUser, email)
     },*/
@@ -84,26 +98,7 @@ export default {
     },*/
 
 
-    /*async uploadAvatar({ state }, { authId, file, filename }) {
-      if (!file) return null
-      authId = authId || state.authId
-      filename = filename || file.name
-      try {
-        const storageRef = ref(
-          storage,
-          `uploads/${authId}/images/${Date.now()}-${filename}`
-        )
-        return uploadBytes(storageRef, file).then(snapshot => {
-          return getDownloadURL(storageRef)
-        })
-      } catch (error) {
-        const { addNotification } = useNotifications()
-        addNotification({
-          message: 'Error uploading avatar image',
-          type: 'error'
-        })
-      }
-    },*/
+
     // Дублируется:
     /*fetchAuthUser: async ({ dispatch, state, commit }) => {
       const userId = auth.currentUser?.uid;

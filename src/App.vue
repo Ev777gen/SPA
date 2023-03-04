@@ -9,7 +9,7 @@
     </aside>
     <main class="content">
       <router-view v-show="isLoaded" :key="`${$route.path}${JSON.stringify($route.query)}`" />
-      <AppSpinner v-show="!isLoaded" />
+      <AppSpinner v-show="!isLoaded" class="spinner" />
     </main>
   </div>
 </template>
@@ -74,5 +74,8 @@ hr {
 }
 .container {
   margin-top: 75px;
+}
+.spinner {
+  margin-top: 40vh;
 }
 </style>

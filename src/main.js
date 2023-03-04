@@ -7,9 +7,10 @@ import store from './store';
 import { initializeApp } from "firebase/app";
 import { getFirestore } from 'firebase/firestore';
 import { getAuth } from "firebase/auth";
+import { getStorage } from 'firebase/storage';
 // Importing FontAwesome plugin
 import FontAwesome from "@/plugins/FontAwesome";
-// Importing pagination
+// Importing pagination plugin
 import VPagination from '@/plugins/VPagination';
 
 // Initializing Firebase
@@ -24,6 +25,7 @@ const firebaseConfig = {
 const firebaseApp = initializeApp(firebaseConfig);
 export const db = getFirestore(firebaseApp);
 export const auth = getAuth(firebaseApp);
+export const storage = getStorage(firebaseApp);
 
 // Creating Vue app
 const app = createApp(App)

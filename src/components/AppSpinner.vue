@@ -15,13 +15,12 @@
       <div class="sk-circle12 sk-child"></div>
     </div>
   </div>
-
 </template>
 <!--
 <script>
 export default {
   props: {
-    color: { type: String, default: '#263959' }
+    color: { type: String, default: '#ff9d4e' }
   },
   data () {
     return {
@@ -33,10 +32,8 @@ export default {
 -->
 <style scoped>
 .spinner {
-  margin-top: 40vh;
   text-align: center;
 }
-
 .sk-circle {
   margin: 100px auto;
   width: 40px;
