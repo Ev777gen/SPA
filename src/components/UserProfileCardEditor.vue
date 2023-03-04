@@ -14,6 +14,7 @@
           <div class="card__avatar-cover">
             <font-awesome-icon icon="fa-solid fa-camera" class="card__camera-icon" />
             <input type="file" title="Изменить аватар" accept="image/*" @change="onAvatarChange">
+            <button class="card__avatar-button btn btn_red" @click.prevent="deleteAvatar">Удалить</button>
           </div>
         </div>
       </div>
@@ -69,10 +70,6 @@ export default {
         this.avatarPreview = event.target.result;
       }
       reader.readAsDataURL(this.avatar);
-      
-      /*const file = e.target.files[0];
-      const uploadedImage = await this.uploadAvatar({ file });
-      this.activeUser.avatar = uploadedImage || this.activeUser.avatar;*/
     },
     async save() {
       // Загружаем аватар в Firebase Storage и получаем его URL
@@ -86,6 +83,9 @@ export default {
     },
     cancel() {
       this.$router.push({name: 'ProfileView'});
+    },
+    deleteAvatar() {
+      this.activeUser.avatar = '';
     },
   },
 }
@@ -128,6 +128,14 @@ export default {
     transform: translate(-50%, -50%);
     opacity: 0;
     cursor: pointer;
+  }
+  & .card__avatar-button {
+    position: absolute;
+    top: 80%;
+    left: 50%;
+    padding: 5px;
+    font-size: 12px;
+    transform: translate(-50%, -50%);
   }
   &:hover {
     opacity: 1;
