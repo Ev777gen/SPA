@@ -1,41 +1,23 @@
-$container-width: 1100px;
-$content-width: 900px;
 
 html,
 body {
   min-height: 100vh;
   line-height: 1.5em;
-  background-color: #fff;
-}
-#app {
+  /*min-height: 100%;*/
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #444;
+  background-color: #fff;
 }
-.container {
-  display: flex;
-  justify-content: space-between;
-  max-width: $container-width;
-  margin: 0px auto;
-  padding: 0 15px;
-  /*border: 1px solid red;*/
-}
-.sidebar {
-  width: $container-width - $content-width;
-  margin-right: 15px;
-  /*border: 1px solid blue;*/
-}
-.content {
-  width: $content-width;
-  /*border: 1px solid blue;*/
-}
+
 
 /* Заголовки */
 .title {
   font-size: 32px;
   line-height: 1.1;
 }
+
 
 /* Текст */
 .text_gray {
@@ -44,6 +26,7 @@ body {
 .text_small {
   font-size: 12px;
 }
+
 
 /* Списки */
 .list__title {
@@ -70,6 +53,7 @@ body {
   }
 }
 
+
 /* Ссылки */
 a,
 .link {
@@ -81,6 +65,7 @@ a,
     /*color: #5ec0bb;*/
   }
 }
+
 
 /* кнопки */
 .btn, .btn_blue, .btn_green, .btn_orange, .btn_red, .btn_ghost {
@@ -145,6 +130,7 @@ a,
   letter-spacing: normal;
 }
 
+
 /* Аватар */
 $avatar: 50px;
 $avatar-xlarge: 160px;
@@ -178,6 +164,7 @@ $avatar-small: 35px;
   max-height: $avatar-small;
   border-radius: 50%;
 }
+
 
 /* Формы */
 .form_narrow {
@@ -293,39 +280,12 @@ textarea.form__input {
 
 /* Адаптив */
 @media (max-width: 820px) {
-  .desktop-only, .navbar-user {
+  .desktop-only {
     display: none;
   }
 }
-
-/*
-@media (max-width: 820px) {
-    .desktop-only, .forum-list .forum-listing .threads-count, .forum-list .forum-listing .last-thread, .forum-stats, .thread-list .thread .activity, .navbar-user {
-        display: none;
-    }
-}
-
 @media (min-width: 820px) {
-    .mobile-only, .navbar-mobile-item {
-        display: none;
-    }
+  .mobile-only {
+    display: none;
+  }
 }
-
-@media (max-width: 720px) {
-    .hide-mobile {
-        display: none;
-    }
-}
-
-@media (min-width: 720px) and (max-width: 820px) {
-    .hide-tablet {
-        display: none;
-    }
-}
-
-@media (max-width: 720px) {
-    .hide-desktop {
-        display: none;
-    }
-}
-*/

@@ -117,6 +117,11 @@ export default {
 }
 .post__user-name {
   font-size: 18px;
+  @media (max-width: 720px) {
+    & {
+      font-size: 16px;
+    }
+  }
 }
 .post__user-info {
   display: flex;

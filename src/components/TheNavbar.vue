@@ -33,6 +33,8 @@
       <div class="dropdown" :class="{'dropdown_open': isDropdownOpen}">
         <router-link :to="{name: 'ProfileView'}" class="dropdown__link">Мой профиль</router-link>
         <!--<p class="dropdown__link">Настройки</p>-->
+        <router-link :to="{name: 'HomeView'}" class="dropdown__link mobile-only">На главную</router-link>
+        <router-link :to="{name: 'HomeView'}" class="dropdown__link mobile-only">Форум</router-link>
         <a href="" class="dropdown__link" @click.prevent="signOut">Выйти <font-awesome-icon icon="fa-solid fa-right-from-bracket" /></a>
       </div>
       

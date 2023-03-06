@@ -539,7 +539,8 @@ export default createStore({
     fetchThreads({ dispatch }, {ids}) {
       return dispatch('fetchItems', { resource: 'threads', ids });
     },
-    fetchThreadsByPage: ({ dispatch, commit }, { ids, page, threadsPerPage = 10 }) => {
+    fetchThreadsByPage: ({ dispatch, commit }, { ids = [], page, threadsPerPage = 10 }) => {
+      if (ids.length === 0) return [];
       commit('clearThreadsForPagination');
       const chunks = chunk(ids, threadsPerPage);
       const limitedIds = chunks[page - 1];

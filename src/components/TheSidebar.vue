@@ -8,12 +8,6 @@
 </template>
 
 <style lang="scss" scoped>
-.sidebar {
-  height: 100%;
-  margin-top: 15px;
-  padding: 15px;
-  background-color: #f6f6f6;
-}
 .sidebar__nav {
   display: flex;
   flex-direction: column;

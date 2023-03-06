@@ -70,6 +70,11 @@ $card-header-height: 300px;
     height: 40px;
     margin: auto 0;
     margin-right: 35px;
+    @media (max-width: 720px) {
+      & {
+        margin-right: 0px;
+      }
+    }
   }
   @media (max-width: 720px) {
     & {
