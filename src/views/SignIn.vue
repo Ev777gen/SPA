@@ -1,17 +1,12 @@
 <template>
   <div class="form_narrow">
-    <form @submit.prevent="signIn">
+
+    <VeeForm @submit="signIn">
       <h1 class="form__title title">Войти</h1>
 
-      <div class="form__input-group">
-        <label for="email">E-mail</label>
-        <input v-model="form.email" id="email" type="text" class="form__input" />
-      </div>
-      <div class="form__input-group">
-        <label for="password">Пароль</label>
-        <input v-model="form.password" id="password" type="password" class="form__input" />
-      </div>
-
+      <AppFormField label="e-mail" name="email" type="email" v-model="form.email" rules="required|email" />
+      <AppFormField label="Пароль" name="password" type="password" v-model="form.password" rules="required" />
+      
       <div class="form__btn-group">
         <div>
           <span>Еще не зарегистрированы? </span>
@@ -19,7 +14,8 @@
         </div>
         <button type="submit" class="btn btn_blue" :disabled="!(form.email && form.password)">Войти</button>
       </div>
-    </form>
+    </VeeForm>
+    
   </div>
 </template>
 <script>

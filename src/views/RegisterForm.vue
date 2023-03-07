@@ -1,33 +1,18 @@
 <template>
   <div class="form_narrow">
 
-    <form @submit.prevent="register">
+    <VeeForm @submit="register">
       <h1 class="form__title title">Форма регистрации</h1>
 
-      <div class="form__input-group">
-        <label for="name" class="form__label">Полное имя</label>
-        <input v-model="form.name" id="name" type="text" class="form__input" />
-      </div>
-
-      <div class="form__input-group">
-        <label for="username" class="form__label">Логин</label>
-        <input v-model="form.username" id="username" type="text" class="form__input" />
-      </div>
-
-      <div class="form__input-group">
-        <label for="email" class="form__label">e-mail</label>
-        <input v-model="form.email" id="email" type="email" class="form__input" />
-      </div>
-
-      <div class="form__input-group">
-        <label for="password" class="form__label">Пароль</label>
-        <input v-model="form.password" id="password" type="password" class="form__input" />
-      </div>
+      <AppFormField v-model="form.name" name="name" label="Имя" rules="required" />
+      <AppFormField v-model="form.username" name="username" label="Логин" rules="required|unique:users,username" />
+      <AppFormField v-model="form.email" name="email" label="e-mail" rules="required|email|unique:users,email" type="email" />
+      <AppFormField v-model="form.password" name="password" label="Пароль" rules="required|min:6" type="password" />
 
       <div class="form__btn-group">
         <button type="submit" class="btn_blue">Зарегистрироваться</button>
       </div>
-    </form>
+    </VeeForm>
 
   </div>
 </template>

@@ -8,10 +8,10 @@ import { initializeApp } from "firebase/app";
 import { getFirestore } from 'firebase/firestore';
 import { getAuth } from "firebase/auth";
 import { getStorage } from 'firebase/storage';
-// Importing FontAwesome plugin
+// Importing plugins
 import FontAwesome from "@/plugins/FontAwesome";
-// Importing pagination plugin
 import VPagination from '@/plugins/VPagination';
+import VeeValidatePlugin from '@/plugins/VeeValidatePlugin';
 
 // Initializing Firebase
 const firebaseConfig = {
@@ -33,6 +33,7 @@ const app = createApp(App)
   .use(router)
   .use(FontAwesome)
   .use(VPagination)
+  .use(VeeValidatePlugin)
 
 // Базовые компоненты: делаем глобальными компоненты, начинающиеся на App...
 const requireComponent = require.context("@/components", true, /App[A-Z]\w+\.(vue|js)$/)

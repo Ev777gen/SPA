@@ -1,11 +1,9 @@
 <template>
   <div class="card">
-    <form @submit.prevent="save">
+
+    <VeeForm @submit="save">
       <div class="card__header">
         <div class="card__background_cover"></div>
-        <div class="card__background_footer">
-          <input v-model="activeUser.name" type="text" placeholder="Имя" class="card__name form__input">
-        </div>
         <div class="card__avatar">
           <div v-if="avatarPreview">
             <img :src="avatarPreview" class="avatar_xlarge">
@@ -17,31 +15,35 @@
             <button class="card__avatar-button btn btn_red" @click.prevent="deleteAvatar">Удалить</button>
           </div>
         </div>
+        <div class="card__background_footer">
+          <AppFormField name="name" v-model="activeUser.name" rules="required" class="card__name" />
+        </div>
       </div>
 
-      <div class="card__info card__info_edit">
+      <div class="card__info_edit">
         <div class="card__username">
           <span>Имя пользователя: </span>
-          <input v-model="activeUser.username" type="text" placeholder="Имя пользователя" class="form__input">
+          <AppFormField name="username" v-model="activeUser.username" :rules="`required|unique:users,username,${user.username}`"/>
         </div>
         <div class="card__email">
           <span>Почта: </span>
-          <input v-model="activeUser.email" type="text" placeholder="E-mail" class="form__input">
+          <AppFormField name="email" v-model="activeUser.email" :rules="`required|email|unique:users,email,${user.email}`"/>
         </div>
         <div class="card__bio">
           <span>Обо мне: </span>
-          <textarea v-model="activeUser.bio" rows="5" placeholder="Расскажите коротко о себе" class="form__input"></textarea>
+          <AppFormField name="bio" as="textarea" v-model="activeUser.bio" placeholder="Расскажите коротко о себе" />
         </div>
         <div class="card__website">
           <span>Вебсайт: </span>
-          <input v-model="activeUser.website" type="text" placeholder="Добавьте ссылку на Ваш вебсайт" class="form__input">
+          <AppFormField name="website" v-model="activeUser.website" placeholder="Добавьте ссылку на Ваш вебсайт" rules="url" />
         </div>
       </div>
       <div class="card__buttons form__btn-group">
         <button @click.prevent="cancel" class="btn btn_ghost">Отмена</button>
         <button type="submit" class="btn btn_blue">Сохранить</button>
       </div>
-    </form>
+    </VeeForm>
+
   </div>
 </template>
 
@@ -93,10 +95,33 @@ export default {
 
 <style lang="scss" scoped>
 /* 
-  Общую часть стилей компонентов 
+  Общая часть стилей компонентов 
   UserProfileCard.vue и UserProfileCardEditor.vue 
-  я поместил в файл ProfileView.vue. 
+  находится в файле ProfileView.vue
 */
+.card__background_footer {
+  padding-right: 25px;
+  padding-top: 25px;
+  & input.card__name {
+    height: 40px;
+    margin: auto 0;
+    @media (max-width: 720px) {
+      & {
+        margin-right: 0px;
+      }
+    }
+  }
+  @media (max-width: 720px) {
+    & {
+      padding: 10px;
+      padding-top: 20px;
+    }
+  }
+}
+
+
+
+
 .card__avatar-cover {
   position: absolute;
   top: 0;
@@ -114,7 +139,8 @@ export default {
     padding: 60px;
     border-radius: 50%;
     font-size: 40px;
-    color: #fff;
+    /*color: #fff;*/
+    color: rgba(255, 255, 255, 0.7);
     transform: translate(-50%, -50%);
   }
   & input {
@@ -131,7 +157,7 @@ export default {
   }
   & .card__avatar-button {
     position: absolute;
-    top: 80%;
+    top: 110%;
     left: 50%;
     padding: 5px;
     font-size: 12px;
@@ -140,28 +166,58 @@ export default {
   &:hover {
     opacity: 1;
   }
+  @media (max-width: 720px) {
+    & {
+      background-color: rgba(0, 0, 0, 0.0);
+      opacity: 1;
+      & .card__avatar-button {
+        top: 111%;
+        opacity: 0.5;
+      }
+    }
+  }
 }
-.card__info {
+
+
+
+
+
+
+
+
+
+.card__info_edit {
   margin: 15px 0;
-  padding: 15px 25px;
+  padding: 25px 25px 15px 25px;
   border: 2px solid #eee;
   border-radius: 5px;
   font-size: 18px;
   & div {
-    padding: 10px;
+    margin-bottom: 15px;
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+  /*& div {
+    padding-top: 15px;
+    &:last-child {
+      margin: 0;
+    }
     & span:first-child {
       display: inline-block;
       width: 250px;
-      padding-top: 10px;
+      padding-top: 5px;
       vertical-align: top;
     }
-  }
+  }*/
   @media (max-width: 720px) {
     & {
       padding: 10px;
+      padding-top: 20px;
     }
   }
 }
+
 .form__input {
   width: 100%;
   margin: 0;

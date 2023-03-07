@@ -62,9 +62,9 @@ export default {
 
 <style lang="scss" scoped>
 /* 
-  Общую часть стилей компонентов 
+  Общая часть стилей компонентов 
   UserProfileCard.vue и UserProfileCardEditor.vue 
-  я поместил в файл ProfileView.vue. 
+  находится в файле ProfileView.vue 
 */
 .card__info {
   margin: 15px 0;

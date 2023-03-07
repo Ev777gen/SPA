@@ -109,6 +109,9 @@ export default {
   &:nth-child(odd) {
     background: #eee;
   }
+  &:last-child {
+    margin-bottom: 20px;
+  }
   @media (max-width: 720px) {
     & {
       padding: 0;
