@@ -35,15 +35,11 @@ export default {
   UserProfileCard и UserProfileCardEditor.
 */
 $card-header-height: 320px;
-$card-background-cover-height: $card-header-height * 0.65 - 2px;
-$card-background-footer-height: $card-header-height * 0.35 - 2px;
-
-$card-background-cover-height: $card-header-height * 0.65 - 2px;
-$card-background-footer-height: $card-header-height - $card-background-cover-height - 2px;
+$card-background-cover-height: $card-header-height * 0.65;
+$card-background-footer-height: $card-header-height - $card-background-cover-height - 4px;
 
 .card__header {
   position: relative;
-  /*box-sizing: content-box;*/
   margin: 15px 0;
   height: $card-header-height;
   border: 2px solid #eee;
@@ -67,7 +63,6 @@ $card-background-footer-height: $card-header-height - $card-background-cover-hei
   height: $card-background-footer-height;
   padding-left: 33%;
   background-color: #fff;
-  /*border: 1px solid red;*/
   & .card__name {
     font-size: 28px;
     font-weight: 700;

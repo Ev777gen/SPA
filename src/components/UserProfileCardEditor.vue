@@ -102,9 +102,9 @@ export default {
 .card__background_footer {
   padding-right: 25px;
   padding-top: 25px;
-  & input.card__name {
+  align-items: center;
+  & .card__name {
     height: 40px;
-    margin: auto 0;
     @media (max-width: 720px) {
       & {
         margin-right: 0px;
@@ -114,13 +114,10 @@ export default {
   @media (max-width: 720px) {
     & {
       padding: 10px;
-      padding-top: 20px;
+      padding-top: 18px;
     }
   }
 }
-
-
-
 
 .card__avatar-cover {
   position: absolute;
@@ -139,7 +136,6 @@ export default {
     padding: 60px;
     border-radius: 50%;
     font-size: 40px;
-    /*color: #fff;*/
     color: rgba(255, 255, 255, 0.7);
     transform: translate(-50%, -50%);
   }
@@ -171,7 +167,7 @@ export default {
       background-color: rgba(0, 0, 0, 0.0);
       opacity: 1;
       & .card__avatar-button {
-        top: 111%;
+        top: 112%;
         opacity: 0.5;
       }
     }
