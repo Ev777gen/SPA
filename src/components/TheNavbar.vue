@@ -1,6 +1,7 @@
 <template>
   <header class="header">
     <div class="header__body container">
+
       <router-link :to="{name: 'HomeView'}" v-if="!isMobile || (authUser && isMobile)" class="header__logo">Logo</router-link>
       <a
         v-if="authUser && !isMobile"
@@ -31,10 +32,13 @@
       </div>
 
       <div class="dropdown" :class="{'dropdown_open': isDropdownOpen}">
+        <div class="dropdown__nav mobile-only">
+          <router-link :to="{name: 'HomeView'}" class="dropdown__link">На главную</router-link>
+          <router-link :to="{name: 'HomeView'}" class="dropdown__link">Форум</router-link>
+          <hr>
+        </div>
         <router-link :to="{name: 'ProfileView'}" class="dropdown__link">Мой профиль</router-link>
-        <!--<p class="dropdown__link">Настройки</p>-->
-        <router-link :to="{name: 'HomeView'}" class="dropdown__link mobile-only">На главную</router-link>
-        <router-link :to="{name: 'HomeView'}" class="dropdown__link mobile-only">Форум</router-link>
+        <router-link :to="{name: 'SettingsView'}" class="dropdown__link">Настройки</router-link>
         <a href="" class="dropdown__link" @click.prevent="signOut">Выйти <font-awesome-icon icon="fa-solid fa-right-from-bracket" /></a>
       </div>
       
@@ -170,12 +174,13 @@ $triangle-size: 8px;
   z-index: 1000;
   & .dropdown__link {
     display: block;
-    font-size: 18px;
+    font-size: 20px;
     line-height: 2;
     color: $dropdown-link-color;
     @media (max-width: 720px) {
       & {
         font-size: 24px;
+        line-height: 1.8;
       }
     }
   }
@@ -199,5 +204,13 @@ $triangle-size: 8px;
 .dropdown_open {
   opacity: 1;
   visibility: visible;
+}
+.dropdown__nav {
+  & hr {
+    height: 2px;
+    width: 100%;
+    margin: 15px 0;
+    background-color: #eee;
+  }
 }
 </style>

@@ -10,15 +10,15 @@
         <AppAvatar :src="user.avatar" class="avatar_xlarge" />
       </div>
     </div>
-    <div class="card__info card__info_show">
+    <div class="card__info">
       <div class="card__username">
         <span>Имя пользователя: </span>
         <span>{{ user.username }}</span>
       </div>
-      <div class="card__email">
+      <!--<div class="card__email">
         <span>Почта: </span>
         <span>{{ user.email }}</span>
-      </div>
+      </div>-->
       <div class="card__bio">
         <span>Обо мне: </span>
         <span>{{ user.bio || '---' }}</span>

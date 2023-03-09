@@ -17,8 +17,8 @@ export default app => {
   // чтобы убедиться, что они еще не зарегистрированы
   defineRule('unique', async (value, args) => {
     // На элементе AppFormField можно записать правила двумя способами: 
-    // - строкой: <AppFormField ... rules="...|unique:users,email," />
-    // - объектом: <AppFormField ... rules="{..., unique: {coll: 'users', field: 'email'}}" />
+    // - строкой: <AppFormField ... rules="...|unique:users,username" />
+    // - объектом: <AppFormField ... rules="{..., unique: {coll: 'users', field: 'username'}}" />
     // Поэтому деструктурируем для обоих случаев: когда args - это: 
     // - массив (в него собраны аргументы из строки после двоеточия) 
     // - объект
@@ -28,10 +28,10 @@ export default app => {
     } else {
       ({ coll, field, excluding } = args);
     }
-    // Переменная excluding используется при редактировании профиля
-    // в компоненте UserProfileCardEditor.vue. Там пишем так:
-    // <AppFormField ... :rules="`...|unique:users,email,${user.email}`"/>
-    // Следующее условие позволяет не обращаться к БД,
+    // Переменная excluding используется при редактировании профиля.
+    // В компоненте UserProfileCardEditor.vue пишем так:
+    // <AppFormField ... :rules="`...|unique:users,username,${user.username}`"/>
+    // А следующее условие позволяет не обращаться к БД,
     // если пользователь не менял username или email.
     if (value === excluding) return true;
     // В базе даннх, в коллекции coll ищем документы,
@@ -61,3 +61,7 @@ export default app => {
   app.component('VeeField', Field);
   app.component('VeeErrorMessage', ErrorMessage);
 }
+
+// Примечание: здесь не реализована проверка уникальности логина
+// В данном случае логин избыточный, т.к. регистрация производится
+// по электронной почте и паролю.

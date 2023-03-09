@@ -431,7 +431,7 @@ export default createStore({
       await setDoc(userRef, user);
       const newUser = await getDoc(userRef);
       commit('setItem', { resource: 'users', item: newUser });
-      console.log('store - index.js -> createUser ', newUser)
+      //console.log('store - index.js -> createUser ', newUser)
       return makeResourceFromDoc(newUser);
     },
     async updateUser({ commit }, user) {
@@ -441,12 +441,11 @@ export default createStore({
         name: user.name || null,
         bio: user.bio || null,
         website: user.website || null,
-        email: user.email || null,
-        location: user.location || null
+        email: user.email || null
       }
-      const userRef = doc(db, 'users', user.id)
-      await updateDoc(userRef, userUpdates)
-      commit('setItem', { resource: 'users', item: user }, { root: true })
+      const userRef = doc(db, 'users', user.id);
+      await updateDoc(userRef, userUpdates);
+      commit('setItem', { resource: 'users', item: user }, { root: true });
     },
     //------------------------------------------------------------
     // Чтение из Cloud Firestore

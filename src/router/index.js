@@ -11,7 +11,7 @@ const routes = [
     path: '/profile',
     name: 'ProfileView',
     component: () => import(/* webpackChunkName: "ProfileView" */'@/views/ProfileView.vue'),
-    meta: { isAuthRequired: true, toTop: true, smoothScroll: true },
+    meta: { isAuthRequired: true, toTop: true, smoothScroll: true }
   },
   // {
   //   path: '/profile',
@@ -21,9 +21,15 @@ const routes = [
   //   meta: { toTop: true, smoothScroll: true }
   // },
   {
+    path: '/settings',
+    name: 'SettingsView',
+    component: () => import(/* webpackChunkName: "SettingsView" */'@/views/SettingsView.vue'),
+    meta: { isAuthRequired: true, toTop: true, smoothScroll: true }
+  },
+  {
     path: '/profile/edit',
     name: 'ProfileEdit',
-    component: () => import(/* webpackChunkName: "Profile" */'@/views/ProfileView.vue'),
+    component: () => import(/* webpackChunkName: "ProfileEdit" */'@/views/ProfileView.vue'),
     props: { edit: true },
     meta: { isAuthRequired: true }
   },
@@ -51,9 +57,9 @@ const routes = [
     component: () => import(/* webpackChunkName: "ThreadView" */ '@/views/ThreadView.vue'),
     props: true,
     /*async beforeEnter (to, from, next) {
-      await store.dispatch('threads/fetchThread', { id: to.params.id, once: true })
+      await store.dispatch('fetchThread', { id: to.params.id, once: true })
       // check if thread exists
-      const threadExists = findById(store.state.threads.items, to.params.id)
+      const threadExists = findItemById(store.state.threads, to.params.id)
       // if exists continue
       if (threadExists) {
         return next()

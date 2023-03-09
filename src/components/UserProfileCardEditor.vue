@@ -11,7 +11,7 @@
           <AppAvatar v-else :src="activeUser.avatar" class="avatar_xlarge" />
           <div class="card__avatar-cover">
             <font-awesome-icon icon="fa-solid fa-camera" class="card__camera-icon" />
-            <input type="file" title="Изменить аватар" accept="image/*" @change="onAvatarChange">
+            <input type="file" title="Изменить аватар" accept="image/*" @change="changeAvatar">
             <button class="card__avatar-button btn btn_red" @click.prevent="deleteAvatar">Удалить</button>
           </div>
         </div>
@@ -25,10 +25,10 @@
           <span>Имя пользователя: </span>
           <AppFormField name="username" v-model="activeUser.username" :rules="`required|unique:users,username,${user.username}`"/>
         </div>
-        <div class="card__email">
+        <!--<div class="card__email">
           <span>Почта: </span>
           <AppFormField name="email" v-model="activeUser.email" :rules="`required|email|unique:users,email,${user.email}`"/>
-        </div>
+        </div>-->
         <div class="card__bio">
           <span>Обо мне: </span>
           <AppFormField name="bio" as="textarea" v-model="activeUser.bio" placeholder="Расскажите коротко о себе" />
@@ -50,22 +50,22 @@
 <script>
 import { mapActions } from "vuex";
 export default {
-  data() {
-    return {
-      activeUser: { ...this.user },
-      avatar: null,
-      avatarPreview: null
-    }
-  },
   props: {
     user: {
       type: Object,
       required: true
     }
   },
+  data() {
+    return {
+      activeUser: { ...this.user },
+      avatar: null,
+      avatarPreview: null,
+    }
+  },
   methods: {
-    ...mapActions(['uploadAvatar']),
-    onAvatarChange (e) {
+    ...mapActions(['uploadAvatar', 'updateUser']),
+    changeAvatar (e) {
       this.avatar = e.target.files[0];
       const reader = new FileReader();
       reader.onload = (event) => {
@@ -73,21 +73,24 @@ export default {
       }
       reader.readAsDataURL(this.avatar);
     },
+    deleteAvatar() {
+      this.activeUser.avatar = '';
+    },
     async save() {
-      // Загружаем аватар в Firebase Storage и получаем его URL
-      const uploadedImageURL = await this.uploadAvatar({ file: this.avatar });
-      this.activeUser.avatar = uploadedImageURL || this.activeUser.avatar;
+      const isAvatarChanged = this.avatar !== null || this.activeUser.avatar === '';
+      if (isAvatarChanged) {
+        // Загружаем аватар в Firebase Storage и получаем его URL
+        const uploadedImageURL = await this.uploadAvatar({ file: this.avatar });
+        this.activeUser.avatar = uploadedImageURL || this.activeUser.avatar;
+      }
       // Надо клонировать объект, прежде чем посылать его в store
       // Если этого не сделать, получается мы создаем реактивную привязку данных
-      this.$store.dispatch('updateUser', {...this.activeUser});
+      this.updateUser({...this.activeUser});
       // Выходим из редактирования и возвращаемся к отображению информации
       this.$router.push({name: 'ProfileView'});
     },
     cancel() {
       this.$router.push({name: 'ProfileView'});
-    },
-    deleteAvatar() {
-      this.activeUser.avatar = '';
     },
   },
 }
