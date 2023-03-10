@@ -21,20 +21,19 @@
           <AppFormField name="reauth-password" label="Пароль" v-model="password" type="password" rules="required" />
           <div class="form__btn-group">
             <button class="btn btn_ghost" @click.prevent="cancel">Отмена</button>
-            <button class="btn btn_blue">Изменить e-mail</button>
+            <button class="btn btn_blue">Сохранить изменения</button>
           </div>
         </VeeForm>
       </div>
 
       <div v-if="isChangingPassword" class="settings__password_edit">
-        <h3 class="settings__subtitle">Введите данные</h3>
+        <h3 class="settings__subtitle">Введите старый и новый пароль</h3>
         <VeeForm @submit="changePassword">
-          <AppFormField name="reauth-email" label="e-mail" v-model="newEmail" rules="required|email" />
           <AppFormField name="password" label="Старый пароль" v-model="password" type="password" rules="required" />
           <AppFormField name="reauth-password" label="Новый пароль" v-model="newPassword" type="password" rules="required|min:6" />
           <div class="form__btn-group">
             <button class="btn btn_ghost" @click.prevent="cancel">Отмена</button>
-            <button class="btn btn_blue">Изменить e-mail</button>
+            <button class="btn btn_blue">Сохранить изменения</button>
           </div>
         </VeeForm>
       </div>
@@ -69,20 +68,15 @@ export default {
         this.startLoadingIndicator();
         await this.reauthenticate({ email: this.activeUser.email, password: this.password });
         await this.updateEmail({ email: this.newEmail });
-        await this.updateUser({ ...this.activeUser, email: this.newEmail });
+        this.updateUser({ ...this.activeUser, email: this.newEmail });
         this.clearForm();
         this.isChangingEmail = false;
-        this.stpoLoadingIndicator();
+        this.stopLoadingIndicator();
       } catch (error) {
         alert('Возникла ошибка при обновлении данных пользователя. Попробуйте повторить еще раз.');
-        // Если произошла ошибка при записи нового e-mail в БД,
-        // то возвращаем обратно исходный e-mail
-        if (this.activeUser.email !== this.newEmail) {
-          await this.reauthenticate({ email: this.newEmail, password: this.password });
-          await this.updateEmail({ email: this.activeUser.email });
-        }
         this.clearForm();
         this.isChangingEmail = false;
+        this.stopLoadingIndicator();
       }
     },
     async changePassword() {
@@ -93,11 +87,12 @@ export default {
       //   await this.updatePassword({ password: this.newPassword });
       //   this.clearForm();
       //   this.isChangingPassword = false;
-      //   this.stpoLoadingIndicator();
+      //   this.stopLoadingIndicator();
       // } catch (error) {
       //   alert('Возникла ошибка при обновлении данных пользователя. Попробуйте повторить еще раз.');
       //   this.clearForm();
       //   this.isChangingPassword = false;
+      //   this.stopLoadingIndicator();
       // }
 
       // Если раскомментировать то, что выше,
@@ -121,7 +116,7 @@ export default {
 
 <style lang="scss" scoped>
 .settings__subtitle {
-  margin: 35px 0 10px 0;
+  margin: 35px 0 20px 0;
   text-align: center;
   font-size: 18px;
 }
