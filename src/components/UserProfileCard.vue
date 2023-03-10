@@ -15,10 +15,6 @@
         <span>Имя пользователя: </span>
         <span>{{ user.username }}</span>
       </div>
-      <!--<div class="card__email">
-        <span>Почта: </span>
-        <span>{{ user.email }}</span>
-      </div>-->
       <div class="card__bio">
         <span>Обо мне: </span>
         <span>{{ user.bio || '---' }}</span>

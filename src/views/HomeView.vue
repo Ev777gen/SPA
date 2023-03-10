@@ -1,13 +1,13 @@
 <template>
   <div class="homepage">
     <h1 class="homepage__title title">Single Page Application</h1>
-    <h2 class="homepage__subtitle subtitle">Форум на Firebase</h2>
+    <h2 class="homepage__subtitle subtitle">Форум на Vue 3 и Firebase</h2>
     <div class="homepage__text">
       <p>
         Привет! Это пример реализации SPA в виде 
         <router-link :to="{name: 'ForumMainPage'}" class="homepage__link">форума</router-link>.
-        Здесь можно зарегистрироваться, создавать новые темы, писать посты, 
-        редактировать свои данные на странице профиля и поменять e-mail в настроках. 
+        Здесь можно зарегистрироваться, создать новую тему, написать пост, 
+        отредактировать свои данные на странице профиля и поменять e-mail в настроках. 
         Функционал и дизайн специально упрощены, чтобы было нагляднее.
       </p>
       <p>А еще приложение адаптировано под мобильные устройства.</p>

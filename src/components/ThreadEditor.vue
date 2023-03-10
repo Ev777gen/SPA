@@ -26,22 +26,22 @@ export default {
   },
   computed: {
     existing () {
-      return !!this.title
+      return !!this.title;
     }
   },
   methods: {
     save () {
-      this.$emit('clean')
-      this.$emit('save', { ...this.form })
+      this.$emit('clean');
+      this.$emit('save', { ...this.form });
     }
   },
   watch: {
     form: {
       handler () {
         if (this.form.title !== this.title || this.form.text !== this.text) {
-          this.$emit('dirty')
+          this.$emit('dirty');
         } else {
-          this.$emit('clean')
+          this.$emit('clean');
         }
       },
       deep: true

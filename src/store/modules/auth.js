@@ -9,10 +9,6 @@ export default {
     authObserverUnsubscribe: null
   },
   getters: {
-    /*authUser: (state, getters, rootState, rootGetters) => {
-      //console.log('auth.js -> authUser ', rootGetters.user(state.authId))
-      return rootGetters.user(state.authId);
-    }*/
     authUser: (state, getters) => {
       return getters.user(state.authId);
     }

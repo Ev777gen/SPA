@@ -40,9 +40,8 @@
 import PostList from '@/components/PostList';
 import PostEditor from '@/components/PostEditor';
 import { mapActions, mapGetters } from 'vuex';
-//import useNotifications from '@/composables/useNotifications';
-//import difference from 'lodash/difference';
 import { localeDate, repliesCountWording } from '@/helpers';
+
 export default {
   name: 'ThreadView',
   components: {
@@ -55,96 +54,46 @@ export default {
       required: true
     }
   },
-  /*setup () {
-    const { addNotification } = useNotifications()
-    return { addNotification }
-  },*/
   computed: {
     ...mapGetters(['authUser']),
     threads() {
-      return this.$store.state.threads
+      return this.$store.state.threads;
     },
     posts() {
-      return this.$store.state.posts
+      return this.$store.state.posts;
     },
     thread() {
-      return this.$store.getters.thread(this.id)
+      return this.$store.getters.thread(this.id);
     },
     threadPosts() {
-      return this.posts.filter(post => post.threadId === this.id)
+      return this.posts.filter(post => post.threadId === this.id);
     },
     isAsyncDataLoaded() {
       return this.$store.state.isLoaded;
     },
   },
   methods: {
-    ...mapActions(['fetchThread', 'fetchUser', 'fetchUsers', 'fetchPosts', 'createPost', 'startLoadingIndicator', 'stopLoadingIndicator']),
+    ...mapActions(['fetchThread', 'fetchUsers', 'fetchPosts', 'createPost', 'startLoadingIndicator', 'stopLoadingIndicator']),
     localeDate,
     repliesCountWording,
     addPost (eventData) {
       const post = {
         ...eventData.post,
         threadId: this.id
-      }
-      this.createPost(post)
+      };
+      this.createPost(post);
     },
     async fetchPostsWithUsers (ids) {
       // Загружаем из базы данных посты
-      const posts = await this.fetchPosts({
-        ids,
-        /*onSnapshot: ({ isLocal, previousItem }) => {
-          if (!this.asyncDataStatus_ready || isLocal || (previousItem?.edited && !previousItem?.edited?.at)) return
-          this.addNotification({ message: 'Thread recently updated', timeout: 5000 })
-        }*/
-      })
+      const posts = await this.fetchPosts({ ids });
       // Загружаем пользователей, написавших эти посты
-      const users = posts.map(post => post.userId).concat(this.thread.userId)
-      await this.fetchUsers({ ids: users })
+      const users = posts.map(post => post.userId).concat(this.thread.userId);
+      await this.fetchUsers({ ids: users });
     }
   },
-  /*async created() {
-    // fetch the thread
-    //console.log('1. fetching the thread inside created hook', this.id);
-    // Из store (временно!!!) !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    //const thread = this.$store.state.threads.find(t => t.id == this.id);
-    // Из Firebase
-    const thread = await this.fetchThread({ id: this.id });
-    //console.log('7. thread inside created hook', thread);
-    // fetch the user
-    this.fetchUser({ id: thread.userId });
-    // fetch the posts
-    // Из store (временно!!!)
-    //const posts = this.$store.state.posts.filter(p => p.id == thread.postIds);
-    // Из Firebase
-    const posts = await this.fetchPosts({ ids: thread.postIds });
-    //console.log('posts', posts)
-    // fetch the users associated with the posts
-    const users = posts.map(post => post.userId);
-    //console.log('users', users)
-    this.fetchUsers({ ids: users });
-    //thread.posts.forEach( async (postId) => {
-    //  const post = await this.$store.dispatch('fetchPost', {id: postId});
-    //  //console.log('post inside created hook ', post);
-    //  this.$store.dispatch('fetchUser', {id: post.userId});
-    //});
-    this.isAsyncDataLoaded = true;
-  },*/
   async created () {
-    // fetch the thread
     this.startLoadingIndicator();
-    const thread = await this.fetchThread({
-      id: this.id,
-      /*onSnapshot: async ({ isLocal, item, previousItem }) => {
-        if (!this.asyncDataStatus_ready || isLocal) return;
-        const newPosts = difference(item.posts, previousItem.posts);
-        const hasNewPosts = newPosts.length > 0;
-        if (hasNewPosts) {
-          await this.fetchPostsWithUsers(newPosts);
-        } else {
-          this.addNotification({ message: 'Thread recently updated', timeout: 5000 });
-        }
-      }*/
-    })
+    const thread = await this.fetchThread({ id: this.id });
     await this.fetchPostsWithUsers(thread.postIds);
     this.stopLoadingIndicator();
   }

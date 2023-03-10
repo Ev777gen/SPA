@@ -39,9 +39,7 @@ export default {
         title,
         text,
         forumId: this.forum.id
-        //forumId
       });
-      //console.log('thread', thread, 'thread.id', thread.id)
       this.$router.push({ name: 'ThreadView', params: { id: thread.id } });
     },
     cancel () {
@@ -55,7 +53,7 @@ export default {
   },
   beforeRouteLeave () {
     if (this.formIsDirty) {
-      const confirmed = window.confirm('Are you sure you want to leave? Unsaved changes will be lost!');
+      const confirmed = window.confirm('Вы уверены, что хотите покунуть страницу? Все несохраненные изменения будут потеряны.');
       if (!confirmed) return false;
     }
   }

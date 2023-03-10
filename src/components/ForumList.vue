@@ -15,8 +15,7 @@
         {{ forum.threadIds?.length }}
         {{ forumThreadsCountWording(forum.threadIds?.length) }}
       </div>
-      <!-- на будущее 
-      <div class="forum__last-thread">???</div>-->
+
     </div>
   </div>
 </template>
@@ -52,13 +51,5 @@ export default {
   flex-basis: 12%;
   text-align: center;
   font-weight: 100;
-}
-
-/* на будущее */
-.forum__last-thread {
-  flex-basis: 32%;
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
 }
 </style>

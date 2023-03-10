@@ -17,7 +17,7 @@
       <div v-if="isChangingEmail" class="settings__email_edit">
         <h3 class="settings__subtitle">Введите новый e-mail и пароль</h3>
         <VeeForm @submit="changeEmail">
-          <AppFormField name="reauth-email" label="Новый e-mail" v-model="newEmail" rules="required|email" />
+          <AppFormField name="new-email" label="Новый e-mail" v-model="newEmail" rules="required|email" />
           <AppFormField name="reauth-password" label="Пароль" v-model="password" type="password" rules="required" />
           <div class="form__btn-group">
             <button class="btn btn_ghost" @click.prevent="cancel">Отмена</button>
@@ -29,8 +29,8 @@
       <div v-if="isChangingPassword" class="settings__password_edit">
         <h3 class="settings__subtitle">Введите старый и новый пароль</h3>
         <VeeForm @submit="changePassword">
-          <AppFormField name="password" label="Старый пароль" v-model="password" type="password" rules="required" />
-          <AppFormField name="reauth-password" label="Новый пароль" v-model="newPassword" type="password" rules="required|min:6" />
+          <AppFormField name="reauth-password" label="Старый пароль" v-model="password" type="password" rules="required" />
+          <AppFormField name="new-password" label="Новый пароль" v-model="newPassword" type="password" rules="required|min:6" />
           <div class="form__btn-group">
             <button class="btn btn_ghost" @click.prevent="cancel">Отмена</button>
             <button class="btn btn_blue">Сохранить изменения</button>
@@ -109,6 +109,13 @@ export default {
       this.newEmail = '';
       this.password = '';
       this.newPassword = '';
+    }
+  },
+  watch: {
+    activeUser(newValue) {
+      if (newValue === null) {
+        this.$router.push('/');
+      }
     }
   },
 }

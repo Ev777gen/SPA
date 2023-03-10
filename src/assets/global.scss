@@ -3,7 +3,6 @@ html,
 body {
   min-height: 100vh;
   line-height: 1.5em;
-  /*min-height: 100%;*/
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -18,7 +17,7 @@ body {
   line-height: 1.1;
 }
 .subtitle {
-  font-size: 26px;
+  font-size: 22px;
   line-height: 1.1;
 }
 
@@ -41,9 +40,6 @@ body {
   font-weight: 100;
   color: #fefefe;
   background-color: #23374d;
-  /*a:hover {
-    color: #89c6af;
-  }*/
 }
 .list__item {
   display: flex;
@@ -62,11 +58,9 @@ body {
 a,
 .link {
   color: #1f9b80;
-  /*color: #019991;*/
   transition: all ease 0.3s;
   &:hover {
     color: #5bc4ad;
-    /*color: #5ec0bb;*/
   }
 }
 
@@ -108,8 +102,6 @@ a,
   }
 }
 .btn_orange {
-  /*background: #ffaf6e;*/
-  /*background: #ffc494;*/
   background: #ffb579;
   &:hover:not(:disabled) {
     background: #ff9d4e;
@@ -122,7 +114,6 @@ a,
   }
 }
 .btn_ghost {
-  /*flex-grow: 0;*/
   background-color: rgba(150, 150, 150, 0.45);
   &:hover:not(:disabled) {
     background-color: rgba(150, 150, 150, 0.7);

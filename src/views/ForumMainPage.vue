@@ -9,7 +9,6 @@
 import CategoryList from '@/components/CategoryList';
 import { mapActions } from 'vuex';
 export default {
-  name: 'HomeView',
   components: { CategoryList },
   computed: {
     categories() {

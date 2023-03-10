@@ -49,9 +49,10 @@
 </template>
 
 <script>
-import PostEditor from '@/components/PostEditor'
-import { mapActions } from 'vuex'
-import { localeDate, userPostsCountWording, userThreadsCountWording } from '@/helpers'
+import PostEditor from '@/components/PostEditor';
+import { mapActions } from 'vuex';
+import { localeDate, userPostsCountWording, userThreadsCountWording } from '@/helpers';
+
 export default {
   components: { PostEditor },
   props: {
@@ -67,7 +68,7 @@ export default {
   },
   computed: {
     users() {
-      return this.$store.state.users
+      return this.$store.state.users;
     }
   },
   methods: {
@@ -96,7 +97,6 @@ export default {
 .wrapper {
   margin-top: 10px;
 }
-
 .post {
   display: flex;
   flex-wrap: wrap;

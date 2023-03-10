@@ -19,6 +19,7 @@
 import ThreadEditor from '@/components/ThreadEditor';
 import { findItemById } from '@/helpers';
 import { mapActions } from 'vuex';
+
 export default {
   components: { ThreadEditor },
   props: {
@@ -49,11 +50,9 @@ export default {
         title,
         text
       });
-      //console.log('thread', thread)
       this.$router.push({ name: 'ThreadView', params: { id: thread.id } });
     },
     cancel () {
-      //console.log(this.id)
       this.$router.push({ name: 'ThreadView', params: { id: this.id } });
     }
   },

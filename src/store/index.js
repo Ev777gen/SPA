@@ -1,43 +1,19 @@
 import { createStore } from 'vuex';
 import { findItemById } from '@/helpers';
-//import testData from "@/data.json";
 import { db } from "@/main.js";
-//import { collection, getDocs, setDoc, addDoc, doc, updateDoc, arrayUnion, writeBatch, serverTimestamp } from "firebase/firestore/lite";
 import { collection,doc, getDoc, getDocs, setDoc, updateDoc, arrayUnion, writeBatch, serverTimestamp, increment, onSnapshot } from "firebase/firestore";
 import auth from './modules/auth';
 import chunk from 'lodash/chunk';
 
 export default createStore({
   state: {
-    // На тестовых данных:
-    /*categories: testData.categories,
-    forums: testData.forums,
-    threads: testData.threads,
-    posts: testData.posts,
-    users: testData.users,*/
-    // На Firebase:
     categories: [],
     forums: [],
     threads: [],
     posts: [],
-    users: [
-      /*{
-        "avatar": "https://icons.iconarchive.com/icons/iconka/meow/128/cat-eyes-icon.png",
-        "email": "email@mail.ru",
-        "name": "Мистер Кэт",
-        "username": "username1",
-        "usernameLower": "username1",
-        "id": "1",
-        "bio": "Обожаю программировать",
-        "registeredAt": 1594632260,
-        "lastVisitAt": 1594772078,
-        "postsCount": 1,
-        "threadsStarted": ["1"]
-      }*/
-    ],
+    users: [],
     unsubscribes: [],
     isLoaded: true,
-    //authId: null,
   },
   getters: {
     user: (state) => {
@@ -64,10 +40,6 @@ export default createStore({
         }
       }
     },
-    /*authUser: (state, getters) => {
-      //console.log(getters.user(state.authId))
-      return getters.user(state.authId)
-    },*/
     thread: (state) => {
       return (id) => {
         const thread = findItemById(state.threads, id)
@@ -89,18 +61,11 @@ export default createStore({
     },
   },
   mutations: {
-    /*setThread(state, {thread}) {
-      pushItemToStore(state.threads, thread)
-    },
-    setPost(state, {post}) {
-      pushItemToStore(state.posts, post)
-    },
-    setUser(state, {user}) {
-      pushItemToStore(state.users, user)
-    },*/
     setItem(state, { resource, item }) {
       pushItemToStore(state[resource], item);
     },
+    // Мутации для дублирования перекрестных связей между 
+    // документами в БД Firestore сюда, в store
     appendPostToThread: makeAppendChildToParentMutation({child: 'postIds', parent: 'threads'}),
     appendContributorToThread: makeAppendChildToParentMutation({child: 'contributorIds', parent: 'threads'}),
     appendThreadToForum: makeAppendChildToParentMutation({child: 'threadIds', parent: 'forums'}),
@@ -120,49 +85,9 @@ export default createStore({
     }
   },
   actions: {
-    /*
     //------------------------------------------------------------
-    // На тестовых данных:
+    // Запись в БД Cloud Firestore
     //------------------------------------------------------------
-    async createThread({commit, state, dispatch}, {title, text, forumId}) {
-      const id = 't' + Math.random();  // Здесь должна быть функция генерации id
-      const userId = state.authId;
-      const publishedAt = Math.floor(Date.now() / 1000);
-      const thread = { forumId, title, publishedAt, userId, id };
-      commit('setThread', {thread});
-      commit('appendThreadToForum', {forumId, threadId: id});
-      commit('appendThreadToUser', {userId, threadId: id});
-      dispatch('createPost', {text, threadId: id});
-      return state.threads.find(thread => thread.id === id)
-    },
-    async updateThread({commit, state}, {title, text, id}) {
-      const thread = state.threads.find(thread => thread.id === id);
-      const post = state.posts.find(post => post.id === thread.postIds[0]);
-      const newThread = { ...thread, title };
-      const newPost = { ...post, text };
-      commit('setThread', { thread: newThread });
-      commit('setPost', { post: newPost });
-      return newThread;
-    },
-    async createPost({state, commit}, post) {
-      post.id = 'p' + Math.random();  // Здесь должна быть функция генерации id
-      post.userId = state.authId;
-      post.publishedAt = Math.floor(Date.now() / 1000);
-      // Добавляем пост в store, чтобы он сразу отобразился на странице
-      commit('setItem', { resource: 'posts', item: { ...post, id: post.id } });
-      commit('appendPostToThread', {childId: post.id, parentId: post.threadId});
-      commit('appendContributorToThread', {childId: post.userId, parentId: post.threadId});
-    },
-    */
-    //------------------------------------------------------------
-    // На Firebase:
-    //------------------------------------------------------------
-    // Запись в Cloud Firestore
-    //------------------------------------------------------------
-
-
-    // Новая версия функций
-
     async createThread({ commit, state, dispatch, rootState }, { text, title, forumId }) {
       // Подготавливаем данные для отправки
       const userId = rootState.auth.authId;
@@ -262,160 +187,6 @@ export default createStore({
       const updatedPost = await getDoc(postRef);
       commit('setItem', { resource: 'posts', item: updatedPost }, { root: true });
     },
-    
-    
-    // Предыдущая версия функций:
-    /*
-    async createThread({commit, state, dispatch, rootState}, {title, text, forumId}) {
-      //const id = 't' + Math.random();  // Здесь должна быть функция генерации id
-      const userId = rootState.auth.authId;
-      //const publishedAt = Math.floor(Date.now() / 1000);
-      //const thread = { forumId, title, publishedAt, userId }; // Убрал отсюда id
-      const thread = { forumId, title, userId }; // Убрал отсюда id и publishedAt
-      // Добавляем thread в базу данных Cloud Firestore: 
-      // - сам thread добавляем в коллекцию threads
-      // - его id добавляем в соответствующий форум
-      // - его id добавляем пользователю, который его создал
-      
-      // Это последняя версия, с batch:
-      const batch = writeBatch(db);
-      const threadRef = doc(collection(db, "threads")); // Создает новый thread с id 
-      const forumRef = doc(db, "forums", thread.forumId);
-      const userRef = doc(db, "users", thread.userId);
-      batch.set(threadRef, thread);
-      batch.update(threadRef, {
-        publishedAt: serverTimestamp()
-      });
-      batch.update(forumRef, {
-        threadIds: arrayUnion(threadRef.id),
-      });
-      batch.update(userRef, {
-        threadsStarted: arrayUnion(threadRef.id),
-      });
-      await batch.commit();
-      // Делаем то же самое в store, чтобы созданная тема сразу отобразилась на странице
-      const newThread = await dispatch("fetchThread", { id: threadRef.id });
-      console.log(newThread)
-      commit('setItem', { resource: 'threads', item: { ...newThread, id: newThread.id } });
-      commit('appendThreadToForum', {forumId, threadId: newThread.id});
-      commit('appendThreadToUser', {userId, threadId: newThread.id});
-      await dispatch('createPost', {text, threadId: newThread.id});
-      return findItemById(state.threads, newThread.id);
-      *//*
-      // Это первая версия, без batch:
-      const newThread = await addDoc(collection(db, "threads"), thread);
-      await updateDoc(doc(db, "forums", thread.forumId), {
-        threadIds: arrayUnion(newThread.id),
-      });
-      await updateDoc(doc(db, "users", thread.userId), {
-        threadsStarted: arrayUnion(newThread.id),
-      });
-      // Делаем то же самое в store, чтобы созданная тема сразу отобразилась на странице
-      commit('setItem', { resource: 'threads', item: { ...thread, id: newThread.id } });
-      commit('appendThreadToForum', {forumId, threadId: newThread.id});
-      commit('appendThreadToUser', {userId, threadId: newThread.id});
-      dispatch('createPost', {text, threadId: newThread.id});
-      return state.threads.find(thread => thread.id === newThread.id);
-      *//*
-    },*/
-    /*async updateThread({commit, state, dispatch}, {title, text, id}) {
-      const thread = findItemById(state.threads, id);
-      const post = findItemById(state.posts, thread.postIds[0]);
-      let newThread = { ...thread, title };
-      let newPost = { ...post, text };
-      // Изменяем thread в базе данных Cloud Firestore:
-      // Это последняя версия, с batch:
-      const batch = writeBatch(db);
-      const threadRef = doc(db, "threads", id);
-      const postRef = doc(db, "posts", thread.postIds[0]);
-      batch.update(threadRef, { title });
-      batch.update(postRef, { text });
-      await batch.commit();
-      // Делаем то же самое в store, чтобы измененная тема сразу отобразилась на странице
-      // Сначала загружаем посты из БД, чтобы точно работать со свежими данными
-      newThread = await dispatch("fetchThread", { id: threadRef.id });
-      newPost = await dispatch("fetchPost", { id: postRef.id });
-      // И выполняем мутации
-      commit('setItem', { resource: 'threads', item: { ...newThread, id: newThread.id } });
-      commit('setItem', { resource: 'posts', item: { ...newPost, id: newPost.id } });
-      //commit('setItem', { resource: 'threads', item: { thread: newThread } });
-      //commit('setItem', { resource: 'posts', item: { post: newPost } });
-      return newThread;
-      *//*
-      // Это первая версия, без batch:
-      await updateDoc(doc(db, "threads", id), {
-        title
-      });
-      await updateDoc(doc(db, "posts", thread.postIds[0]), {
-        text
-      });
-      // Делаем то же самое в store, чтобы измененная тема сразу отобразилась на странице
-      commit('setThread', { thread: newThread });
-      commit('setPost', { post: newPost });
-      return newThread;
-      *//*
-    },*/
-    /*async createPost({state, commit, dispatch}, post) {
-      //post.id = 'qqqq' + Math.random();  // Здесь должна быть функция генерации id
-      post.userId = state.authId;
-      //post.publishedAt = Math.floor(Date.now() / 1000);
-      // Добавляем пост в базу данных Cloud Firebase: 
-      // - сам пост добавляем в коллекцию постов posts
-      // - id поста добавляем в соответствующий thread
-      // - id пользователя, написавшего пост, тоже добавлям в этот же thread
-      // Это последняя версия, с batch:
-      const batch = writeBatch(db);
-      const postRef = doc(collection(db, "posts"));
-      const threadRef = doc(db, "threads", post.threadId);
-      const userRef = doc(db, "users", post.userId);
-
-      batch.set(postRef, post);
-      batch.update(postRef, {
-        publishedAt: serverTimestamp()
-      });
-      batch.update(threadRef, {
-        postIds: arrayUnion(postRef.id),
-        contributorIds: arrayUnion(state.authId)
-      });
-      batch.update(userRef, {
-        postsCount: increment(1)
-      });
-      await batch.commit();
-      // Делаем то же самое в store, чтобы пост сразу отобразился на странице
-      const newPost = await dispatch("fetchPost", { id: postRef.id });
-      commit('setItem', { resource: 'posts', item: { ...newPost, id: postRef.id } });
-      commit('appendPostToThread', {childId: postRef.id, parentId: post.threadId});
-      commit('appendContributorToThread', {childId: post.userId, parentId: post.threadId});
-      *//*
-      // Это первая версия, без batch:
-      const newPost = await addDoc(collection(db, "posts"), post);
-      //console.log(newPost);
-      //console.log(newPost.data());
-      await updateDoc(doc(db, "threads", post.threadId), {
-        postIds: arrayUnion(newPost.id),
-        contributorIds: arrayUnion(state.authId)
-      });
-      // Делаем то же самое в store, чтобы пост сразу отобразился на странице
-      commit('setItem', { resource: 'posts', item: { ...post, id: newPost.id } });
-      commit('appendPostToThread', {childId: newPost.id, parentId: post.threadId});
-      commit('appendContributorToThread', {childId: post.userId, parentId: post.threadId});
-      *//*
-    },*/
-    /*async updatePost ({ commit, state, dispatch }, { text, id }) {
-      const batch = writeBatch(db);
-      const postRef = doc(db, "posts", id);
-      batch.update(postRef, {
-        text,
-        edited: {
-          at: serverTimestamp(),
-          by: state.authId,
-          moderated: false
-        }
-      });
-      await batch.commit();
-      const updatedPost = await dispatch("fetchPost", { id });
-      commit('setItem', { resource: 'posts', item: updatedPost });
-    },*/
     async createUser({ commit }, { id, email, name, username }) {
       const registeredAt = serverTimestamp();
       const usernameLower = username.toLowerCase();
@@ -431,7 +202,6 @@ export default createStore({
       await setDoc(userRef, user);
       const newUser = await getDoc(userRef);
       commit('setItem', { resource: 'users', item: newUser });
-      //console.log('store - index.js -> createUser ', newUser)
       return makeResourceFromDoc(newUser);
     },
     async updateUser({ commit }, user) {
@@ -448,60 +218,45 @@ export default createStore({
       commit('setItem', { resource: 'users', item: user }, { root: true });
     },
     //------------------------------------------------------------
-    // Чтение из Cloud Firestore
+    // Чтение из БД Cloud Firestore
     //------------------------------------------------------------
     // Создаем два универсальных метода для чтения из базы данных: 
-    //------------------------------------------------------------
-    // Первый – для получения одного документа
-    async fetchItem({ commit }, { resource, id, handleUnsubscribe = null }) {
-      
-      // Первый вариант - обновление данных в реальном времени
-      return new Promise((resolve) => {
-        const unsubscribe = onSnapshot(doc(db, resource, id), (doc) => {
-          //console.log('snapshot', id);
-          // Восстанавливаем полный документ = данные + id
-          const item = { ...doc.data(), id: doc.id };
-          // Добавляем документ в state
-          commit('setItem', { resource, item });
-          resolve(item);
-        });
+    fetchItem({ state, commit }, { id, resource, handleUnsubscribe = null, once = false, callBack = null }) {
+      return new Promise(resolve => {
+        const docRef = doc(db, resource, id);
+        const unsubscribe = onSnapshot(docRef, doc => {
+          if (once) unsubscribe();
+  
+          if (doc.exists()) {
+            const item = { ...doc.data(), id: doc.id };
+            let previousItem = findItemById(state[resource], id);
+            previousItem = previousItem ? { ...previousItem } : null;
+            commit('setItem', { resource, item });
+            if (typeof callBack === 'function') {
+              const isLocal = doc.metadata.hasPendingWrites;
+              callBack({ item: { ...item }, previousItem, isLocal });
+            }
+            resolve(item);
+          } else {
+            resolve(null);
+          }
+        })
         if (handleUnsubscribe) {
           handleUnsubscribe(unsubscribe);
         } else {
           commit('appendUnsubscribe', { unsubscribe });
         }
-      });
-      
-      /*
-      // Второй вариант - одиночный запрос
-      const docRef = doc(db, resource, id);
-      const docSnap = await getDoc(docRef);
-      console.log('snapshot', id)
-      // Восстанавливаем полный документ = данные + id
-      const item = { ...docSnap.data(), id: docSnap.id };
-      // Добавляем документ в state
-      commit('setItem', { resource, item });
-      // Дополнительно возвращаем промис, чтобы результат вызова этой функции не был  
-      // равен undefined и его можно было бы использовать в Компонентах.vue
-      return Promise.resolve(item);
-      */
+      })
     },
-    // Второй – для получения нескольких документов из коллекции
-    fetchItems({dispatch}, { resource, ids }) {
-      //console.log('fetchItems', ids, resource)
-      return Promise.all(ids.map(id => dispatch('fetchItem', { resource, id })));
+    fetchItems({ dispatch }, { ids, resource, callBack = null }) {
+      ids = ids || [];
+      return Promise.all(ids.map(id => dispatch('fetchItem', { id, resource, callBack })));
     },
-    // Вспомогательный метод для работы с обновлением в реальном времени
-    // Удаляем все onSnapshot listeners
-    // Вызываем эту функцию в глобальном Navigation Guard (src/router/index.js)
     async unsubscribeAllSnapshots ({ state, commit }) {
-      //console.log('state.unsubscribes', state.unsubscribes)
       state.unsubscribes.forEach(unsubscribe => unsubscribe());
       commit('clearAllUnsubscribes');
     },
-    //-------------------------------------------------------------
     // Создаем на их основе методы чтения из базы данных
-    //-------------------------------------------------------------
     // Для одного item
     fetchCategory({ dispatch }, {id}) {
       return dispatch('fetchItem', { resource: 'categories', id });
@@ -518,9 +273,6 @@ export default createStore({
     fetchUser({ dispatch }, {id}) {
       return dispatch('fetchItem', { resource: 'users', id });
     },
-    /*fetchAuthUser({ state, dispatch }) {
-      return dispatch('fetchItem', { resource: 'users', id: state.authId });
-    },*/
     // Для нескольких items
     async fetchAllCategories({ commit }) {
       let categories = [];
@@ -567,14 +319,14 @@ export default createStore({
 // Вспомогательные функции
 function makeAppendChildToParentMutation({child, parent}) {
   return (state, { childId, parentId }) => {
-    const resource = state[parent].find(r => r.id === parentId)
+    const resource = state[parent].find(r => r.id === parentId);
     if (!resource) {
       console.warn(`Не удалось добавить ${child} ${childId} к ${parent} ${parentId} т.к. родитель не существует.`);
       return;
     }
-    resource[child] = resource[child] || []
-    if (!resource[child].includes(childId)) { // Чтобы добавить пользователя в список только один раз (т.к. они могут по много раз отвечать на одной ветке / форуме и т.д.)
-      resource[child].push(childId)
+    resource[child] = resource[child] || [];
+    if (!resource[child].includes(childId)) { // Чтобы добавить пользователя в список только один раз
+      resource[child].push(childId);
     }
   }
 }

@@ -2,7 +2,7 @@
   <div class="sidebar">
     <nav class="sidebar__nav">
       <router-link :to="{name: 'HomeView'}" class="sidebar__link">На главную</router-link>
-      <router-link :to="{name: 'HomeView'}" class="sidebar__link">Форум</router-link>
+      <router-link :to="{name: 'ForumMainPage'}" class="sidebar__link">Форум</router-link>
     </nav>
   </div>
 </template>

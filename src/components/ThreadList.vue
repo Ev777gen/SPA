@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import { localeDate, findItemById, repliesCountWording } from '@/helpers'
+import { localeDate, findItemById, repliesCountWording } from '@/helpers';
 export default {
   props: {
     threads: {
@@ -52,10 +52,10 @@ export default {
     localeDate,
     repliesCountWording,
     postById (postId) {
-      return findItemById(this.posts, postId)
+      return findItemById(this.posts, postId);
     },
     userById (userId) {
-      return findItemById(this.users, userId) || {}
+      return findItemById(this.users, userId) || {};
     }
   }
 }

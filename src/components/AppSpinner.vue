@@ -16,20 +16,7 @@
     </div>
   </div>
 </template>
-<!--
-<script>
-export default {
-  props: {
-    color: { type: String, default: '#ff9d4e' }
-  },
-  data () {
-    return {
-      spinnerColor: this.color
-    }
-  }
-}
-</script>
--->
+
 <style scoped>
 .spinner {
   text-align: center;
@@ -53,7 +40,6 @@ export default {
   margin: 0 auto;
   width: 15%;
   height: 15%;
-  /*background-color: v-bind(spinnerColor);*/
   background-color: #ff9d4e;
   border-radius: 100%;
   -webkit-animation: sk-circleBounceDelay 1.2s infinite ease-in-out both;

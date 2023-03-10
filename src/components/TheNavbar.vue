@@ -34,7 +34,7 @@
       <div class="dropdown" :class="{'dropdown_open': isDropdownOpen}">
         <div class="dropdown__nav mobile-only">
           <router-link :to="{name: 'HomeView'}" class="dropdown__link">На главную</router-link>
-          <router-link :to="{name: 'HomeView'}" class="dropdown__link">Форум</router-link>
+          <router-link :to="{name: 'ForumMainPage'}" class="dropdown__link">Форум</router-link>
           <hr>
         </div>
         <router-link :to="{name: 'ProfileView'}" class="dropdown__link">Мой профиль</router-link>
@@ -49,6 +49,7 @@
 <script>
 import { mapGetters } from 'vuex';
 import vClickOutside from 'click-outside-vue3';
+
 export default {
   data () {
     return {
@@ -109,7 +110,6 @@ $triangle-size: 8px;
 .header__not-auth-user {
   margin-left: auto;
 }
-
 .header__user-avatar {
   cursor: pointer;
 }
@@ -123,7 +123,6 @@ $triangle-size: 8px;
 .header__arrow_up {
   transform: rotate(-180deg);
 }
-
 .header__link {
   margin-left: 15px;
   font-size: 16px;

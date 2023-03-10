@@ -25,10 +25,6 @@
           <span>Имя пользователя: </span>
           <AppFormField name="username" v-model="activeUser.username" :rules="`required|unique:users,username,${user.username}`"/>
         </div>
-        <!--<div class="card__email">
-          <span>Почта: </span>
-          <AppFormField name="email" v-model="activeUser.email" :rules="`required|email|unique:users,email,${user.email}`"/>
-        </div>-->
         <div class="card__bio">
           <span>Обо мне: </span>
           <AppFormField name="bio" as="textarea" v-model="activeUser.bio" placeholder="Расскажите коротко о себе" />
@@ -60,7 +56,7 @@ export default {
     return {
       activeUser: { ...this.user },
       avatar: null,
-      avatarPreview: null,
+      avatarPreview: null
     }
   },
   methods: {
@@ -177,14 +173,6 @@ export default {
   }
 }
 
-
-
-
-
-
-
-
-
 .card__info_edit {
   margin: 15px 0;
   padding: 25px 25px 15px 25px;
@@ -197,18 +185,6 @@ export default {
       margin-bottom: 0;
     }
   }
-  /*& div {
-    padding-top: 15px;
-    &:last-child {
-      margin: 0;
-    }
-    & span:first-child {
-      display: inline-block;
-      width: 250px;
-      padding-top: 5px;
-      vertical-align: top;
-    }
-  }*/
   @media (max-width: 720px) {
     & {
       padding: 10px;
@@ -217,10 +193,6 @@ export default {
   }
 }
 
-.form__input {
-  width: 100%;
-  margin: 0;
-}
 .card__buttons {
   display: flex;
   margin-bottom: 30px;

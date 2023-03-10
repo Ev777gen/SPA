@@ -31,6 +31,7 @@
 import ThreadList from '@/components/ThreadList';
 import { findItemById } from '@/helpers';
 import { mapActions, mapGetters } from 'vuex';
+
 export default {
   components: { ThreadList },
   props: {
@@ -48,16 +49,16 @@ export default {
   computed: {
     ...mapGetters(['authUser']),
     forum () {
-      return findItemById(this.$store.state.forums, this.id)
+      return findItemById(this.$store.state.forums, this.id);
     },
     threads () {
-      if (!this.forum) return []
+      if (!this.forum) return [];
       return this.$store.state.threads
         .filter(thread => thread.forumId === this.forum.id)
-        .map(thread => this.$store.getters.thread(thread.id))
+        .map(thread => this.$store.getters.thread(thread.id));
     },
     threadsCount () {
-      return this.forum.threadIds?.length || 0
+      return this.forum.threadIds?.length || 0;
     },
     isAsyncDataLoaded() {
       return this.$store.state.isLoaded;
@@ -70,27 +71,17 @@ export default {
   methods: {
     ...mapActions(['fetchForum', 'fetchThreads', 'fetchThreadsByPage', 'fetchUsers', 'startLoadingIndicator', 'stopLoadingIndicator']),
   },
-  /*async created () {
-    this.startLoadingIndicator();
-    const forum = await this.fetchForum({ id: this.id });
-    const threads = await this.fetchThreads({ ids: forum.threadIds || [] });
-    await this.fetchUsers({ ids: threads.map(thread => thread.userId) });
-    this.stopLoadingIndicator();
-  },*/
-  // With pagination:
-  async created () {
-    this.startLoadingIndicator();
-    const forum = await this.fetchForum({ id: this.id });
-    //console.log(forum)
-    const threads = await this.fetchThreadsByPage({ ids: forum.threadIds, page: this.page, threadsPerPage: this.threadsPerPage });
-    //console.log(threads)
-    await this.fetchUsers({ ids: threads.map(thread => thread.userId) });
-    this.stopLoadingIndicator();
-  },
   watch: {
     async page (page) {
       this.$router.push({ query: { page } });
     }
+  },
+  async created () {
+    this.startLoadingIndicator();
+    const forum = await this.fetchForum({ id: this.id });
+    const threads = await this.fetchThreadsByPage({ ids: forum.threadIds, page: this.page, threadsPerPage: this.threadsPerPage });
+    await this.fetchUsers({ ids: threads.map(thread => thread.userId) });
+    this.stopLoadingIndicator();
   }
 }
 </script>

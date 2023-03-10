@@ -22,6 +22,7 @@ import TheNavbar from '@/components/TheNavbar';
 import TheSidebar from '@/components/TheSidebar';
 import { mapActions } from 'vuex';
 import NProgress from 'nprogress';
+
 export default {
   name: 'App',
   components: { TheNavbar, TheSidebar },
@@ -33,13 +34,6 @@ export default {
   methods: {
     ...mapActions(['fetchAuthUser']),
   },
-  /*watch: {
-    isLoaded(newValue) {
-      if (newValue === true) {
-        NProgress.done();
-      }
-    }
-  },*/
   created () {
     this.fetchAuthUser();
     NProgress.configure({
@@ -47,7 +41,6 @@ export default {
       showSpinner: false
     });
     this.$router.beforeEach(() => {
-      //this.isLoaded = false;
       NProgress.start();
     });
     this.$router.afterEach(() => {

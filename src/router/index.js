@@ -1,25 +1,21 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import store from '@/store';
+import { findItemById } from '@/helpers';
 
 const routes = [
   {
     path: '/',
     name: 'HomeView',
-    component: () => import(/* webpackChunkName: "HomeView" */ '@/views/HomeView.vue')
+    component: () => import(/* webpackChunkName: "HomeView" */ '@/views/HomeView.vue'),
+    meta: { toTop: true, smoothScroll: true }
   },
   {
     path: '/profile',
     name: 'ProfileView',
     component: () => import(/* webpackChunkName: "ProfileView" */'@/views/ProfileView.vue'),
+    props: { edit: false },
     meta: { isAuthRequired: true, toTop: true, smoothScroll: true }
   },
-  // {
-  //   path: '/profile',
-  //   name: 'ProfileAnyUser',
-  //   component: () => import(/* webpackChunkName: "ProfileView" */'@/views/ProfileView.vue'),
-  //   props: true,
-  //   meta: { toTop: true, smoothScroll: true }
-  // },
   {
     path: '/settings',
     name: 'SettingsView',
@@ -46,6 +42,11 @@ const routes = [
     meta: { isForGuests: true }
   },
   {
+    path: '/forum',
+    name: 'ForumMainPage',
+    component: () => import(/* webpackChunkName: "ForumMainPage" */ '@/views/ForumMainPage.vue')
+  },
+  {
     path: '/forum/:id',
     name: 'ForumView',
     component: () => import(/* webpackChunkName: "Forum" */ '@/views/ForumView.vue'),
@@ -56,24 +57,24 @@ const routes = [
     name: 'ThreadView',
     component: () => import(/* webpackChunkName: "ThreadView" */ '@/views/ThreadView.vue'),
     props: true,
-    /*async beforeEnter (to, from, next) {
-      await store.dispatch('fetchThread', { id: to.params.id, once: true })
-      // check if thread exists
-      const threadExists = findItemById(store.state.threads, to.params.id)
-      // if exists continue
+    async beforeEnter (to, from, next) {
+      await store.dispatch('fetchThread', { id: to.params.id, once: true });
+      // Проверяем, есть ли такая тема
+      const threadExists = findItemById(store.state.threads, to.params.id);
+      // если есть - продолжаем
       if (threadExists) {
-        return next()
+        return next();
       } else {
+        // Если такой темы нет - переходим на страницу 404
         next({
           name: 'NotFound',
           params: { pathMatch: to.path.substring(1).split('/') },
-          // preserve existing query and hash
+          // сохраняем текущие значения query и hash
           query: to.query,
           hash: to.hash
         })
       }
-      // if doesnt exist redirect to not found
-    }*/
+    }
   },
   {
     path: '/forum/:forumId/thread/create',

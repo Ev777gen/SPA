@@ -25,6 +25,13 @@ export default {
   computed: {
     ...mapGetters({ user: 'authUser' }),
   },
+  watch: {
+    user(newValue) {
+      if (newValue === null) {
+        this.$router.push('/');
+      }
+    }
+  },
 }
 </script>
 
