@@ -1,39 +1,89 @@
 <template>
-  <div v-if="isAsyncDataLoaded" class="home">
-    <h1 class="title">Добро пожаловать на форум!</h1>
-    <CategoryList :categories="categories" />
+  <div class="homepage">
+    <h1 class="homepage__title title">Single Page Application</h1>
+    <h2 class="homepage__subtitle subtitle">Форум на Firebase</h2>
+    <div class="homepage__text">
+      <p>
+        Привет! Это пример реализации SPA в виде 
+        <router-link :to="{name: 'ForumMainPage'}" class="homepage__link">форума</router-link>.
+        Здесь можно зарегистрироваться, создавать новые темы, писать посты, 
+        редактировать свои данные на странице профиля и поменять e-mail в настроках. 
+        Функционал и дизайн специально упрощены, чтобы было нагляднее.
+      </p>
+      <p>А еще приложение адаптировано под мобильные устройства.</p>
+    </div>
+    <div class="homepage__text">
+      Для проекта я использовал Firebase 9: 
+      <ol  class="homepage__list">
+        <li>Cloud Firestore - в качестве базы данных;</li>
+        <li>Authentication - для авторизации;</li>
+        <li>Storage - для хранения аватарок, которые загружает пользователь.</li>
+      </ol>
+    </div>
+    <div class="homepage__text">
+      На GitHub можно посмотреть <a href="https://github.com/Ev777gen/SPA" target="_blank">исходный код</a>.
+    </div>
+    <div class="homepage__text">
+      Чтобы осмотреться вокруг, можно 
+      <router-link :to="{name: 'RegisterForm'}" class="homepage__link">
+        зарегистрироваться
+      </router-link> 
+      самостоятельно, используя любую почту и пароль, или 
+      <button class="btn btn_green" @click.prevent="logInToCheckOutThisSite" :disabled="authUser">
+        войти в аккаунт существующего пользователя
+      </button>
+    </div>
+
   </div>
 </template>
 
 <script>
-import CategoryList from '@/components/CategoryList';
-import { mapActions } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 export default {
   name: 'HomeView',
-  components: { CategoryList },
   computed: {
-    categories() {
-      return this.$store.state.categories;
-    },
-    isAsyncDataLoaded() {
-      return this.$store.state.isLoaded;
-    },
+    ...mapGetters(['authUser'])
   },
   methods: {
-    ...mapActions(['fetchAllCategories', 'fetchForums', 'startLoadingIndicator', 'stopLoadingIndicator'])
-  },
-  async created () {
-    this.startLoadingIndicator();
-    const categories = await this.fetchAllCategories();
-    const forumIds = categories.map(category => category.forumIds).flat();
-    await this.fetchForums({ ids: forumIds });
-    this.stopLoadingIndicator();
+    ...mapActions(['signInWithEmailAndPassword', 'startLoadingIndicator', 'stopLoadingIndicator']),
+    async logInToCheckOutThisSite() {
+      try {
+        this.startLoadingIndicator();
+        await this.signInWithEmailAndPassword({ email: 'email@mail.ru', password: '123456' });
+        this.stopLoadingIndicator();
+      } catch (error) {
+        alert(error.message);
+      }
+    }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.title {
+.homepage {
+  font-size: 16px;
+  line-height: 1.5;
+}
+.homepage__title {
   margin: 30px 0;
+}
+.homepage__subtitle {
+  margin: 20px 0;
+}
+.homepage__text {
+  margin: 20px 0;
+  text-align: justify;
+  & p {
+    margin: 20px 0;
+  }
+  .homepage__list {
+    & li {
+      margin-left: 45px;
+    }
+  }
+  & button {
+    margin: 15px 0;
+    text-align: center;
+  }
 }
 </style>
