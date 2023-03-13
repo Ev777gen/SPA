@@ -8,7 +8,7 @@
         </p>
         <p class="thread__info desktop-only">
           Тема начата пользователем  
-          <a href="#">{{ userById(thread.userId).name }}</a>, 
+          <router-link :to="{name: 'ProfileOfAnyUser', params: {userId: thread.userId}}">{{ userById(thread.userId).name }}</router-link>, 
           {{ localeDate(thread.publishedAt) }}
         </p>
       </div>
@@ -20,7 +20,7 @@
         <AppAvatar class="thread__avatar avatar_small" :src="userById(thread.userId).avatar" />
         <div>
           <p class="thread__user">
-            <a href="#">{{ userById(thread.userId).name }}</a>
+            <router-link :to="{name: 'ProfileOfAnyUser', params: {userId: thread.userId}}">{{ userById(thread.userId).name }}</router-link>
           </p>
         </div>
       </div>

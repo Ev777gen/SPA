@@ -18,43 +18,40 @@ export default createStore({
   getters: {
     user: (state) => {
       return (id) => {
-        const user = findItemById(state.users, id)
-        if (!user) return null
+        const user = findItemById(state.users, id);
+        if (!user) return null;
         return {
           ...user,
           get posts () {
-            return state.posts.filter(post => post.userId === user.id)
+            return state.posts.filter(post => post.userId === user.id);
           },
           get postsCount () {
-            return user.postsCount || 0
+            return user.postsCount || 0;
           },
           get threads () {
-            return state.threads.filter(post => post.userId === user.id)
-          },
-          get threadsStarted () {
-            return user.threadsStarted
+            return state.threads.filter(post => post.userId === user.id);
           },
           get threadsCount () {
-            return user.threadsStarted?.length || 0
+            return user.threadsStarted?.length || 0;
           }
         }
       }
     },
     thread: (state) => {
       return (id) => {
-        const thread = findItemById(state.threads, id)
-        if (!thread) return {}
+        const thread = findItemById(state.threads, id);
+        if (!thread) return {};
         return {
           ...thread,
           get author () {
-            return findItemById(state.users, thread.userId)
+            return findItemById(state.users, thread.userId);
           },
           get repliesCount () {
-            return thread.postIds.length - 1
+            return thread.postIds.length - 1;
           },
           get contributorsCount () {
-            if (!thread.contributorIds) return 0
-            return thread.contributorIds.length
+            if (!thread.contributorIds) return 0;
+            return thread.contributorIds.length;
           }
         }
       }
@@ -85,6 +82,93 @@ export default createStore({
     }
   },
   actions: {
+    //------------------------------------------------------------
+    // Чтение из БД Cloud Firestore
+    //------------------------------------------------------------
+    // Создаем два универсальных метода для чтения из базы данных: 
+    fetchItem({ state, commit }, { id, resource, handleUnsubscribe = null, once = false, callBack = null }) {
+      return new Promise(resolve => {
+        const docRef = doc(db, resource, id);
+        const unsubscribe = onSnapshot(docRef, doc => {
+          if (once) unsubscribe();
+  
+          if (doc.exists()) {
+            const item = { ...doc.data(), id: doc.id };
+            let previousItem = findItemById(state[resource], id);
+            previousItem = previousItem ? { ...previousItem } : null;
+            commit('setItem', { resource, item });
+            if (typeof callBack === 'function') {
+              const isLocal = doc.metadata.hasPendingWrites;
+              callBack({ item: { ...item }, previousItem, isLocal });
+            }
+            resolve(item);
+          } else {
+            resolve(null);
+          }
+        })
+        if (handleUnsubscribe) {
+          handleUnsubscribe(unsubscribe);
+        } else {
+          commit('appendUnsubscribe', { unsubscribe });
+        }
+      })
+    },
+    fetchItems({ dispatch }, { ids, resource, callBack = null }) {
+      ids = ids || [];
+      return Promise.all(ids.map(id => dispatch('fetchItem', { id, resource, callBack })));
+    },
+    async unsubscribeAllSnapshots ({ state, commit }) {
+      state.unsubscribes.forEach(unsubscribe => unsubscribe());
+      commit('clearAllUnsubscribes');
+    },
+    // Создаем на их основе методы чтения из базы данных
+    // Для одного item
+    fetchCategory({ dispatch }, {id}) {
+      return dispatch('fetchItem', { resource: 'categories', id });
+    },
+    fetchForum({ dispatch }, {id}) {
+      return dispatch('fetchItem', { resource: 'forums', id });
+    },
+    fetchThread({ dispatch }, {id}) {
+      return dispatch('fetchItem', { resource: 'threads', id });
+    },
+    fetchPost({ dispatch }, {id}) {
+      return dispatch('fetchItem', { resource: 'posts', id });
+    },
+    fetchUser({ dispatch }, {id}) {
+      return dispatch('fetchItem', { resource: 'users', id });
+    },
+    // Для нескольких items
+    async fetchAllCategories({ commit }) {
+      let categories = [];
+      const querySnapshot = await getDocs(collection(db, 'categories'));
+      querySnapshot.forEach((doc) => {
+        const item = { ...doc.data(), id: doc.id };
+        categories.push(item);
+        commit('setItem', { resource: 'categories', item });
+      });
+      return Promise.resolve(categories);
+    },
+    fetchForums({ dispatch }, {ids}) {
+      return dispatch('fetchItems', { resource: 'forums', ids });
+    },
+    fetchThreads({ dispatch }, {ids}) {
+      return dispatch('fetchItems', { resource: 'threads', ids });
+    },
+    fetchThreadsByPage: ({ dispatch, commit }, { ids = [], page, threadsPerPage = 10 }) => {
+      if (ids.length === 0) return [];
+      commit('clearThreadsForPagination');
+      const chunks = chunk(ids, threadsPerPage);
+      const limitedIds = chunks[page - 1];
+      return dispatch('fetchThreads', { ids: limitedIds });
+    },
+    fetchPosts({ dispatch }, {ids}) {
+      return dispatch('fetchItems', { resource: 'posts', ids });
+    },
+    fetchUsers({ dispatch }, {ids}) {
+      return dispatch('fetchItems', { resource: 'users', ids });
+    },
+    
     //------------------------------------------------------------
     // Запись в БД Cloud Firestore
     //------------------------------------------------------------
@@ -217,92 +301,10 @@ export default createStore({
       await updateDoc(userRef, userUpdates);
       commit('setItem', { resource: 'users', item: user }, { root: true });
     },
+      
     //------------------------------------------------------------
-    // Чтение из БД Cloud Firestore
+    // Другие методы
     //------------------------------------------------------------
-    // Создаем два универсальных метода для чтения из базы данных: 
-    fetchItem({ state, commit }, { id, resource, handleUnsubscribe = null, once = false, callBack = null }) {
-      return new Promise(resolve => {
-        const docRef = doc(db, resource, id);
-        const unsubscribe = onSnapshot(docRef, doc => {
-          if (once) unsubscribe();
-  
-          if (doc.exists()) {
-            const item = { ...doc.data(), id: doc.id };
-            let previousItem = findItemById(state[resource], id);
-            previousItem = previousItem ? { ...previousItem } : null;
-            commit('setItem', { resource, item });
-            if (typeof callBack === 'function') {
-              const isLocal = doc.metadata.hasPendingWrites;
-              callBack({ item: { ...item }, previousItem, isLocal });
-            }
-            resolve(item);
-          } else {
-            resolve(null);
-          }
-        })
-        if (handleUnsubscribe) {
-          handleUnsubscribe(unsubscribe);
-        } else {
-          commit('appendUnsubscribe', { unsubscribe });
-        }
-      })
-    },
-    fetchItems({ dispatch }, { ids, resource, callBack = null }) {
-      ids = ids || [];
-      return Promise.all(ids.map(id => dispatch('fetchItem', { id, resource, callBack })));
-    },
-    async unsubscribeAllSnapshots ({ state, commit }) {
-      state.unsubscribes.forEach(unsubscribe => unsubscribe());
-      commit('clearAllUnsubscribes');
-    },
-    // Создаем на их основе методы чтения из базы данных
-    // Для одного item
-    fetchCategory({ dispatch }, {id}) {
-      return dispatch('fetchItem', { resource: 'categories', id });
-    },
-    fetchForum({ dispatch }, {id}) {
-      return dispatch('fetchItem', { resource: 'forums', id });
-    },
-    fetchThread({ dispatch }, {id}) {
-      return dispatch('fetchItem', { resource: 'threads', id });
-    },
-    fetchPost({ dispatch }, {id}) {
-      return dispatch('fetchItem', { resource: 'posts', id });
-    },
-    fetchUser({ dispatch }, {id}) {
-      return dispatch('fetchItem', { resource: 'users', id });
-    },
-    // Для нескольких items
-    async fetchAllCategories({ commit }) {
-      let categories = [];
-      const querySnapshot = await getDocs(collection(db, 'categories'));
-      querySnapshot.forEach((doc) => {
-        const item = { ...doc.data(), id: doc.id };
-        categories.push(item);
-        commit('setItem', { resource: 'categories', item });
-      });
-      return Promise.resolve(categories);
-    },
-    fetchForums({ dispatch }, {ids}) {
-      return dispatch('fetchItems', { resource: 'forums', ids });
-    },
-    fetchThreads({ dispatch }, {ids}) {
-      return dispatch('fetchItems', { resource: 'threads', ids });
-    },
-    fetchThreadsByPage: ({ dispatch, commit }, { ids = [], page, threadsPerPage = 10 }) => {
-      if (ids.length === 0) return [];
-      commit('clearThreadsForPagination');
-      const chunks = chunk(ids, threadsPerPage);
-      const limitedIds = chunks[page - 1];
-      return dispatch('fetchThreads', { ids: limitedIds });
-    },
-    fetchPosts({ dispatch }, {ids}) {
-      return dispatch('fetchItems', { resource: 'posts', ids });
-    },
-    fetchUsers({ dispatch }, {ids}) {
-      return dispatch('fetchItems', { resource: 'users', ids });
-    },
     // Установка и сброс переменной для индикатора загрузки
     startLoadingIndicator({commit}) {
       commit('setIsLoadedStatus', false);

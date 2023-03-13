@@ -5,8 +5,12 @@
          :key="post.id"
     >
       <div v-if="getUserById(post.userId)" class="post__user-info">
-        <a href="#" class="post__user-name">{{ getUserById(post.userId).name }}</a>
-        <a href="#"><AppAvatar class="post__avatar avatar_large" :src="getUserById(post.userId).avatar" /></a>
+        <router-link :to="{name: 'ProfileOfAnyUser', params: {userId: post.userId}}" class="post__user-name">
+          {{ getUserById(post.userId).name }}
+        </router-link>
+        <router-link :to="{name: 'ProfileOfAnyUser', params: {userId: post.userId}}" class="post__user-name">
+          <AppAvatar class="post__avatar avatar_large" :src="getUserById(post.userId).avatar" />
+        </router-link>
         <p class="desktop-only text_gray">
           {{ getUserById(post.userId).postsCount }} 
           {{ userPostsCountWording(getUserById(post.userId).postsCount) }}

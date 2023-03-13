@@ -17,17 +17,24 @@ const routes = [
     meta: { isAuthRequired: true, toTop: true, smoothScroll: true }
   },
   {
-    path: '/settings',
-    name: 'SettingsView',
-    component: () => import(/* webpackChunkName: "SettingsView" */'@/views/SettingsView.vue'),
-    meta: { isAuthRequired: true, toTop: true, smoothScroll: true }
-  },
-  {
     path: '/profile/edit',
     name: 'ProfileEdit',
     component: () => import(/* webpackChunkName: "ProfileEdit" */'@/views/ProfileView.vue'),
     props: { edit: true },
     meta: { isAuthRequired: true }
+  },
+  {
+    path: '/profile/:userId',
+    name: 'ProfileOfAnyUser',
+    component: () => import(/* webpackChunkName: "ProfileOfAnyUser" */'@/views/ProfileView.vue'),
+    props: true,
+    meta: { toTop: true, smoothScroll: true }
+  },
+  {
+    path: '/settings',
+    name: 'SettingsView',
+    component: () => import(/* webpackChunkName: "SettingsView" */'@/views/SettingsView.vue'),
+    meta: { isAuthRequired: true, toTop: true, smoothScroll: true }
   },
   {
     path: '/register',

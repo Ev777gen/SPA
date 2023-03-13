@@ -1,5 +1,5 @@
 <template>
-  <div class="card">
+  <div v-if="user" class="card">
     <div class="card__header">
       <div class="card__background_cover"></div>
       <div class="card__background_footer">
@@ -35,7 +35,7 @@
         <span>{{ user.threadsCount }}</span>
       </div>
     </div>
-    <div class="card__button">
+    <div v-if="user.id === this.$store.state.auth.authId" class="card__button">
       <router-link :to="{name: 'ProfileEdit'}" class="btn btn_orange">Редактировать профиль</router-link>
     </div>
   </div>
@@ -52,7 +52,7 @@ export default {
   },
   methods: {
     localeDate,
-  },
+  }
 }
 </script>
 

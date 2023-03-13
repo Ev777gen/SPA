@@ -1,21 +1,25 @@
 <template>
-  <div class="profile">
+  <div v-if="isReadyToDisplay" class="profile">
     <div class="profile__card">
-      <UserProfileCard v-if="!edit" :user="user"/>
-      <UserProfileCardEditor v-else :user="user"/>
+      <UserProfileCard v-if="!edit" :user="userToDisplay"/>
+      <UserProfileCardEditor v-else :user="userToDisplay"/>
     </div>
   </div>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 import UserProfileCard from "@/components/UserProfileCard.vue";
 import UserProfileCardEditor from "@/components/UserProfileCardEditor.vue";
 export default {
   props: {
     edit: {
       type: Boolean,
-      required: true
+      required: false
+    },
+    userId: {
+      type: String,
+      default: ''
     }
   },
   components: {
@@ -23,15 +27,38 @@ export default {
     UserProfileCardEditor
   },
   computed: {
-    ...mapGetters({ user: 'authUser' }),
+    ...mapGetters({ authUser: 'authUser' }),
+    otherUser() {
+      if (this.userId) {
+        return this.$store.getters.user(this.userId);
+      } else {
+        return null;
+      }
+    },
+    userToDisplay() {
+      return this.otherUser || this.authUser;
+    },
+    isReadyToDisplay() {
+      return this.$store.state.isLoaded;
+    },
+  },
+  methods: {
+    ...mapActions(['fetchUser', 'startLoadingIndicator', 'stopLoadingIndicator']),
   },
   watch: {
-    user(newValue) {
+    userToDisplay(newValue) {
       if (newValue === null) {
         this.$router.push('/');
       }
     }
   },
+  async created () {
+    if (this.userId) {
+      this.startLoadingIndicator();
+      await this.fetchUser({ id: this.userId });
+      this.stopLoadingIndicator();
+    } 
+  }
 }
 </script>
 

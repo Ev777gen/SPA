@@ -1,5 +1,5 @@
 <template>
-  <div class="settings form_narrow">
+  <div v-if="activeUser" class="settings form_narrow">
 
     <h2 class="settings__title form__title title">Редактировать настройки</h2>
 

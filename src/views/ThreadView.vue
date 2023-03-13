@@ -12,7 +12,7 @@
     <p class="thread__info text_gray">
       <span class="thread__info_user desktop-only">
         Тема начата пользователем 
-        <a href="#">{{thread.author?.name}}</a>, 
+        <router-link :to="{name: 'ProfileOfAnyUser', params: {userId: thread.author?.id}}">{{thread.author?.name}}</router-link>, 
         {{ localeDate(thread.publishedAt) }}
       </span>
       <span v-if="thread.repliesCount" class="thread__replies">

@@ -1,5 +1,5 @@
 <template>
-  <div class="card">
+  <div v-if="user" class="card">
 
     <VeeForm @submit="save">
       <div class="card__header">
