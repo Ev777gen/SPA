@@ -35,6 +35,7 @@
         <div class="dropdown__nav mobile-only">
           <router-link :to="{name: 'HomeView'}" class="dropdown__link">На главную</router-link>
           <router-link :to="{name: 'ForumMainPage'}" class="dropdown__link">Форум</router-link>
+          <router-link :to="{name: 'AboutMe'}" class="dropdown__link">Обо мне</router-link>
           <hr>
         </div>
         <router-link :to="{name: 'ProfileView'}" class="dropdown__link">Мой профиль</router-link>

@@ -103,7 +103,8 @@ const routes = [
   {
     path: '/aboutme',
     name: 'AboutMe',
-    component: () => import(/* webpackChunkName: "AboutMe" */ '@/views/AboutMe.vue')
+    component: () => import(/* webpackChunkName: "AboutMe" */ '@/views/AboutMe.vue'),
+    meta: { breadcrumb: 'Обо мне' }
   },
   {
     path: '/:pathMatch(.*)*',

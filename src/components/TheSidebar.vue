@@ -3,6 +3,7 @@
     <nav class="sidebar__nav">
       <router-link :to="{name: 'HomeView'}" class="sidebar__link">На главную</router-link>
       <router-link :to="{name: 'ForumMainPage'}" class="sidebar__link">Форум</router-link>
+      <router-link :to="{name: 'AboutMe'}" class="sidebar__link">Обо мне</router-link>
     </nav>
   </div>
 </template>
