@@ -7,63 +7,66 @@ const routes = [
     path: '/',
     name: 'HomeView',
     component: () => import(/* webpackChunkName: "HomeView" */ '@/views/HomeView.vue'),
-    meta: { toTop: true, smoothScroll: true }
+    meta: { toTop: true, smoothScroll: true, breadcrumb: 'Главная' }
   },
   {
     path: '/profile',
     name: 'ProfileView',
     component: () => import(/* webpackChunkName: "ProfileView" */'@/views/ProfileView.vue'),
     props: { edit: false },
-    meta: { isAuthRequired: true, toTop: true, smoothScroll: true }
+    meta: { isAuthRequired: true, toTop: true, smoothScroll: true, breadcrumb: 'Профиль' }
   },
   {
     path: '/profile/edit',
     name: 'ProfileEdit',
     component: () => import(/* webpackChunkName: "ProfileEdit" */'@/views/ProfileView.vue'),
     props: { edit: true },
-    meta: { isAuthRequired: true }
+    meta: { isAuthRequired: true, breadcrumb: 'Редактировать профиль' }
   },
   {
     path: '/profile/:userId',
     name: 'ProfileOfAnyUser',
     component: () => import(/* webpackChunkName: "ProfileOfAnyUser" */'@/views/ProfileView.vue'),
     props: true,
-    meta: { toTop: true, smoothScroll: true }
+    meta: { toTop: true, smoothScroll: true, breadcrumb: 'Профиль' }
   },
   {
     path: '/settings',
     name: 'SettingsView',
     component: () => import(/* webpackChunkName: "SettingsView" */'@/views/SettingsView.vue'),
-    meta: { isAuthRequired: true, toTop: true, smoothScroll: true }
+    meta: { isAuthRequired: true, toTop: true, smoothScroll: true, breadcrumb: 'Настройки' }
   },
   {
     path: '/register',
     name: 'RegisterForm',
     component: () => import(/* webpackChunkName: "RegisterForm" */'@/views/RegisterForm.vue'),
-    meta: { isForGuests: true }
+    meta: { isForGuests: true, breadcrumb: 'Зарегистрироваться' }
   },
   {
     path: '/signin',
     name: 'SignIn',
     component: () => import(/* webpackChunkName: "SignIn" */'@/views/SignIn.vue'),
-    meta: { isForGuests: true }
+    meta: { isForGuests: true, breadcrumb: 'Войти' }
   },
   {
     path: '/forum',
     name: 'ForumMainPage',
-    component: () => import(/* webpackChunkName: "ForumMainPage" */ '@/views/ForumMainPage.vue')
+    component: () => import(/* webpackChunkName: "ForumMainPage" */ '@/views/ForumMainPage.vue'),
+    meta: { breadcrumb: 'Категории' }
   },
   {
     path: '/forum/:id',
     name: 'ForumView',
-    component: () => import(/* webpackChunkName: "Forum" */ '@/views/ForumView.vue'),
-    props: true
+    component: () => import(/* webpackChunkName: "ForumView" */ '@/views/ForumView.vue'),
+    props: true,
+    meta: { breadcrumb: 'Форум' }
   },
   {
     path: '/thread/:id',
     name: 'ThreadView',
     component: () => import(/* webpackChunkName: "ThreadView" */ '@/views/ThreadView.vue'),
     props: true,
+    meta: { breadcrumb: 'Тема' },
     async beforeEnter (to, from, next) {
       await store.dispatch('fetchThread', { id: to.params.id, once: true });
       // Проверяем, есть ли такая тема
@@ -88,14 +91,19 @@ const routes = [
     name: 'ThreadCreate',
     component: () => import(/* webpackChunkName: "ThreadCreate" */ '@/views/ThreadCreate.vue'),
     props: true,
-    meta: { isAuthRequired: true }
+    meta: { isAuthRequired: true, breadcrumb: 'Создать тему' }
   },
   {
     path: '/thread/:id/edit',
     name: 'ThreadEdit',
     component: () => import(/* webpackChunkName: "ThreadEdit" */'@/views/ThreadEdit.vue'),
     props: true,
-    meta: { isAuthRequired: true }
+    meta: { isAuthRequired: true, breadcrumb: 'Редактировать тему' }
+  },
+  {
+    path: '/aboutme',
+    name: 'AboutMe',
+    component: () => import(/* webpackChunkName: "AboutMe" */ '@/views/AboutMe.vue')
   },
   {
     path: '/:pathMatch(.*)*',

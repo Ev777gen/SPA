@@ -9,6 +9,7 @@
         <TheSidebar />
       </aside>
       <main class="app__content">
+        <AppBreadcrumbs />
         <router-view v-show="isLoaded" :key="`${$route.path}${JSON.stringify($route.query)}`" />
         <AppSpinner v-show="!isLoaded" class="app__spinner" />
       </main>
