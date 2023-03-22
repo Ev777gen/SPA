@@ -1,5 +1,5 @@
 <template>
-  <div class="breadcrumb">
+  <div class="breadcrumbs">
     <ul v-if="breadcrumbs.length > 1">
       <li
         v-for="(breadcrumb, idx) in breadcrumbs"
@@ -22,18 +22,12 @@ export default {
   },
   methods: {
     changeRoute (breadcrumb, idx) {
-      if (idx < this.breadcrumbs.length - 1) {
-        this.$router.push({ 
-          name: breadcrumb.name,
-          params: breadcrumb.params,
-          query: breadcrumb.query
-        });
-        this.deleteBreadcrumbs(idx + 1);
-      }
-      if (this.breadcrumbs.length === 0) {
-        console.log('ini')
-        this.initialiseBreadcrumbs();
-      }
+      this.$router.push({ 
+        name: breadcrumb.name,
+        params: breadcrumb.params,
+        query: breadcrumb.query
+      });
+      this.deleteNextBreadcrumbs(idx + 1);
     },
     addBreadcrumb () {
       const currentRoute = {
@@ -44,7 +38,7 @@ export default {
       };
       this.breadcrumbs.push(currentRoute);
     },
-    deleteBreadcrumbs(idx) {
+    deleteNextBreadcrumbs(idx) {
       this.breadcrumbs.splice(idx);
     },
     replaceLastBreadcrumb() {
@@ -53,7 +47,7 @@ export default {
     },
     initialiseBreadcrumbs() {
       if (this.breadcrumbs.length > 0) {
-        this.deleteBreadcrumbs(1);
+        this.deleteNextBreadcrumbs(1);
       } else {
         this.breadcrumbs.push({ name: 'HomeView', nameToDisplay: 'Главная' });
       }
@@ -64,17 +58,16 @@ export default {
       if (this.$route.meta.breadcrumb) {
         const lastIndex = this.breadcrumbs.length - 1;
         const currentIndex = this.breadcrumbs.findIndex(breadcrumb => breadcrumb.name === this.$route.name);
-        const hasSameName = this.breadcrumbs[lastIndex].name === this.$route.name;
-        const isPaginatedPage = !!this.$route.query.page && hasSameName;
+        const hasSameNameAsLast = this.breadcrumbs[lastIndex].name === this.$route.name;
         const isHomePage = this.$route.path === '/';
         const isPageAdded = currentIndex > 0 && currentIndex <= lastIndex;
         
         if (!isPageAdded && !isHomePage) {
           this.addBreadcrumb();
-        } else if (isPageAdded && isPaginatedPage) {
+        } else if (isPageAdded && hasSameNameAsLast) {
           this.replaceLastBreadcrumb();
         } else {
-          this.deleteBreadcrumbs(currentIndex + 1);
+          this.deleteNextBreadcrumbs(currentIndex + 1);
         }
         
       } else {
@@ -89,23 +82,23 @@ export default {
 </script>
 
 <style scoped>
-  .breadcrumb {
+  .breadcrumbs {
     margin-top: 20px;
   }
   ul {
     display: flex;
     justify-content: flex-start;
+    flex-wrap: wrap;
     list-style-type: none;
     margin: 0;
-    padding: 0;
   }
   ul > li {
     display: flex;
     float: left;
-    height: 10px;
     width: auto;
     font-weight: bold;
     font-size: .8em;
+    line-height: 1.3em;
     cursor: default;
     align-items: center;
   }

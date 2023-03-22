@@ -9,7 +9,7 @@
         <TheSidebar />
       </aside>
       <main class="app__content">
-        <AppBreadcrumbs />
+        <TheBreadcrumbs />
         <router-view v-show="isLoaded" :key="`${$route.path}${JSON.stringify($route.query)}`" />
         <AppSpinner v-show="!isLoaded" class="app__spinner" />
       </main>
@@ -21,12 +21,13 @@
 <script>
 import TheNavbar from '@/components/TheNavbar';
 import TheSidebar from '@/components/TheSidebar';
+import TheBreadcrumbs from '@/components/TheBreadcrumbs';
 import { mapActions } from 'vuex';
 import NProgress from 'nprogress';
 
 export default {
   name: 'App',
-  components: { TheNavbar, TheSidebar },
+  components: { TheNavbar, TheSidebar, TheBreadcrumbs },
   computed: {
     isLoaded() {
       return this.$store.state.isLoaded;
