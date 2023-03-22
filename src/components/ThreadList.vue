@@ -66,49 +66,57 @@ export default {
   flex-wrap: wrap;
   padding: 5px 10px 5px 20px;
   min-height: 45px;
-}
-.thread__title {
-  font-size: 18px;
-}
-.thread__info {
-  color: #777;
-}
-.thread__activity {
-  flex-basis: 35%;
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  & .thread__replies-count {
+
+  &__title {
+    font-size: 18px;
+  }
+  
+  &__info {
+    color: #777;
+  }
+
+  &__activity {
+    flex-basis: 35%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+  }
+
+  &__replies-count {
     flex-basis: 35%;
     text-align: center;
   }
-  & .thread__avatar {
+
+  &__avatar {
     margin: 0 10px;
   }
-  & .thread__user {
+
+  &__user {
     white-space: nowrap;
   }
+
   @media (max-width: 720px) {
-    & {
+    &__activity {
       flex-basis: 100%;
       margin-top: 5px;
     }
-    & .thread__replies-count {
+    &__replies-count {
       order: 2;
       line-height: 1;
       margin-left: auto;
       text-align: right;
     }
-    & .thread__avatar {
+    &__avatar {
       order: -1;
       margin-left: 0;
       margin-right: 5px;
     }
-    & .thread__user {
+    &__user {
       order: 1;
     }
   }
 }
+
 .no-threads {
   padding: 10px;
   text-align: center;

@@ -6,11 +6,12 @@
   </div>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
 .not-found {
   font-size: 16px;
-}
-.not-found__title {
-  margin: 35px 0;
+  
+  &__title {
+    margin: 35px 0;
+  }
 }
 </style>

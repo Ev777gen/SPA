@@ -17,7 +17,9 @@
   </div>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
+$color: #ff9d4e;
+
 .spinner {
   text-align: center;
 }
@@ -40,7 +42,7 @@
   margin: 0 auto;
   width: 15%;
   height: 15%;
-  background-color: #ff9d4e;
+  background-color: $color;
   border-radius: 100%;
   -webkit-animation: sk-circleBounceDelay 1.2s infinite ease-in-out both;
           animation: sk-circleBounceDelay 1.2s infinite ease-in-out both;

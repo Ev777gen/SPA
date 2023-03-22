@@ -32,12 +32,12 @@
       </div>
 
       <div class="dropdown" :class="{'dropdown_open': isDropdownOpen}">
-        <div class="dropdown__nav mobile-only">
+        <nav class="dropdown__nav mobile-only">
           <router-link :to="{name: 'HomeView'}" class="dropdown__link">На главную</router-link>
           <router-link :to="{name: 'ForumMainPage'}" class="dropdown__link">Форум</router-link>
           <router-link :to="{name: 'AboutMe'}" class="dropdown__link">Обо мне</router-link>
           <hr>
-        </div>
+        </nav>
         <router-link :to="{name: 'ProfileView'}" class="dropdown__link">Мой профиль</router-link>
         <router-link :to="{name: 'SettingsView'}" class="dropdown__link">Настройки</router-link>
         <a href="" class="dropdown__link" @click.prevent="signOut">Выйти <font-awesome-icon icon="fa-solid fa-right-from-bracket" /></a>
@@ -95,42 +95,49 @@ $triangle-size: 8px;
 .header {
   padding: 20px 0;
   background-color: #23374d;
-}
-.header__body {
-  position: relative;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  min-height: 35px;
-}
-.header__logo {
-  font-size: 32px;
-  font-weight: bold;
-  color: #fff;
-}
-.header__not-auth-user {
-  margin-left: auto;
-}
-.header__user-avatar {
-  cursor: pointer;
-}
-.header__arrow {
-  margin-left: 5px;
-  margin-top: 10px;
-  vertical-align: middle;
-  color: #fff;
-  transition: all 0.3s;
-}
-.header__arrow_up {
-  transform: rotate(-180deg);
-}
-.header__link {
-  margin-left: 15px;
-  font-size: 16px;
-  font-weight: 700;
-  color: #ffb579;
-  &:last-child {
+
+  &__body {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 35px;
+  }
+
+  &__logo {
+    font-size: 32px;
+    font-weight: bold;
     color: #fff;
+  }
+
+  &__not-auth-user {
+    margin-left: auto;
+  }
+
+  &__user-avatar {
+    cursor: pointer;
+  }
+
+  &__arrow {
+    margin-left: 5px;
+    margin-top: 10px;
+    vertical-align: middle;
+    color: #fff;
+    transition: all 0.3s;
+  }
+
+  &__arrow_up {
+    transform: rotate(-180deg);
+  }
+
+  &__link {
+    margin-left: 15px;
+    font-size: 16px;
+    font-weight: 700;
+    color: #ffb579;
+    &:last-child {
+      color: #fff;
+    }
   }
 }
 
@@ -139,26 +146,31 @@ $triangle-size: 8px;
   height: $burger-size;
   margin: 0 10px;
   cursor: pointer;
+
+  &__top-bar,
+  &__middle-bar,
+  &__bottom-bar {
+    width: $burger-size;
+    height: 3px;
+    background: white;
+    position: absolute;
+    border-radius: 10px;
+    transition: all 0.5s;
+  }
+
+  &__top-bar {
+    top: 15%;
+  }
+
+  &__middle-bar {
+    top: 50%;
+  }
+
+  &__bottom-bar {
+    top: 85%;
+  }
 }
-.burger__top-bar,
-.burger__middle-bar,
-.burger__bottom-bar {
-  width: $burger-size;
-  height: 3px;
-  background: white;
-  position: absolute;
-  border-radius: 10px;
-  transition: all 0.5s;
-}
-.burger__top-bar {
-  top: 15%;
-}
-.burger__middle-bar {
-  top: 50%;
-}
-.burger__bottom-bar {
-  top: 85%;
-}
+
 
 .dropdown {
   position: absolute;
@@ -169,21 +181,11 @@ $triangle-size: 8px;
   padding: 20px 40px;
   background-color: $dropdown-color;
   box-shadow: 1px 15px 15px rgba(1, 1, 1, 0.1);
-  opacity: 1;
-  visibility: visible;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s;
   z-index: 1000;
-  & .dropdown__link {
-    display: block;
-    font-size: 20px;
-    line-height: 2;
-    color: $dropdown-link-color;
-    @media (max-width: 720px) {
-      & {
-        font-size: 24px;
-        line-height: 1.8;
-      }
-    }
-  }
+
   &::after {
     content: ''; 
     position: absolute;
@@ -197,20 +199,30 @@ $triangle-size: 8px;
       }
     }
   }
-  opacity: 0;
-  visibility: hidden;
-  transition: all 0.3s;
-}
-.dropdown_open {
-  opacity: 1;
-  visibility: visible;
-}
-.dropdown__nav {
-  & hr {
+
+  &__link {
+    display: block;
+    font-size: 20px;
+    line-height: 2;
+    color: $dropdown-link-color;
+    @media (max-width: 720px) {
+      & {
+        font-size: 24px;
+        line-height: 1.8;
+      }
+    }
+  }
+
+  &__nav hr {
     height: 2px;
     width: 100%;
     margin: 15px 0;
     background-color: #eee;
+  }
+
+  &_open {
+    opacity: 1;
+    visibility: visible;
   }
 }
 </style>

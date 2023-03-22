@@ -36,20 +36,25 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.forum__details {
-  flex-basis: 50%;
-  @media (max-width: 720px) {
-    & {
-      flex-basis: 100%;
+.forum {
+
+  &__details {
+    flex-basis: 50%;
+    @media (max-width: 720px) {
+      & {
+        flex-basis: 100%;
+      }
     }
   }
-}
-.forum__title {
-  font-size: 18px;
-}
-.forum__threads-count {
-  flex-basis: 12%;
-  text-align: center;
-  font-weight: 100;
+
+  &__title {
+    font-size: 18px;
+  }
+  
+  &__threads-count {
+    flex-basis: 12%;
+    text-align: center;
+    font-weight: 100;
+  }
 }
 </style>

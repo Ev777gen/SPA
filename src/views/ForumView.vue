@@ -87,30 +87,35 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.forum__header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  margin-top: 30px;
-}
-.forum__details {
-  flex-basis: 50%;
+.forum {
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-top: 30px;
+  }
+
+  &__details {
+    flex-basis: 50%;
+  }
+
+  &__description {
+    margin: 10px 0 15px 0;
+    font-size: 16px;
+  }
+
+  &__button {
+    align-self: flex-start;
+    margin-left: 15px;
+    text-align: center;
+  }
+
   @media (max-width: 720px) {
-    & {
+    &__details {
       flex-basis: 100%;
     }
-  }
-}
-.forum__description {
-  margin: 10px 0 15px 0;
-  font-size: 16px;
-}
-.forum__button {
-  align-self: flex-start;
-  margin-left: 15px;
-  text-align: center;
-  @media (max-width: 720px) {
-    & {
+    &__button {
       padding: 5px;
     }
   }

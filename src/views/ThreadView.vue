@@ -101,22 +101,28 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.thread__title {
-  display: flex;
-  justify-content: space-between;
-  margin: 20px 0;
-}
-.thread__info {
-  display: flex;
-  justify-content: space-between;
-}
-.thread__replies {
-  justify-self: flex-end;
-  text-align: right;
-}
-.thread__no-auth-user {
-  margin: 30px 0;
-  text-align: center;
-  font-size: 16px;
+.thread {
+
+  &__title {
+    display: flex;
+    justify-content: space-between;
+    margin: 20px 0;
+  }
+
+  &__info {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__replies {
+    justify-self: flex-end;
+    text-align: right;
+  }
+  
+  &__no-auth-user {
+    margin: 30px 0;
+    text-align: center;
+    font-size: 16px;
+  }
 }
 </style>

@@ -8,7 +8,7 @@
         <router-link :to="{name: 'ProfileOfAnyUser', params: {userId: post.userId}}" class="post__user-name">
           {{ getUserById(post.userId).name }}
         </router-link>
-        <router-link :to="{name: 'ProfileOfAnyUser', params: {userId: post.userId}}" class="post__user-name">
+        <router-link :to="{name: 'ProfileOfAnyUser', params: {userId: post.userId}}" class="post__avatar">
           <AppAvatar class="post__avatar avatar_large" :src="getUserById(post.userId).avatar" />
         </router-link>
         <p class="desktop-only text_gray">
@@ -116,79 +116,85 @@ export default {
   &:last-child {
     margin-bottom: 20px;
   }
+
+  &__user-name {
+    font-size: 18px;
+  }
+  
+  &__user-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    text-align: center;
+    flex: 1 1 15%;
+    margin-right: 5px;
+    & > * {
+      margin-bottom: 10px;
+    }
+  }
+
+  &__content {
+    display: flex;
+    flex: 1 0 83%;
+    padding-left: 15px;
+    padding-right: 10px;
+    font-size: 16px;
+    text-align: justify;
+    line-height: 1.5;
+    word-break: break-word;
+    & p {
+      margin-bottom: 20px;
+    } 
+  }
+
+  &__body {
+    width: 100%;
+  }
+
+  &__date {
+    flex-basis: 100%;
+    font-size: 14px;
+    text-align: right;
+    margin-bottom: 5px;
+    padding-right: 7px;
+  }
+  
+  &__edit-icon {
+    margin-left: auto;
+    padding-left: 10px;
+    color: #777;
+  }
+
   @media (max-width: 720px) {
     & {
       padding: 0;
     }
-  }
-}
-.post__user-name {
-  font-size: 18px;
-  @media (max-width: 720px) {
-    & {
+    &__user-name {
       font-size: 16px;
     }
-  }
-}
-.post__user-info {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  text-align: center;
-  flex: 1 1 15%;
-  margin-right: 5px;
-  & > * {
-    margin-bottom: 10px;
-  }
-  @media (max-width: 820px) {
-    & {
+    &__user-info {
       order: -2;
       flex-direction: row;
       justify-content: flex-start;
       background: rgba(73, 89, 96, 0.06);
       margin-right: 0;
       padding: 10px;
-      .post__avatar {
-        height: 35px;
-        width: 35px;
-        margin-right: 5px;
-        order: 1;
-      }
-      .post__user-name {
-        order: 2;
-      }
-      & > * {
-        margin-right: 5px;
-        margin-bottom: 0;
-      }
     }
-  }
-}
-.post__content {
-  display: flex;
-  flex: 1 0 83%;
-  padding-left: 15px;
-  padding-right: 10px;
-  font-size: 16px;
-  text-align: justify;
-  line-height: 1.5;
-  word-break: break-word;
-  & p {
-    margin-bottom: 20px;
-  } 
-}
-.post__body {
-  width: 100%;
-}
-.post__date {
-  flex-basis: 100%;
-  font-size: 14px;
-  text-align: right;
-  margin-bottom: 5px;
-  padding-right: 7px;
-  @media (max-width: 820px) {
-    & {
+    &__user-info > * {
+      margin-right: 5px;
+      margin-bottom: 0;
+    }
+    &__avatar {
+      order: 1;
+      height: 35px;
+      width: 35px;
+      margin-right: 5px;
+    }
+    &__user-name {
+      order: 2;
+    }
+    &__date {
       box-sizing: content-box;
       order: -1;
       flex-basis: 30%;
@@ -202,10 +208,5 @@ export default {
       background: rgba(73, 89, 96, 0.06);
     }
   }
-}
-.post__edit-icon {
-  margin-left: auto;
-  padding-left: 10px;
-  color: #777;
 }
 </style>

@@ -63,27 +63,31 @@ export default {
 .homepage {
   font-size: 16px;
   line-height: 1.5;
-}
-.homepage__title {
-  margin: 30px 0;
-}
-.homepage__subtitle {
-  margin: 20px 0;
-}
-.homepage__text {
-  margin: 20px 0;
-  text-align: justify;
-  & p {
+
+  &__title {
+    margin: 30px 0;
+  }
+  
+  &__subtitle {
     margin: 20px 0;
   }
-  .homepage__list {
+
+  &__text {
+    margin: 20px 0;
+    text-align: justify;
+    & p {
+      margin: 20px 0;
+    }
+    & button {
+      margin: 15px 0;
+      text-align: center;
+    }
+  }
+
+  &__list {
     & li {
       margin-left: 45px;
     }
-  }
-  & button {
-    margin: 15px 0;
-    text-align: center;
   }
 }
 </style>

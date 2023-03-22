@@ -122,20 +122,26 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.settings__subtitle {
-  margin: 35px 0 20px 0;
-  text-align: center;
-  font-size: 18px;
-}
-.settings__email {
-  font-size: 20px;
-  & span:first-child {
-    margin-right: 30px;
+.settings {
+
+  &__subtitle {
+    margin: 35px 0 20px 0;
+    text-align: center;
+    font-size: 18px;
   }
-}
-.settings__buttons {
-  margin-top: 35px;
-  & .settings__button {
+
+  &__email {
+    font-size: 20px;
+    & span:first-child {
+      margin-right: 30px;
+    }
+  }
+
+  &__buttons {
+    margin-top: 35px;
+  }
+  
+  &__button {
     width: 100%;
     margin-bottom: 20px;
   }

@@ -98,37 +98,49 @@ export default {
   UserProfileCard.vue и UserProfileCardEditor.vue 
   находится в файле ProfileView.vue
 */
-.card__background_footer {
-  padding-right: 25px;
-  padding-top: 25px;
-  align-items: center;
-  & .card__name {
-    height: 40px;
-    @media (max-width: 720px) {
-      & {
-        margin-right: 0px;
-      }
-    }
-  }
-  @media (max-width: 720px) {
-    & {
-      padding: 10px;
-      padding-top: 18px;
-    }
-  }
-}
 
-.card__avatar-cover {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  background-color: rgba(0, 0, 0, 0.25);
-  opacity: 0;
-  transition: all 0.3s;
-  & .card__camera-icon {
+.card {
+
+  &__background_footer {
+    padding-right: 25px;
+    padding-top: 25px;
+    align-items: center;
+  }
+
+  &__name {
+    height: 40px;
+  }
+  
+  &__avatar-cover {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, 0.25);
+    opacity: 0;
+    transition: all 0.3s;
+
+    & input {
+      position: absolute;
+      display: block;
+      top: 50%;
+      left: 50%;
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  &__camera-icon {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -138,19 +150,8 @@ export default {
     color: rgba(255, 255, 255, 0.7);
     transform: translate(-50%, -50%);
   }
-  & input {
-    position: absolute;
-    display: block;
-    top: 50%;
-    left: 50%;
-    width: 160px;
-    height: 160px;
-    border-radius: 50%;
-    transform: translate(-50%, -50%);
-    opacity: 0;
-    cursor: pointer;
-  }
-  & .card__avatar-button {
+
+  &__avatar-button {
     position: absolute;
     top: 110%;
     left: 50%;
@@ -158,51 +159,57 @@ export default {
     font-size: 12px;
     transform: translate(-50%, -50%);
   }
-  &:hover {
-    opacity: 1;
-  }
-  @media (max-width: 720px) {
-    & {
-      background-color: rgba(0, 0, 0, 0.0);
-      opacity: 1;
-      & .card__avatar-button {
-        top: 112%;
-        opacity: 0.5;
+    
+  &__info_edit {
+    margin: 15px 0;
+    padding: 25px 25px 15px 25px;
+    border: 2px solid #eee;
+    border-radius: 5px;
+    font-size: 18px;
+    & div {
+      margin-bottom: 15px;
+      &:last-child {
+        margin-bottom: 0;
       }
     }
   }
-}
 
-.card__info_edit {
-  margin: 15px 0;
-  padding: 25px 25px 15px 25px;
-  border: 2px solid #eee;
-  border-radius: 5px;
-  font-size: 18px;
-  & div {
-    margin-bottom: 15px;
-    &:last-child {
-      margin-bottom: 0;
-    }
+  &__buttons {
+    display: flex;
+    margin-bottom: 30px;
+    text-align: right;
   }
+
   @media (max-width: 720px) {
-    & {
+    &__background_footer {
+      padding: 10px;
+      padding-top: 18px;
+    }
+
+    &__name {
+      margin-right: 0px;
+    }
+
+    &__avatar-cover {
+      background-color: rgba(0, 0, 0, 0.0);
+      opacity: 1;
+    }
+
+    &__avatar-button {
+      top: 112%;
+      opacity: 0.5;
+    }
+
+    &__info_edit {
       padding: 10px;
       padding-top: 20px;
     }
-  }
-}
 
-.card__buttons {
-  display: flex;
-  margin-bottom: 30px;
-  text-align: right;
-  @media (max-width: 720px) {
-    & {
+    &__buttons {
       justify-content: space-between;
-    }
-    & .btn {
-      margin: 0;
+      & .btn {
+        margin: 0;
+      }
     }
   }
 }

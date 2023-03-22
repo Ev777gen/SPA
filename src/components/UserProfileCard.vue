@@ -12,7 +12,7 @@
     </div>
     <div class="card__info">
       <div class="card__username">
-        <span>Имя пользователя: </span>
+        <span>Логин: </span>
         <span>{{ user.username }}</span>
       </div>
       <div class="card__bio">
@@ -62,43 +62,56 @@ export default {
   UserProfileCard.vue и UserProfileCardEditor.vue 
   находится в файле ProfileView.vue 
 */
-.card__info {
-  margin: 15px 0;
-  padding: 15px 25px;
-  border: 2px solid #eee;
-  border-radius: 5px;
-  font-size: 18px;
-  & div {
-    padding: 10px;
-    display: flex;
-    flex-wrap: nowrap;
-    & > span:first-child {
-      width: 250px;
-      @media (max-width: 720px) {
-        & {
-          width: 150px;
+.card {
+  
+  &__info {
+    margin: 15px 0;
+    padding: 15px 25px;
+    border: 2px solid #eee;
+    border-radius: 5px;
+    font-size: 18px;
+    @media (max-width: 720px) {
+      & {
+        padding: 10px;
+      }
+    }
+
+    & div {
+      padding: 10px;
+      display: flex;
+      flex-wrap: nowrap;
+      & > span:first-child {
+        width: 250px;
+        @media (max-width: 720px) {
+          & {
+            width: 40%;
+          }
+        }
+      }
+      & > span:last-child {
+        @media (max-width: 720px) {
+          & {
+            width: 60%;
+            padding-left: 5%;
+          }
         }
       }
     }
   }
-  @media (max-width: 720px) {
-    & {
-      padding: 10px;
+
+  &__button {
+    margin-bottom: 30px;
+    text-align: right;
+    @media (max-width: 720px) {
+      & {
+        text-align: center;
+      }
     }
-  }
-}
-.card__button {
-  margin-bottom: 30px;
-  text-align: right;
-  @media (max-width: 720px) {
-    & {
-      text-align: center;
-    }
-  }
-  @media (max-width: 550px) {
-    & .btn {
-      width: 100%;
-      text-align: center;
+    @media (max-width: 550px) {
+      & .btn {
+        width: 100%;
+        text-align: center;
+      }
     }
   }
 }
