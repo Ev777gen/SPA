@@ -29,12 +29,6 @@ export default {
       return !!this.title;
     }
   },
-  methods: {
-    save () {
-      this.$emit('clean');
-      this.$emit('save', { ...this.form });
-    }
-  },
   watch: {
     form: {
       handler () {
@@ -45,6 +39,12 @@ export default {
         }
       },
       deep: true
+    }
+  },
+  methods: {
+    save () {
+      this.$emit('clean');
+      this.$emit('save', { ...this.form });
     }
   }
 }

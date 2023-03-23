@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import CategoryList from '@/components/CategoryList';
+import CategoryList from '@/components/forum/CategoryList';
 import { mapActions } from 'vuex';
 export default {
   components: { CategoryList },
@@ -18,15 +18,15 @@ export default {
       return this.$store.state.isLoaded;
     },
   },
-  methods: {
-    ...mapActions(['fetchAllCategories', 'fetchForums', 'startLoadingIndicator', 'stopLoadingIndicator'])
-  },
   async created () {
     this.startLoadingIndicator();
     const categories = await this.fetchAllCategories();
     const forumIds = categories.map(category => category.forumIds).flat();
     await this.fetchForums({ ids: forumIds });
     this.stopLoadingIndicator();
+  },
+  methods: {
+    ...mapActions(['fetchAllCategories', 'fetchForums', 'startLoadingIndicator', 'stopLoadingIndicator'])
   }
 }
 </script>

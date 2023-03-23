@@ -61,6 +61,13 @@ export default {
       return (this.isChangingEmail && !this.isChangingPassword) || (!this.isChangingEmail && this.isChangingPassword)
     }
   },
+  watch: {
+    activeUser(newValue) {
+      if (newValue === null) {
+        this.$router.push('/');
+      }
+    }
+  },
   methods: {
     ...mapActions(['reauthenticate', 'updateEmail', 'updateUser', 'startLoadingIndicator', 'stopLoadingIndicator']),
     async changeEmail() {
@@ -110,14 +117,7 @@ export default {
       this.password = '';
       this.newPassword = '';
     }
-  },
-  watch: {
-    activeUser(newValue) {
-      if (newValue === null) {
-        this.$router.push('/');
-      }
-    }
-  },
+  }
 }
 </script>
 

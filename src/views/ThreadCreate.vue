@@ -8,7 +8,7 @@
   </div>
 </template>
 <script>
-import ThreadEditor from '@/components/ThreadEditor';
+import ThreadEditor from '@/components/forum/ThreadEditor';
 import { findItemById } from '@/helpers';
 import { mapActions } from 'vuex';
 export default {
@@ -32,6 +32,11 @@ export default {
       return this.$store.state.isLoaded;
     },
   },
+  async created () {
+    this.startLoadingIndicator();
+    await this.fetchForum({ id: this.forumId });
+    this.stopLoadingIndicator();
+  },
   methods: {
     ...mapActions(['fetchForum', 'createThread', 'startLoadingIndicator', 'stopLoadingIndicator']),
     async save ({ title, text }) {
@@ -45,11 +50,6 @@ export default {
     cancel () {
       this.$router.push({ name: 'ForumView', params: { id: this.forum.id } });
     }
-  },
-  async created () {
-    this.startLoadingIndicator();
-    await this.fetchForum({ id: this.forumId });
-    this.stopLoadingIndicator();
   },
   beforeRouteLeave () {
     if (this.formIsDirty) {

@@ -20,6 +20,31 @@ export default {
       breadcrumbs: []
     }
   },
+  watch: { 
+    '$route'() {
+      if (this.$route.meta.breadcrumb) {
+        const lastIndex = this.breadcrumbs.length - 1;
+        const currentIndex = this.breadcrumbs.findIndex(breadcrumb => breadcrumb.name === this.$route.name);
+        const hasSameNameAsLast = this.breadcrumbs[lastIndex].name === this.$route.name;
+        const isHomePage = this.$route.path === '/';
+        const isPageAdded = currentIndex > 0 && currentIndex <= lastIndex;
+        
+        if (!isPageAdded && !isHomePage) {
+          this.addBreadcrumb();
+        } else if (isPageAdded && hasSameNameAsLast) {
+          this.replaceLastBreadcrumb();
+        } else {
+          this.deleteNextBreadcrumbs(currentIndex + 1);
+        }
+        
+      } else {
+        this.initialiseBreadcrumbs();
+      }
+    }
+  },
+  mounted () { 
+    this.initialiseBreadcrumbs();
+  },
   methods: {
     changeRoute (breadcrumb, idx) {
       this.$router.push({ 
@@ -52,31 +77,6 @@ export default {
         this.breadcrumbs.push({ name: 'HomeView', nameToDisplay: 'Главная' });
       }
     }
-  },
-  watch: { 
-    '$route'() {
-      if (this.$route.meta.breadcrumb) {
-        const lastIndex = this.breadcrumbs.length - 1;
-        const currentIndex = this.breadcrumbs.findIndex(breadcrumb => breadcrumb.name === this.$route.name);
-        const hasSameNameAsLast = this.breadcrumbs[lastIndex].name === this.$route.name;
-        const isHomePage = this.$route.path === '/';
-        const isPageAdded = currentIndex > 0 && currentIndex <= lastIndex;
-        
-        if (!isPageAdded && !isHomePage) {
-          this.addBreadcrumb();
-        } else if (isPageAdded && hasSameNameAsLast) {
-          this.replaceLastBreadcrumb();
-        } else {
-          this.deleteNextBreadcrumbs(currentIndex + 1);
-        }
-        
-      } else {
-        this.initialiseBreadcrumbs();
-      }
-    }
-  },
-  mounted () { 
-    this.initialiseBreadcrumbs();
   }
 }
 </script>

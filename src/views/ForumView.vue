@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import ThreadList from '@/components/ThreadList';
+import ThreadList from '@/components/forum/ThreadList';
 import { findItemById } from '@/helpers';
 import { mapActions, mapGetters } from 'vuex';
 
@@ -68,9 +68,6 @@ export default {
       return Math.ceil(this.threadsCount / this.threadsPerPage);
     }
   },
-  methods: {
-    ...mapActions(['fetchForum', 'fetchThreads', 'fetchThreadsByPage', 'fetchUsers', 'startLoadingIndicator', 'stopLoadingIndicator']),
-  },
   watch: {
     async page (page) {
       this.$router.push({ query: { page } });
@@ -82,6 +79,9 @@ export default {
     const threads = await this.fetchThreadsByPage({ ids: forum.threadIds, page: this.page, threadsPerPage: this.threadsPerPage });
     await this.fetchUsers({ ids: threads.map(thread => thread.userId) });
     this.stopLoadingIndicator();
+  },
+  methods: {
+    ...mapActions(['fetchForum', 'fetchThreads', 'fetchThreadsByPage', 'fetchUsers', 'startLoadingIndicator', 'stopLoadingIndicator']),
   }
 }
 </script>

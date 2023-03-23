@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import ThreadEditor from '@/components/ThreadEditor';
+import ThreadEditor from '@/components/forum/ThreadEditor';
 import { findItemById } from '@/helpers';
 import { mapActions } from 'vuex';
 
@@ -42,6 +42,12 @@ export default {
       return this.$store.state.isLoaded;
     },
   },
+  async created () {
+    this.startLoadingIndicator();
+    const thread = await this.fetchThread({ id: this.id });
+    await this.fetchPost({ id: thread.postIds[0] });
+    this.stopLoadingIndicator();
+  },
   methods: {
     ...mapActions(['fetchThread', 'updateThread', 'fetchPost', 'startLoadingIndicator', 'stopLoadingIndicator']),
     async save ({ title, text }) {
@@ -55,12 +61,6 @@ export default {
     cancel () {
       this.$router.push({ name: 'ThreadView', params: { id: this.id } });
     }
-  },
-  async created () {
-    this.startLoadingIndicator();
-    const thread = await this.fetchThread({ id: this.id });
-    await this.fetchPost({ id: thread.postIds[0] });
-    this.stopLoadingIndicator();
   },
   beforeRouteLeave () {
     if (this.formIsDirty) {

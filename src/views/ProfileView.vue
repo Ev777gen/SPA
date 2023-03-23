@@ -9,9 +9,10 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
-import UserProfileCard from "@/components/UserProfileCard.vue";
-import UserProfileCardEditor from "@/components/UserProfileCardEditor.vue";
+import UserProfileCard from "@/components/user/UserProfileCard.vue";
+import UserProfileCardEditor from "@/components/user/UserProfileCardEditor.vue";
 export default {
+  components: { UserProfileCard, UserProfileCardEditor },
   props: {
     edit: {
       type: Boolean,
@@ -21,10 +22,6 @@ export default {
       type: String,
       default: ''
     }
-  },
-  components: {
-    UserProfileCard,
-    UserProfileCardEditor
   },
   computed: {
     ...mapGetters({ authUser: 'authUser' }),
@@ -42,9 +39,6 @@ export default {
       return this.$store.state.isLoaded;
     },
   },
-  methods: {
-    ...mapActions(['fetchUser', 'startLoadingIndicator', 'stopLoadingIndicator']),
-  },
   watch: {
     userToDisplay(newValue) {
       if (newValue === null) {
@@ -58,6 +52,9 @@ export default {
       await this.fetchUser({ id: this.userId });
       this.stopLoadingIndicator();
     } 
+  },
+  methods: {
+    ...mapActions(['fetchUser', 'startLoadingIndicator', 'stopLoadingIndicator']),
   }
 }
 </script>

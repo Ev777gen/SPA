@@ -41,7 +41,7 @@ export default {
       const redirectTo = this.$route.query.redirectTo || { name: 'HomeView' };
       this.$router.push(redirectTo);
     }
-  },
+  }
 }
 </script>
 <style lang="scss" scoped>

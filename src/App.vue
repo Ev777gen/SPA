@@ -19,9 +19,9 @@
 </template>
 
 <script>
-import TheNavbar from '@/components/TheNavbar';
-import TheSidebar from '@/components/TheSidebar';
-import TheBreadcrumbs from '@/components/TheBreadcrumbs';
+import TheNavbar from '@/components/layout/TheNavbar';
+import TheSidebar from '@/components/layout/TheSidebar';
+import TheBreadcrumbs from '@/components/layout/TheBreadcrumbs';
 import { mapActions } from 'vuex';
 import NProgress from 'nprogress';
 

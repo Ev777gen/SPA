@@ -53,7 +53,7 @@
 </template>
 
 <script>
-import PostEditor from '@/components/PostEditor';
+import PostEditor from '@/components/forum/PostEditor';
 import { mapActions } from 'vuex';
 import { localeDate, userPostsCountWording, userThreadsCountWording } from '@/helpers';
 

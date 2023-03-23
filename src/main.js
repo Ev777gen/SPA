@@ -36,7 +36,7 @@ const app = createApp(App)
   .use(VeeValidatePlugin)
 
 // Базовые компоненты: делаем глобальными компоненты, начинающиеся на App...
-const requireComponent = require.context("@/components", true, /App[A-Z]\w+\.(vue|js)$/)
+const requireComponent = require.context("@/components/ui", true, /App[A-Z]\w+\.(vue|js)$/)
 requireComponent.keys().forEach(function (fileName) {
   let baseComponentConfig = requireComponent(fileName)
   baseComponentConfig = baseComponentConfig.default || baseComponentConfig

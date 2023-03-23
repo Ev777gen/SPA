@@ -52,26 +52,17 @@ import { mapGetters } from 'vuex';
 import vClickOutside from 'click-outside-vue3';
 
 export default {
+  directives: {
+    clickOutside: vClickOutside.directive
+  },
   data () {
     return {
       isDropdownOpen: false,
       isMobile: false
     }
   },
-  directives: {
-    clickOutside: vClickOutside.directive
-  },
   computed: {
     ...mapGetters(['authUser'])
-  },
-  methods: {
-    signOut () {
-      this.$store.dispatch('signOut');
-      this.isDropdownOpen = false;
-    },
-    onClickOutside () {
-      this.isDropdownOpen = false;
-    }
   },
   created () {
     this.$router.beforeEach(() => {
@@ -81,6 +72,15 @@ export default {
       this.isMobile = true;
     } else {
       this.isMobile = false;
+    }
+  },
+  methods: {
+    signOut () {
+      this.$store.dispatch('signOut');
+      this.isDropdownOpen = false;
+    },
+    onClickOutside () {
+      this.isDropdownOpen = false;
     }
   }
 }

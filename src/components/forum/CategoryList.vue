@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import ForumList from '@/components/ForumList';
+import ForumList from '@/components/forum/ForumList';
 export default {
   components: { ForumList },
   props: {

@@ -37,17 +37,14 @@
 </template>
 
 <script>
-import PostList from '@/components/PostList';
-import PostEditor from '@/components/PostEditor';
+import PostList from '@/components/forum/PostList';
+import PostEditor from '@/components/forum/PostEditor';
 import { mapActions, mapGetters } from 'vuex';
 import { localeDate, repliesCountWording } from '@/helpers';
 
 export default {
   name: 'ThreadView',
-  components: {
-    PostList,
-    PostEditor
-  },
+  components: { PostList, PostEditor },
   props: {
     id: {
       type: String,
@@ -72,6 +69,12 @@ export default {
       return this.$store.state.isLoaded;
     },
   },
+  async created () {
+    this.startLoadingIndicator();
+    const thread = await this.fetchThread({ id: this.id });
+    await this.fetchPostsWithUsers(thread.postIds);
+    this.stopLoadingIndicator();
+  },
   methods: {
     ...mapActions(['fetchThread', 'fetchUsers', 'fetchPosts', 'createPost', 'startLoadingIndicator', 'stopLoadingIndicator']),
     localeDate,
@@ -90,12 +93,6 @@ export default {
       const users = posts.map(post => post.userId).concat(this.thread.userId);
       await this.fetchUsers({ ids: users });
     }
-  },
-  async created () {
-    this.startLoadingIndicator();
-    const thread = await this.fetchThread({ id: this.id });
-    await this.fetchPostsWithUsers(thread.postIds);
-    this.stopLoadingIndicator();
   }
 }
 </script>
