@@ -20,11 +20,8 @@
 <style lang="scss" scoped>
 $color: #ff9d4e;
 
-.spinner {
-  text-align: center;
-}
 .sk-circle {
-  margin: 100px auto;
+  margin: 0 auto;
   width: 40px;
   height: 40px;
   position: relative;
