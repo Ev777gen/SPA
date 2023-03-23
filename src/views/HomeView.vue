@@ -45,11 +45,12 @@ export default {
     ...mapGetters(['authUser'])
   },
   methods: {
-    ...mapActions(['signInWithEmailAndPassword', 'startLoadingIndicator', 'stopLoadingIndicator']),
+    ...mapActions(['signInWithEmailAndPassword', 'startLoadingIndicator', 'stopLoadingIndicator', 'fetchUser']),
     async logInToCheckOutThisSite() {
       try {
         this.startLoadingIndicator();
-        await this.signInWithEmailAndPassword({ email: 'email@mail.ru', password: '123456' });
+        const defaultUser = await this.fetchUser({ id: '8WGcARP4RqQchFNE2wh326iwQ913' });
+        await this.signInWithEmailAndPassword({ email: defaultUser.email, password: '123456' });
         this.stopLoadingIndicator();
       } catch (error) {
         alert(error.message);
