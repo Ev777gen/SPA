@@ -1,9 +1,15 @@
 import { createStore } from 'vuex';
+import createPersistedState from "vuex-persistedstate";
 import { findItemById } from '@/helpers';
 import { db } from "@/main.js";
 import { collection,doc, getDoc, getDocs, setDoc, updateDoc, arrayUnion, writeBatch, serverTimestamp, increment, onSnapshot } from "firebase/firestore";
 import auth from './modules/auth';
+import breadcrumbs from './modules/breadcrumbs';
 import chunk from 'lodash/chunk';
+
+const breadcrumbsPlugin = createPersistedState({
+  paths: ['breadcrumbs']
+});
 
 export default createStore({
   state: {
@@ -315,7 +321,9 @@ export default createStore({
   },
   modules: {
     auth,
-  }
+    breadcrumbs
+  },
+  plugins: [breadcrumbsPlugin],
 });
 
 // Вспомогательные функции

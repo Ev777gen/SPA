@@ -4,7 +4,7 @@
       <li
         v-for="(breadcrumb, idx) in breadcrumbs"
         :key="breadcrumb.name"
-        @click="changeRoute(breadcrumb, idx)"
+        @click="changeRoute(breadcrumb)"
         :class="{'clickable': idx < breadcrumbs.length - 1}"
       >
         {{ breadcrumb.nameToDisplay }}
@@ -14,70 +14,26 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
 export default {
   data () {
     return {
-      breadcrumbs: []
+      breadcrumbs: this.$store.state.breadcrumbs.breadcrumbs
     }
   },
   watch: { 
     '$route'() {
-      if (this.$route.meta.breadcrumb) {
-        const lastIndex = this.breadcrumbs.length - 1;
-        const currentIndex = this.breadcrumbs.findIndex(breadcrumb => breadcrumb.name === this.$route.name);
-        const hasSameNameAsLast = this.breadcrumbs[lastIndex].name === this.$route.name;
-        const isHomePage = this.$route.path === '/';
-        const isPageAdded = currentIndex > 0 && currentIndex <= lastIndex;
-        
-        if (!isPageAdded && !isHomePage) {
-          this.addBreadcrumb();
-        } else if (isPageAdded && hasSameNameAsLast) {
-          this.replaceLastBreadcrumb();
-        } else {
-          this.deleteNextBreadcrumbs(currentIndex + 1);
-        }
-        
-      } else {
-        this.initialiseBreadcrumbs();
+      this.updateBreadcrumbs(this.$route);
+    },
+    'breadcrumbs.length'(newValue) {
+      if (newValue === 0) {
+        this.initialiseBreadcrumbs; 
       }
     }
-  },
-  mounted () { 
-    this.initialiseBreadcrumbs();
   },
   methods: {
-    changeRoute (breadcrumb, idx) {
-      this.$router.push({ 
-        name: breadcrumb.name,
-        params: breadcrumb.params,
-        query: breadcrumb.query
-      });
-      this.deleteNextBreadcrumbs(idx + 1);
-    },
-    addBreadcrumb () {
-      const currentRoute = {
-        name: this.$route.name,
-        params: this.$route.params,
-        query: this.$route.query,
-        nameToDisplay: this.$route.meta.breadcrumb
-      };
-      this.breadcrumbs.push(currentRoute);
-    },
-    deleteNextBreadcrumbs(idx) {
-      this.breadcrumbs.splice(idx);
-    },
-    replaceLastBreadcrumb() {
-      this.breadcrumbs.pop();
-      this.addBreadcrumb();
-    },
-    initialiseBreadcrumbs() {
-      if (this.breadcrumbs.length > 0) {
-        this.deleteNextBreadcrumbs(1);
-      } else {
-        this.breadcrumbs.push({ name: 'HomeView', nameToDisplay: 'Главная' });
-      }
-    }
-  }
+    ...mapActions(['changeRoute', 'initialiseBreadcrumbs', 'updateBreadcrumbs']),
+  },
 }
 </script>
 
