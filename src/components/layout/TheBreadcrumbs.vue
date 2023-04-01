@@ -1,6 +1,6 @@
 <template>
   <div class="breadcrumbs">
-    <ul v-if="breadcrumbs.length > 1">
+    <ul v-if="!isHomePage">
       <li
         v-for="(breadcrumb, idx) in breadcrumbs"
         :key="breadcrumb.name"
@@ -19,6 +19,11 @@ export default {
   data () {
     return {
       breadcrumbs: this.$store.state.breadcrumbs.breadcrumbs
+    }
+  },
+  computed: {
+    isHomePage() {
+      return this.$route.path === '/';
     }
   },
   watch: { 
